@@ -1,4 +1,4 @@
-﻿using Galaxias.Core.Main;
+using Galaxias.Core.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -39,11 +39,11 @@ public class InGameHud
                 health -= 2;
                 if (health < 0)
                 {
-                    renderer.Draw(_heartHalfTexture, w - i * 8, 1, Color.White);
+                    renderer.Draw(_heartHalfTexture, width/2-58-i*8, 25, Color.White);
                 }
                 else
                 {
-                    renderer.Draw(_heartTexture, w - i * 8, 1, Color.White);
+                    renderer.Draw(_heartTexture, width/2-58-i*8, 25, Color.White);
                 }
             }
             else
