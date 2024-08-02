@@ -27,6 +27,7 @@ namespace Galaxias.Client.Key
     {
         public static Dictionary<string, KeyBind> keyBinds = new Dictionary<string, KeyBind>();
         public static Dictionary<Keys, bool> canExecutes = new Dictionary<Keys, bool>();
+        public static KeyBind Inventory = new KeyBind("inventory", Keys.E);
         public static KeyBind Left = new KeyBind("left", Keys.A);
         public static KeyBind Right = new KeyBind("right", Keys.D);
         public static KeyBind Sprint = new KeyBind("sprint", Keys.LeftControl);
@@ -35,6 +36,7 @@ namespace Galaxias.Client.Key
         public static KeyBind Home = new KeyBind("home", Keys.H);
         public static KeyBind SetHome = new KeyBind("set_home", Keys.J);
         public static KeyBind FullScreen = new KeyBind("full_screen", Keys.F11, false);
+        public static KeyBind DeBug = new KeyBind("debug", Keys.F13, false);
         public static KeyBind JetPack = new KeyBind("jetpack", Keys.L, false);
         public static bool Set(string name, Keys key)
         {

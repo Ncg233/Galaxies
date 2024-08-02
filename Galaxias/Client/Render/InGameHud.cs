@@ -51,6 +51,9 @@ public class InGameHud
                 break;
             }
         }
+        for (int m = 0;m<8;m++){
+            renderer.Draw("Assets/Textures/Gui/Inventory",m*20,220,Color.White);
+        }
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
     {
