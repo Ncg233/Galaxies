@@ -44,7 +44,6 @@ public class IntegrationRenderer
     {
         spriteBatch.End();
     }
-
     public void DrawString(SpriteFont font, string s, float x, float y, Color color1, Color color2, float scale = 1)
     {
         spriteBatch.DrawString(font, s, new Vector2(x + scale, y * font.LineSpacing * scale), color2, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
