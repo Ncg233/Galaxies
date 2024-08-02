@@ -68,7 +68,7 @@ public class Player : LivingEntity
         }
         if (EnableJetpack() && KeyBind.Down.IsKeyDown() && !onGround)
         {
-            vy -= factor * speed * 0.01;
+            vy = 0;
         }
         if (KeyBind.Home.IsKeyDown())
         {
@@ -78,7 +78,7 @@ public class Player : LivingEntity
             vy = 0;
         }
         if (KeyBind.SetHome.IsKeyDown())
-        {
+        {        
             homeX = x;
             homeY = y;
         }

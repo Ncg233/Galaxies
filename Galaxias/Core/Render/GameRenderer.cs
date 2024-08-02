@@ -52,7 +52,7 @@ public class GameRenderer{
         }
         if (_galaxias.GetCurrentScreen() != null) 
         {
-            renderer.Begin(samplerState: SamplerState.PointClamp);
+            renderer.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera.GuiMatrix);
             _galaxias.GetCurrentScreen().Render(renderer);
             renderer.End();
         }

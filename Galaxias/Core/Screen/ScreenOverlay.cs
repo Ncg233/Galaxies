@@ -24,7 +24,7 @@ public class ScreenOverlay
 
     public virtual void Render(IntegrationRenderer renderer)
     {
-        renderer.Draw("Assets/Textures/Misc/a", 0, 0, Color.White);
+        
     }
     public virtual void Update()
     {

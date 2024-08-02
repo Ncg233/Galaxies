@@ -1,4 +1,6 @@
 ﻿using Galasias.Core.Screen;
+using Galaxias.Core.Render;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
@@ -12,6 +14,10 @@ public class MainMenuScreen : ScreenOverlay
         {
             galaxias.LoadWorld();
         }
+    }
+    public override void Render(IntegrationRenderer renderer)
+    {
+        renderer.Draw("Assets/Textures/Misc/a", new Rectangle(0, 0, width, height), Color.White);
     }
     protected override void OnInit()
     {

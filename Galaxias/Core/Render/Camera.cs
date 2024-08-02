@@ -1,5 +1,6 @@
 ﻿using Galaxias.Core.World.Entities;
 using Galaxias.Core.World.Tiles;
+using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -16,7 +17,7 @@ public class Camera
     public Vector3 _pos = new();
     private float _zoom = 0.4f, displayRadio, scale, guiScale;
     private int viewWidth, viewHeight;
-    private float guiWidth, guiHeight;
+    public int guiWidth, guiHeight;
     public void Update(Player player, int viewWidth, int viewHeight, float dTime)
     {
         if (false)
@@ -67,8 +68,8 @@ public class Camera
         viewHeight = height;
         displayRadio = Math.Min(viewWidth / 16f, viewHeight / 9f) * 0.1f;
         guiScale = displayRadio / 2F;
-        guiWidth = (width / guiScale);
-        guiWidth = (height / guiScale);
+        guiWidth = Utils.Ceil(width / guiScale);
+        guiWidth = Utils.Ceil(height / guiScale);
 
     }
 }
