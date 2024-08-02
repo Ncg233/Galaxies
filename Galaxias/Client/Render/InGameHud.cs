@@ -23,9 +23,9 @@ public class InGameHud
     {
         _frameCounter.Update(dTime);
         RenderString(renderer, "X:" + Math.Round(_client.GetPlayer().x, 1), 0, 0);
-        RenderString(renderer, "Y:" + Math.Round(_client.GetPlayer().y, 1), 0, _font.LineSpacing * 1f);
-        RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, _font.LineSpacing * 2f);
-        RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(_client.GetPlayer().vx * _client.GetPlayer().vx + _client.GetPlayer().vy * _client.GetPlayer().vy), 1), 0, _font.LineSpacing * 3f);
+        RenderString(renderer, "Y:" + Math.Round(_client.GetPlayer().y, 1), 0, 1f);
+        RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, 2f);
+        RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(_client.GetPlayer().vx * _client.GetPlayer().vx + _client.GetPlayer().vy * _client.GetPlayer().vy), 1), 0, 3f);
         //MouseState state = Mouse.GetState();
         //Point pos = state.Position;
         //Vector2 p = camera.ScreenToWorldSpace(pos);
@@ -55,7 +55,7 @@ public class InGameHud
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
     {
 
-        renderer.DrawString(_font, s, x, y, Color.White, Color.Black);
+        renderer.DrawString(_font, s, x, y, Color.White, Color.Black, 0.5f);
     }
 
 }
