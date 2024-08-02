@@ -14,7 +14,7 @@ public class GalaxiasClient : Game
     public static readonly string Version = "0.0.1";
     private static GalaxiasClient instance;
     private GraphicsDeviceManager _graphics;
-    private ScreenOverlay _currentScreen;
+    private AbstractScreen _currentScreen;
     private readonly IntegrationRenderer renderer;
     private readonly GameRenderer _gameRenderer;
     private readonly WorldRenderer worldRenderer;
@@ -84,14 +84,11 @@ public class GalaxiasClient : Game
 
         base.Draw(gameTime);
     }
-    public void SetCurrentScreen(ScreenOverlay newScreen)
+    public void SetCurrentScreen(AbstractScreen newScreen)
     {
         _currentScreen?.Hid();
         _currentScreen = newScreen;
-        if (newScreen != null)
-        {
-            newScreen.Init(this, GetWindowWidth(), GetWindowHeight());
-        }
+        newScreen?.Init(this, camera.guiWidth, camera.guiHeight);
 
     }
     public void LoadWorld()
@@ -126,7 +123,7 @@ public class GalaxiasClient : Game
         return world;
     }
 
-    public ScreenOverlay GetCurrentScreen()
+    public AbstractScreen GetCurrentScreen()
     {
         return _currentScreen;
     }

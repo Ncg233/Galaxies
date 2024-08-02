@@ -69,7 +69,7 @@ public class Camera
         displayRadio = Math.Min(viewWidth / 16f, viewHeight / 9f) * 0.1f;
         guiScale = getScaleFactor(0);
         guiWidth = Utils.Ceil(width / guiScale);
-        guiWidth = Utils.Ceil(height / guiScale);
+        guiHeight = Utils.Ceil(height / guiScale);
 
     }
     public int getScaleFactor(int guiScale)

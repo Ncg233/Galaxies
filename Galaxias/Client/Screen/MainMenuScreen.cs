@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace Galaxias.Client.Screen;
-public class MainMenuScreen : ScreenOverlay
+public class MainMenuScreen : AbstractScreen
 {
     private static Song mainMusic;
     public override void Update()

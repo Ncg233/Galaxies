@@ -46,7 +46,7 @@ public class GameRenderer
                 samplerState: SamplerState.PointClamp,
                 depthStencilState: DepthStencilState.Default,
                 transformMatrix: camera.GuiMatrix);
-            hud.Render(renderer, dTime);
+            hud.Render(renderer,camera.guiWidth, camera.guiHeight, dTime);
             renderer.End();
 
         }

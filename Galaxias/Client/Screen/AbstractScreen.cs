@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Galaxias.Client.Screen;
 
-public class ScreenOverlay
+public abstract class AbstractScreen
 {
     protected int width;
     protected int height;
@@ -22,10 +22,7 @@ public class ScreenOverlay
 
     }
 
-    public virtual void Render(IntegrationRenderer renderer)
-    {
-
-    }
+    public abstract void Render(IntegrationRenderer renderer);
     public virtual void Update()
     {
 

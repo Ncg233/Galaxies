@@ -19,7 +19,7 @@ public class InGameHud
     {
         _font = GalaxiasClient.GetInstance().Content.Load<SpriteFont>("Assets/Fonts/defaultFont");
     }
-    public void Render(IntegrationRenderer renderer, float dTime)
+    public void Render(IntegrationRenderer renderer, int width, int height,float dTime)
     {
         _frameCounter.Update(dTime);
         RenderString(renderer, "X:" + Math.Round(_client.GetPlayer().x, 1), 0, 0);
@@ -51,8 +51,8 @@ public class InGameHud
                 break;
             }
         }
-        for (int m = 0;m<8;m++){
-            renderer.Draw("Assets/Textures/Gui/Inventory",m*20,220,Color.White);
+        for (int m = 0;m<9;m++){
+            renderer.Draw("Assets/Textures/Gui/Inventory",width / 2 - 90 + m * 20, 0 ,Color.White);
         }
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
