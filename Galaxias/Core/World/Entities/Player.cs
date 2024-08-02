@@ -10,6 +10,7 @@ public class Player : LivingEntity
     private double homeY = 80;
     private int invincibleTicks = 50 * 3;
     protected bool isJumping;
+    private bool isJetpackEnable;
     public int jumpTicks;
     public int jumpTimeout;
     public float factor;
@@ -78,9 +79,13 @@ public class Player : LivingEntity
             vy = 0;
         }
         if (KeyBind.SetHome.IsKeyDown())
-        {        
+        {
             homeX = x;
             homeY = y;
+        }
+        if (KeyBind.JetPack.IsKeyDown())
+        {
+            isJetpackEnable = !isJetpackEnable;
         }
     }
     protected int GetJumpTimeout()
@@ -93,7 +98,7 @@ public class Player : LivingEntity
     }
     private bool EnableJetpack()
     {
-        return true;
+        return this.isJetpackEnable;
     }
     public void Jump(double value)
     {
