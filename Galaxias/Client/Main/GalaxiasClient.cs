@@ -38,6 +38,7 @@ public class GalaxiasClient : Game
         tileRenderer = new TileRenderer();
         worldRenderer = new WorldRenderer(this, camera, tileRenderer);
         _gameRenderer = new GameRenderer(this, renderer, worldRenderer, camera);
+        camera.OnResize(GetWindowWidth(), GetWindowHeight());
     }
 
     protected override void Initialize()
@@ -87,8 +88,10 @@ public class GalaxiasClient : Game
     public void SetCurrentScreen(AbstractScreen newScreen)
     {
         _currentScreen?.Hid();
+
         _currentScreen = newScreen;
-        newScreen?.Init(this, camera.guiWidth, camera.guiHeight);
+
+        _currentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
 
     }
     public void LoadWorld()
@@ -105,6 +108,7 @@ public class GalaxiasClient : Game
         width = GetWindowWidth();
         height = GetWindowHeight();
         _gameRenderer.onResize(width, height);
+        _currentScreen?.OnResize(camera.guiWidth, camera.guiHeight);
     }
     public int GetWindowWidth()
     {

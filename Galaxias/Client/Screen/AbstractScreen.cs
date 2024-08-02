@@ -1,6 +1,7 @@
 ﻿using Galaxias.Client.Render;
 using Galaxias.Core.Main;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Galaxias.Client.Screen;
 
@@ -31,5 +32,11 @@ public abstract class AbstractScreen
     public virtual void Hid()
     {
 
+    }
+
+    public void OnResize(int guiWidth, int guiHeight)
+    {
+        width = guiWidth;
+        height = guiHeight;
     }
 }

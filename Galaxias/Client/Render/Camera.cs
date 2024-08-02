@@ -18,7 +18,7 @@ public class Camera
     private float _zoom = 0.4f, displayRadio, scale, guiScale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
-    public void Update(Player player, int viewWidth, int viewHeight, float dTime)
+    public void Update(Player player, float dTime)
     {
         if (false)
         {

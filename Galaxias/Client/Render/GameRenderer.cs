@@ -32,7 +32,7 @@ public class GameRenderer
         if (_galaxias.GetWorld() != null)
         {
             //render world
-            camera.Update(_galaxias.GetPlayer(), _galaxias.GetWindowWidth(), _galaxias.GetWindowHeight(), dTime);
+            camera.Update(_galaxias.GetPlayer(), dTime);
             renderer.Begin(sortMode: SpriteSortMode.Immediate,
                 samplerState: SamplerState.PointClamp,
                 depthStencilState: DepthStencilState.Default,
