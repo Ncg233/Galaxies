@@ -1,14 +1,15 @@
-﻿using Galaxias.Core.Resource;
+﻿using Galaxias.Client.Resource;
 using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Galaxias.Core.Render;
+namespace Galaxias.Client.Render;
 public class TileRenderer
 {
     private readonly Dictionary<TileState, Texture2D> stateToTexture = new Dictionary<TileState, Texture2D>();
-    public TileRenderer() {   
+    public TileRenderer()
+    {
     }
     public void LoadContent(TextureManager manager)
     {

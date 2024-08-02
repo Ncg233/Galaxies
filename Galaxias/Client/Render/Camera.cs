@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Galaxias.Core.Render;
+namespace Galaxias.Client.Render;
 public class Camera
 {
     public Matrix TransfromMatrix
         => Matrix.CreateTranslation(_pos)
-        * Matrix.CreateScale(scale) * 
+        * Matrix.CreateScale(scale) *
         Matrix.CreateTranslation(viewWidth / 2, viewHeight / 2, 0);
     public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
 
@@ -30,12 +30,12 @@ public class Camera
         {
             _pos.X = (float)-player.x * GameConstants.TileSize; _pos.Y = ((float)player.y + 2) * GameConstants.TileSize;
         }
-        
+
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
             _zoom += 0.22f * dTime;
         else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
             _zoom -= 0.2f * dTime;
-         _zoom = MathHelper.Clamp(_zoom, 0.2f, 0.5f);
+        _zoom = MathHelper.Clamp(_zoom, 0.2f, 0.5f);
         scale = displayRadio * _zoom;
 
 
@@ -46,7 +46,7 @@ public class Camera
     }
     public float GetScale()
     {
-        return scale; 
+        return scale;
     }
     public float GetY()
     {

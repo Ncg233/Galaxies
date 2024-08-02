@@ -1,11 +1,10 @@
 ﻿using Galaxias.Core.Main;
-using Galaxias.Core.Render;
 using Galaxias.Core.World;
 using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Galasias.Core.Render;
+namespace Galaxias.Client.Render;
 public class WorldRenderer
 {
     private readonly Color[] ShadowColor = new Color[GameConstants.MaxLight + 1];
@@ -23,7 +22,8 @@ public class WorldRenderer
         this.camera = camera;
         this.tileRenderer = tileRenderer;
         float step = 1F / GameConstants.MaxLight;
-        for (int i = 0; i < ShadowColor.Length; i++) {
+        for (int i = 0; i < ShadowColor.Length; i++)
+        {
             float modifier = i * step;
             ShadowColor[i] = new Color(modifier, modifier, modifier, 1f);
         }
@@ -40,16 +40,17 @@ public class WorldRenderer
     {
         RenderSky(renderer);
         int scale = GameConstants.TileSize;
-        
+
         int minX = (int)((-camera._pos.X - _galaxias.GetWindowWidth() / camera.GetScale() / 2 - 16) / 8);
         int minY = (int)((camera._pos.Y - _galaxias.GetWindowHeight() / camera.GetScale() / 2 - 16) / 8);
         int maxX = (int)((-camera._pos.X + _galaxias.GetWindowWidth() / camera.GetScale() / 2 + 16) / 8);
         int maxY = (int)((camera._pos.Y + _galaxias.GetWindowHeight() / camera.GetScale() / 2 + 16) / 8);
-        for (int x = minX; x < maxX; x++) {
+        for (int x = minX; x < maxX; x++)
+        {
             for (int y = minY; y < maxY; y++)
             {
                 TileState state = _world.GetTileState(TileLayer.Main, x, y);
-                if(state != AllTiles.Air.GetDefaultState())
+                if (state != AllTiles.Air.GetDefaultState())
                 {
                     int[] lights = _world.GetInterpolateLight(x, y);
                     Color[] colors = InterpolateWorldColor(lights);
@@ -57,7 +58,7 @@ public class WorldRenderer
                     tileRenderer.Render(renderer, state, x, y, colors: colors);
                     //renderer.Draw("Assets/Textures/Blocks/dirt", x * 8, -(y + 1) * 8, 1, 1, );
                 }
-            } 
+            }
         }
         _world.GetAllEntities().ForEach(e =>
         {
@@ -65,7 +66,7 @@ public class WorldRenderer
             //HitBox box = e.hitbox;
             //renderer.Draw("Assets/Textures/Misc/blank", (float)box.minX * scale, (float)-(box.minY + box.GetHeight()) * scale, (float)box.GetWidth(), (float)box.GetHeight(), hitColor);
 
-            Byte Brightness = _world.GetCombinedLight((int)e.x, (int)e.y + 1);
+            byte Brightness = _world.GetCombinedLight((int)e.x, (int)e.y + 1);
             var erenderer = e.GetRenderer();
             erenderer.Render(renderer, (float)e.x * scale, (float)-e.y * scale, 2, 4, e, scale, ShadowColor[Brightness]);
 

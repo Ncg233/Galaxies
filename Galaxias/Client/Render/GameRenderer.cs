@@ -1,18 +1,18 @@
 ﻿using Galaxias.Core.Main;
-using Galaxias.Core.Render;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Galasias.Core.Render;
-public class GameRenderer{
+namespace Galaxias.Client.Render;
+public class GameRenderer
+{
     private IntegrationRenderer renderer;
     private WorldRenderer _worldRenderer;
     private InGameHud hud;
     //private SpriteBatch _spriteBatch;
     private GalaxiasClient _galaxias;
-    
+
     public Camera camera;
 
-    public GameRenderer(GalaxiasClient galaxias, IntegrationRenderer renderer,WorldRenderer worldRenderer, Camera camera)
+    public GameRenderer(GalaxiasClient galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera)
     {
         this.renderer = renderer;
         this.camera = camera;
@@ -28,14 +28,14 @@ public class GameRenderer{
     }
     public void Render(float dTime)
     {
-        
-        if(_galaxias.GetWorld() != null)
+
+        if (_galaxias.GetWorld() != null)
         {
             //render world
             camera.Update(_galaxias.GetPlayer(), _galaxias.GetWindowWidth(), _galaxias.GetWindowHeight(), dTime);
             renderer.Begin(sortMode: SpriteSortMode.Immediate,
-                samplerState: SamplerState.PointClamp, 
-                depthStencilState: DepthStencilState.Default, 
+                samplerState: SamplerState.PointClamp,
+                depthStencilState: DepthStencilState.Default,
                 transformMatrix: camera.TransfromMatrix);
 
             _worldRenderer.Render(null, renderer);
@@ -50,7 +50,7 @@ public class GameRenderer{
             renderer.End();
 
         }
-        if (_galaxias.GetCurrentScreen() != null) 
+        if (_galaxias.GetCurrentScreen() != null)
         {
             renderer.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera.GuiMatrix);
             _galaxias.GetCurrentScreen().Render(renderer);

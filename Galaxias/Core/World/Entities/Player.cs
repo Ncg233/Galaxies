@@ -1,5 +1,5 @@
 using Galasias.Core.World.Entities;
-using Galaxias.Core.Key;
+using Galaxias.Client.Key;
 using Galaxias.Core.Main;
 using Galaxias.Util;
 

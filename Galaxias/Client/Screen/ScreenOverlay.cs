@@ -1,8 +1,8 @@
-﻿using Galaxias.Core.Main;
-using Galaxias.Core.Render;
+﻿using Galaxias.Client.Render;
+using Galaxias.Core.Main;
 using Microsoft.Xna.Framework;
 
-namespace Galasias.Core.Screen;
+namespace Galaxias.Client.Screen;
 
 public class ScreenOverlay
 {
@@ -19,12 +19,12 @@ public class ScreenOverlay
 
     protected virtual void OnInit()
     {
-        
+
     }
 
     public virtual void Render(IntegrationRenderer renderer)
     {
-        
+
     }
     public virtual void Update()
     {
@@ -33,6 +33,6 @@ public class ScreenOverlay
 
     public virtual void Hid()
     {
-        
+
     }
 }

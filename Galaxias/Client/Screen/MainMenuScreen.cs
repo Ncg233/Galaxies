@@ -1,10 +1,9 @@
-﻿using Galasias.Core.Screen;
-using Galaxias.Core.Render;
+﻿using Galaxias.Client.Render;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Galaxias.Core.Screen;
+namespace Galaxias.Client.Screen;
 public class MainMenuScreen : ScreenOverlay
 {
     private static Song mainMusic;
@@ -21,7 +20,8 @@ public class MainMenuScreen : ScreenOverlay
     }
     protected override void OnInit()
     {
-        if (mainMusic == null) {
+        if (mainMusic == null)
+        {
             mainMusic = galaxias.Content.Load<Song>("Assets/Musics/galaxias");
         }
         galaxias.PlayMusic(mainMusic);

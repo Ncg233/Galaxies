@@ -1,4 +1,4 @@
-using Galaxias.Core.Render;
+using Galaxias.Client.Render;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
 using System.Collections.Generic;

@@ -1,14 +1,14 @@
-﻿using Galaxias.Core.Main;
-using Galaxias.Core.Resource;
+﻿using Galaxias.Client.Resource;
+using Galaxias.Core.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Galaxias.Core.Render;
+namespace Galaxias.Client.Render;
 public class IntegrationRenderer
 {
     private SpriteBatch spriteBatch;
     private TextureManager textureManager;
-    public IntegrationRenderer (TextureManager textureManager)
+    public IntegrationRenderer(TextureManager textureManager)
     {
         this.textureManager = textureManager;
     }
@@ -40,7 +40,8 @@ public class IntegrationRenderer
     {
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
     }
-    public void End() { 
+    public void End()
+    {
         spriteBatch.End();
     }
 

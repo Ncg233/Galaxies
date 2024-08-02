@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Galaxias.Core.Resource;
+namespace Galaxias.Client.Resource;
 public class TextureManager
 {
     private ContentManager contentManager;
@@ -10,7 +10,7 @@ public class TextureManager
     public TextureManager(ContentManager contentManager)
     {
         this.contentManager = contentManager;
-    }   
+    }
     public Texture2D LoadTexture2D(string path)
     {
         var texture = textureDic.GetValueOrDefault(path, null);

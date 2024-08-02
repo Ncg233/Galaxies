@@ -21,7 +21,7 @@
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace Galaxias.Core.Key
+namespace Galaxias.Client.Key
 {
     public class KeyBind
     {
@@ -41,32 +41,35 @@ namespace Galaxias.Core.Key
             {
                 keyBinds[name].key = key;
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
         }
         public static void Update(float dTime)
         {
-            
+
         }
         public bool IsKeyDown()
         {
-            if (this.canRepeatExecute)
+            if (canRepeatExecute)
             {
-                return Keyboard.GetState().IsKeyDown(this.key);
-            } else
+                return Keyboard.GetState().IsKeyDown(key);
+            }
+            else
             {
-                if (Keyboard.GetState().IsKeyDown(this.key))
+                if (Keyboard.GetState().IsKeyDown(key))
                 {
-                    if (!canExecutes[this.key])
+                    if (!canExecutes[key])
                     {
-                        canExecutes[this.key] = true;
+                        canExecutes[key] = true;
                         return true;
                     }
-                } else
+                }
+                else
                 {
-                    canExecutes[this.key] = false;
+                    canExecutes[key] = false;
                 }
             }
             return false;
