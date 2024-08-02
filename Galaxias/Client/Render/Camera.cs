@@ -32,7 +32,7 @@ public class Camera
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
-            _zoom += 0.22f * dTime;
+            _zoom += 0.2f * dTime;
         else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
             _zoom -= 0.2f * dTime;
         _zoom = MathHelper.Clamp(_zoom, 0.2f, 0.5f);

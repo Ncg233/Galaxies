@@ -3,6 +3,7 @@ using Galaxias.Core.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace Galaxias.Client.Render;
 public class IntegrationRenderer
 {
@@ -20,23 +21,16 @@ public class IntegrationRenderer
     {
         spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, transformMatrix);
     }
-    public void Draw(string textureName, float x, float y, Color color, SpriteEffects effects = SpriteEffects.None)
-    {
-        spriteBatch.Draw(textureManager.LoadTexture2D(textureName), new Vector2(x, y), null, color, 0, Vector2.Zero, new Vector2(1, 1), effects, 0);
-    }
+
     public void Draw(string textureName, Rectangle rect, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
         spriteBatch.Draw(textureManager.LoadTexture2D(textureName), rect, source, color, 0, Vector2.Zero, effects, 0);
     }
-    public void Draw(string textureName, float x, float y, float width, float height, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
+    public void Draw(string textureName, float x, float y, Color color, float width = 1, float height = 1, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
         spriteBatch.Draw(textureManager.LoadTexture2D(textureName), new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
     }
-    public void Draw(Texture2D texture, float x, float y, Color color, SpriteEffects effects = SpriteEffects.None)
-    {
-        spriteBatch.Draw(texture, new Vector2(x, y), null, color, 0, Vector2.Zero, new Vector2(1, 1), effects, 0);
-    }
-    public void Draw(Texture2D texture, float x, float y, float width, float height, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
+    public void Draw(Texture2D texture, float x, float y, Color color, float width = 1, float height = 1, Rectangle? source = null , SpriteEffects effects = SpriteEffects.None)
     {
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
     }

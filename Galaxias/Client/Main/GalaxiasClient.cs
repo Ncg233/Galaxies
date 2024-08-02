@@ -1,12 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Galaxias.Client.Screen;
 using Galaxias.Core.World.Entities;
 using Microsoft.Xna.Framework.Media;
 using Galaxias.Client.Render;
 using Galaxias.Client.Resource;
 using Galaxias.Client.Key;
 using Galaxias.Client;
+using Galaxias.Client.Gui;
 
 namespace Galaxias.Core.Main;
 public class GalaxiasClient : Game

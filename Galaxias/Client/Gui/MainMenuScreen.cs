@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Galaxias.Client.Screen;
+namespace Galaxias.Client.Gui;
 public class MainMenuScreen : AbstractScreen
 {
     private static Song mainMusic;
@@ -17,6 +17,7 @@ public class MainMenuScreen : AbstractScreen
     public override void Render(IntegrationRenderer renderer)
     {
         renderer.Draw("Assets/Textures/Misc/a", new Rectangle(0, 0, width, height), Color.White);
+        base.Render(renderer);
     }
     protected override void OnInit()
     {
@@ -25,6 +26,7 @@ public class MainMenuScreen : AbstractScreen
             mainMusic = galaxias.Content.Load<Song>("Assets/Musics/galaxias");
         }
         galaxias.PlayMusic(mainMusic);
+        AddButton(new Widget.Button(width / 2 - 100, height / 4 + 48, 200, 20));
         base.OnInit();
     }
     public override void Hid()

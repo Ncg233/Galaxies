@@ -26,11 +26,7 @@ public class InGameHud
         RenderString(renderer, "Y:" + Math.Round(_client.GetPlayer().y, 1), 0, 1f);
         RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, 2f);
         RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(_client.GetPlayer().vx * _client.GetPlayer().vx + _client.GetPlayer().vy * _client.GetPlayer().vy), 1), 0, 3f);
-        //MouseState state = Mouse.GetState();
-        //Point pos = state.Position;
-        //Vector2 p = camera.ScreenToWorldSpace(pos);
-        //RenderString("Mouse Pos:" + p / 8f, new Vector2(0, 24));
-        float w = 300;
+
         int health = (int)Math.Round(_client.GetPlayer().health / 10);
         for (int i = 4; i >= 0; i--)
         {
@@ -39,11 +35,11 @@ public class InGameHud
                 health -= 2;
                 if (health < 0)
                 {
-                    renderer.Draw(_heartHalfTexture, width/2-58-i*8, 25, Color.White);
+                    renderer.Draw(_heartHalfTexture, width / 2 - 58 - i * 8 , 25, Color.White);
                 }
                 else
                 {
-                    renderer.Draw(_heartTexture, width/2-58-i*8, 25, Color.White);
+                    renderer.Draw(_heartTexture, width / 2 - 58 - i * 8 , 25, Color.White);
                 }
             }
             else
