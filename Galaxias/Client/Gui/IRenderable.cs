@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 namespace Galaxias.Client.Gui;
 public interface IRenderable
 {
-    public void Render(IntegrationRenderer renderer, int mouseX, int mouseY);
+    public void Render(IntegrationRenderer renderer, double mouseX, double mouseY);
 }

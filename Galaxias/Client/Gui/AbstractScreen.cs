@@ -18,6 +18,7 @@ public abstract class AbstractScreen
         this.galaxias = galaxias;
         this.width = width;
         this.height = height;
+        buttons.Clear();
         OnInit();
     }
 
@@ -46,10 +47,13 @@ public abstract class AbstractScreen
     {
 
     }
-
+    public void MouseClicked(double mouseX, double mouseY) {
+        buttons.ForEach(button => { 
+            button.MouseClicked(mouseX, mouseY);
+        });
+    }
     public void OnResize(int guiWidth, int guiHeight)
     {
-        width = guiWidth;
-        height = guiHeight;
+        Init(galaxias, guiWidth, guiHeight);
     }
 }

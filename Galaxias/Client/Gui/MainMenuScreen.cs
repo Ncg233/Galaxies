@@ -9,10 +9,6 @@ public class MainMenuScreen : AbstractScreen
     private static Song mainMusic;
     public override void Update()
     {
-        if (Keyboard.GetState().IsKeyDown(Keys.F))
-        {
-            galaxias.LoadWorld();
-        }
     }
     public override void Render(IntegrationRenderer renderer)
     {
@@ -24,9 +20,9 @@ public class MainMenuScreen : AbstractScreen
         if (mainMusic == null)
         {
             mainMusic = galaxias.Content.Load<Song>("Assets/Musics/galaxias");
+            galaxias.PlayMusic(mainMusic);
         }
-        galaxias.PlayMusic(mainMusic);
-        AddButton(new Widget.Button(width / 2 - 100, height / 4 + 48, 200, 20));
+        AddButton(new Widget.Button(width / 2 - 100, height / 4 + 48, 200, 20, galaxias.LoadWorld));
         base.OnInit();
     }
     public override void Hid()

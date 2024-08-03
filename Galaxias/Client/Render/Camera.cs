@@ -12,6 +12,7 @@ public class Camera
         => Matrix.CreateTranslation(_pos)
         * Matrix.CreateScale(scale) *
         Matrix.CreateTranslation(viewWidth / 2, viewHeight / 2, 0);
+    //public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
     public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
 
     public Vector3 _pos = new();

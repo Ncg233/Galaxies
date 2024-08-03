@@ -14,7 +14,7 @@ public class GalaxiasClient : Game
     public static readonly string Version = "0.0.1";
     private static GalaxiasClient instance;
     private GraphicsDeviceManager _graphics;
-    private AbstractScreen _currentScreen;
+    public AbstractScreen CurrentScreen { get; private set; }
     private readonly IntegrationRenderer renderer;
     private readonly GameRenderer _gameRenderer;
     private readonly WorldRenderer worldRenderer;
@@ -70,9 +70,17 @@ public class GalaxiasClient : Game
         {
             OnResize();
         }
+        if(Mouse.GetState().LeftButton == ButtonState.Pressed && CurrentScreen != null)
+        {
+            Point p = Mouse.GetState().Position;
+            double mouseX = p.X * camera.guiWidth / GetWindowWidth();
+            double mouseY = p.Y * camera.guiHeight / GetWindowHeight();
+            CurrentScreen.MouseClicked(mouseX, mouseY);
+            
+        }
         world?.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         KeyBind.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-        _currentScreen?.Update();
+        CurrentScreen?.Update();
         interactionManager?.Update(this, _gameRenderer.camera);
 
     }
@@ -87,11 +95,11 @@ public class GalaxiasClient : Game
     }
     public void SetCurrentScreen(AbstractScreen newScreen)
     {
-        _currentScreen?.Hid();
+        CurrentScreen?.Hid();
 
-        _currentScreen = newScreen;
+        CurrentScreen = newScreen;
 
-        _currentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
+        CurrentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
 
     }
     public void LoadWorld()
@@ -108,7 +116,7 @@ public class GalaxiasClient : Game
         width = GetWindowWidth();
         height = GetWindowHeight();
         _gameRenderer.onResize(width, height);
-        _currentScreen?.OnResize(camera.guiWidth, camera.guiHeight);
+        CurrentScreen?.OnResize(camera.guiWidth, camera.guiHeight);
     }
     public int GetWindowWidth()
     {
@@ -129,7 +137,7 @@ public class GalaxiasClient : Game
 
     public AbstractScreen GetCurrentScreen()
     {
-        return _currentScreen;
+        return CurrentScreen;
     }
     public TextureManager GetTextureManager()
     {
