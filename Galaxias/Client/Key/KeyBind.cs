@@ -1,4 +1,4 @@
-﻿//
+//
 //                            _ooOoo_
 //                           o8888888o
 //                           88" . "88
@@ -36,7 +36,7 @@ namespace Galaxias.Client.Key
         public static KeyBind Home = new KeyBind("home", Keys.H);
         public static KeyBind SetHome = new KeyBind("set_home", Keys.J);
         public static KeyBind FullScreen = new KeyBind("full_screen", Keys.F11, false);
-        public static KeyBind DeBug = new KeyBind("debug", Keys.F13, false);
+        public static KeyBind DeBug = new KeyBind("debug", Keys.F3, false);
         public static KeyBind JetPack = new KeyBind("jetpack", Keys.L, false);
         public static bool Set(string name, Keys key)
         {
