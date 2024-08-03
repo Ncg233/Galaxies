@@ -23,7 +23,6 @@ public class GameRenderer
     public void LoadContents()
     {
         //_spriteBatch = new SpriteBatch(_galaxias.GraphicsDevice);
-        hud.LoadContent();
         _worldRenderer.LoadContents();
     }
     public void Render(float dTime)

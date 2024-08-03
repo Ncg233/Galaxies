@@ -22,7 +22,7 @@ public class MainMenuScreen : AbstractScreen
             mainMusic = galaxias.Content.Load<Song>("Assets/Musics/galaxias");
             galaxias.PlayMusic(mainMusic);
         }
-        AddButton(new Widget.Button(width / 2 - 100, height / 4 + 48, 200, 20, galaxias.LoadWorld));
+        AddButton(new Widget.Button("Single Player",width / 2 - 100, height / 4 + 48, 200, 20, galaxias.LoadWorld));
         base.OnInit();
     }
     public override void Hid()
