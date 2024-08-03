@@ -7,11 +7,12 @@ using Galaxias.Client.Resource;
 using Galaxias.Client.Key;
 using Galaxias.Client;
 using Galaxias.Client.Gui;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Galaxias.Core.Main;
 public class GalaxiasClient : Game
 {
-    public static readonly string Version = "0.0.1";
+    public static readonly string Version = "0.1.0";
     private static GalaxiasClient instance;
     private GraphicsDeviceManager _graphics;
     public AbstractScreen CurrentScreen { get; private set; }
