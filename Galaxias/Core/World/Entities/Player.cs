@@ -135,7 +135,7 @@ public class Player : LivingEntity
         return 4;
     }
     public Item GetItem(){
-        return null;
+        return this.inventory.QuickBar[this.inventory.onHand];
     }
     public Inventory GetInventory(){
         return this.inventory;
