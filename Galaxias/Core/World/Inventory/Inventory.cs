@@ -7,10 +7,10 @@ public class Inventory{
     public int onHand = 1;
     public Inventory(){
         for (int i = 1;i<=9;i++){
-            QuickBar[i] = AllItems.air;
+            QuickBar[i] = AllItems.dirt;
         }
         for (int i = 1;i<=27;i++){
-            Bag[i] = AllItems.air;
+            Bag[i] = AllItems.dirt;
         }
     }
 }

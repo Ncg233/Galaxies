@@ -20,6 +20,7 @@ public class GalaxiasClient : Game
     private readonly GameRenderer _gameRenderer;
     private readonly WorldRenderer worldRenderer;
     private readonly TileRenderer tileRenderer;
+    private readonly ItemRenderer itemRenderer;
     private readonly TextureManager textureManager;
     private Player player;
     private ClientWorld world;
@@ -54,6 +55,7 @@ public class GalaxiasClient : Game
         renderer.LoadContents();
         _gameRenderer.LoadContents();
         tileRenderer.LoadContent(textureManager);
+        itemRenderer.LoadContent(textureManager);
         // TODO: use this.Content to load your game content here
     }
 
