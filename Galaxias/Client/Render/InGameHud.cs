@@ -1,3 +1,4 @@
+using Galaxias.Client.Key;
 using Galaxias.Core.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,6 +9,7 @@ public class InGameHud
 {
     private readonly string _heartTexture = "Assets/Textures/Gui/heart";
     private readonly string _heartHalfTexture = "Assets/Textures/Gui/heart_half";
+    private bool debug;
     private GalaxiasClient _client;
     private FrameCounter _frameCounter = new();
     public InGameHud(GalaxiasClient galaxias)
@@ -19,10 +21,16 @@ public class InGameHud
     {
 
         _frameCounter.Update(dTime);
-        RenderString(renderer, "X:" + Math.Round(_client.GetPlayer().x, 1), 0, 0);
-        RenderString(renderer, "Y:" + Math.Round(_client.GetPlayer().y, 1), 0, 6);
-        RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, 12);
-        RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(_client.GetPlayer().vx * _client.GetPlayer().vx + _client.GetPlayer().vy * _client.GetPlayer().vy), 1), 0, 18);
+        if(KeyBind.DeBug.IsKeyDown()){
+            if(debug == false)debug = true;
+            else debug = false;
+        }
+        if(debug == true){
+            RenderString(renderer, "X:" + Math.Round(_client.GetPlayer().x, 1), 0, 0);
+            RenderString(renderer, "Y:" + Math.Round(_client.GetPlayer().y, 1), 0, 6);
+            RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, 12);
+            RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(_client.GetPlayer().vx * _client.GetPlayer().vx + _client.GetPlayer().vy * _client.GetPlayer().vy), 1), 0, 18);
+        }
 
         int health = (int)Math.Round(_client.GetPlayer().health / 10);
         for (int i = 4; i >= 0; i--)
