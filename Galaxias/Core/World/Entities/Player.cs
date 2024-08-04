@@ -93,11 +93,11 @@ public class Player : LivingEntity
         {
             isJetpackEnable = !isJetpackEnable;
         }
-        for (int p = 49;p<=57;p++){
-            if (Keyboard.GetState().GetPressedKeyCount() == p){
-                this.inventory.onHand = p;
-            }
-        }
+        //for (int p = 49;p<=57;p++){
+        //    if (Keyboard.GetState().GetPressedKeyCount() == p){
+        //        this.inventory.onHand = p;
+        //    }
+        //}
     }
     protected int GetJumpTimeout()
     {
