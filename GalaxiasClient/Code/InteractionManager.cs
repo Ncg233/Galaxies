@@ -39,7 +39,7 @@ public class InteractionManager
                 int y = Utils.Floor(-p.Y / 8);
                 Player player = galaxias.GetPlayer();
                 player.hitX = (double)x;
-                player.hixY = (double)y;
+                player.hitY = (double)y;
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
                 if (tileState.GetTile() == AllTiles.Air && AllTiles.Dirt.OnPlace(world, x, y, tileState))
                 {
