@@ -16,6 +16,8 @@ public class Player : LivingEntity
     public int jumpTicks;
     public int jumpTimeout;
     public float factor;
+    public double hitX = 0;
+    public double hitY = 0;
     public Player(AbstractWorld world) : base(world)
     {
         y = 140;

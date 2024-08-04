@@ -1,4 +1,4 @@
-﻿using Client.Code.Render;
+using Client.Code.Render;
 using Galaxias.Core.World;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
@@ -37,6 +37,9 @@ public class InteractionManager
                 Vector2 p = camera.ScreenToWorldSpace(state.Position);
                 int x = Utils.Floor(p.X / 8);
                 int y = Utils.Floor(-p.Y / 8);
+                Player player = galaxias.GetPlayer();
+                player.hitX = (double)x;
+                player.hixY = (double)y;
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
                 if (tileState.GetTile() == AllTiles.Air && AllTiles.Dirt.OnPlace(world, x, y, tileState))
                 {
