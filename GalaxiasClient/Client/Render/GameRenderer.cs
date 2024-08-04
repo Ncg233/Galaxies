@@ -1,7 +1,7 @@
-﻿using Client.Code.Main;
+﻿using ClientGalaxias.Client.Main;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class GameRenderer
 {
     private IntegrationRenderer renderer;

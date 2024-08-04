@@ -1,4 +1,4 @@
-﻿using Client.Code.Key;
+﻿using ClientGalaxias.Client.Key;
 using Galaxias.Core.World;
 using Galaxias.Core.World.Entities;
 using Galaxias.Util;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Code;
+namespace ClientGalaxias.Client;
 public class ClientPlayer : Player
 {
     public ClientPlayer(AbstractWorld world) : base(world)

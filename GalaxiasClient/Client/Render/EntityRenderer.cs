@@ -2,7 +2,7 @@
 using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class EntityRenderer
 {
     public void Render(IntegrationRenderer renderer, float renderX, float renderY, float width, float height, Entity entity, int scale, Color colors)

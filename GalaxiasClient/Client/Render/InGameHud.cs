@@ -1,12 +1,12 @@
-using Client.Code.Key;
-using Client.Code.Main;
+using ClientGalaxias.Client.Key;
+using ClientGalaxias.Client.Main;
 using Galasias.Core.World.Inventory;
 using Galaxias.Core.World.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class InGameHud
 {
     private readonly string _heartTexture = "Assets/Textures/Gui/heart";

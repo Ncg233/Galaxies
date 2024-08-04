@@ -1,11 +1,11 @@
-﻿using Client.Code.Render;
+﻿using ClientGalaxias.Client.Render;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Code.Gui;
+namespace ClientGalaxias.Client.Gui;
 public interface IRenderable
 {
     public void Render(IntegrationRenderer renderer, double mouseX, double mouseY);

@@ -1,5 +1,5 @@
-﻿using Client.Code.Gui;
-using Client.Code.Render;
+﻿using ClientGalaxias.Client.Gui;
+using ClientGalaxias.Client.Render;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Code.Gui.Widget;
+namespace ClientGalaxias.Client.Gui.Widget;
 public class Button : IRenderable
 {
     private string _text;

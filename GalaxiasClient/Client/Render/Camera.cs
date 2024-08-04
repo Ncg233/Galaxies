@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class Camera
 {
     public Matrix TransfromMatrix

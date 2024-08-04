@@ -1,11 +1,11 @@
-﻿using Client.Code.Resource;
+﻿using ClientGalaxias.Client.Resource;
 using Galasias.Core.World.Items;
 using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class ItemRenderer
 {
     private readonly Dictionary<Item, Texture2D> stateToTexture = new Dictionary<Item, Texture2D>();

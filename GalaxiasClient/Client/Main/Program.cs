@@ -1,7 +1,5 @@
 ﻿
-
-using Client.Code.Main;
-
+using ClientGalaxias.Client.Main;
 static class Program
 {
     static void Main(string[] args)

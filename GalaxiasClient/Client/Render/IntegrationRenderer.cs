@@ -1,10 +1,10 @@
-﻿using Client.Code.Main;
-using Client.Code.Resource;
+﻿using ClientGalaxias.Client.Main;
+using ClientGalaxias.Client.Resource;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class IntegrationRenderer
 {
     private SpriteBatch spriteBatch;

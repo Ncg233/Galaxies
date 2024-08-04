@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Client.Code.Render
+namespace ClientGalaxias.Client.Render
 {
     public class FrameCounter
     {

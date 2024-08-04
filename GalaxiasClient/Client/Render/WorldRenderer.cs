@@ -1,23 +1,24 @@
-﻿using Galaxias.Core.World;
+﻿using ClientGalaxias.Client.Main;
+using Galaxias.Core.World;
 using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Client.Code.Render;
+namespace ClientGalaxias.Client.Render;
 public class WorldRenderer
 {
     private readonly Color[] ShadowColor = new Color[GameConstants.MaxLight + 1];
     private readonly Color startColor = new Color(90, 150, 255);
     private readonly Color endColor = new Color(15, 15, 16);
     private readonly Color hitColor = new Color(0, 1, 0, 0.2f);
-    private Main.GalaxiasClient _galaxias;
+    private GalaxiasClient _galaxias;
     private AbstractWorld _world;
     private Camera camera;
     private TileRenderer tileRenderer;
     private EntityRenderer entityRenderer = new();
     private float sunRadius;
     private float scaleHeight;
-    public WorldRenderer(Main.GalaxiasClient galaxias, Camera camera, TileRenderer tileRenderer)
+    public WorldRenderer(GalaxiasClient galaxias, Camera camera, TileRenderer tileRenderer)
     {
         this.camera = camera;
         this.tileRenderer = tileRenderer;

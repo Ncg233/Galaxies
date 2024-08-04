@@ -21,7 +21,7 @@
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace Client.Code.Key
+namespace ClientGalaxias.Client.Key
 {
     public class KeyBind
     {

@@ -2,14 +2,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Galaxias.Core.World.Entities;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Graphics;
-using Client.Code;
-using Client.Code.Gui;
-using Client.Code.Key;
-using Client.Code.Render;
-using Client.Code.Resource;
+using ClientGalaxias.Client;
+using ClientGalaxias.Client.Gui;
+using ClientGalaxias.Client.Key;
+using ClientGalaxias.Client.Render;
+using ClientGalaxias.Client.Resource;
 
-namespace Client.Code.Main;
+namespace ClientGalaxias.Client.Main;
 public class GalaxiasClient : Game
 {
     public static readonly string Version = "0.1.0";

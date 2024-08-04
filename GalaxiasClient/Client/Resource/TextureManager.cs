@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Client.Code.Resource;
+namespace ClientGalaxias.Client.Resource;
 public class TextureManager
 {
     private ContentManager contentManager;

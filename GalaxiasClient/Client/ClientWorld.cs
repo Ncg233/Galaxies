@@ -1,6 +1,6 @@
 ﻿using Galaxias.Core.World;
 
-namespace Client.Code;
+namespace ClientGalaxias.Client;
 public class ClientWorld : AbstractWorld
 {
 

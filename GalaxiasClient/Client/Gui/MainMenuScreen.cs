@@ -1,9 +1,9 @@
-﻿using Client.Code.Render;
+﻿using ClientGalaxias.Client.Render;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Client.Code.Gui;
+namespace ClientGalaxias.Client.Gui;
 public class MainMenuScreen : AbstractScreen
 {
     private static Song mainMusic;

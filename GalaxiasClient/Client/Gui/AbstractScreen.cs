@@ -1,11 +1,11 @@
-﻿using Client.Code.Gui.Widget;
-using Client.Code.Main;
-using Client.Code.Render;
+﻿using ClientGalaxias.Client.Gui.Widget;
+using ClientGalaxias.Client.Main;
+using ClientGalaxias.Client.Render;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Client.Code.Gui;
+namespace ClientGalaxias.Client.Gui;
 
 public abstract class AbstractScreen
 {

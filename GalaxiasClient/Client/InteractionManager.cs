@@ -1,4 +1,4 @@
-﻿using Client.Code.Render;
+﻿using ClientGalaxias.Client.Render;
 using Galaxias.Core.World;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D11;
 
-namespace Client.Code;
+namespace ClientGalaxias.Client;
 public class InteractionManager
 {
     private AbstractWorld world;
