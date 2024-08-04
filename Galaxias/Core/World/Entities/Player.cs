@@ -1,15 +1,17 @@
 using System.CodeDom;
+using System.Windows.Forms;
 using Galasias.Core.World.Entities;
 using Galasias.Core.World.Inventory;
 using Galasias.Core.World.Items;
 using Galaxias.Client.Key;
 using Galaxias.Core.Main;
 using Galaxias.Util;
+using Microsoft.Xna.Framework.Input;
 
 namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
-    private Inventory inventory;
+    private Inventory inventory = new Inventory();
     private double homeX = 0;
     private double homeY = 80;
     private int invincibleTicks = 50 * 3;
@@ -90,6 +92,11 @@ public class Player : LivingEntity
         if (KeyBind.JetPack.IsKeyDown())
         {
             isJetpackEnable = !isJetpackEnable;
+        }
+        for (int p = 49;p<=57;p++){
+            if (Keyboard.GetState().GetPressedKeyCount() == p){
+                this.inventory.onHand = p;
+            }
         }
     }
     protected int GetJumpTimeout()
