@@ -1,4 +1,7 @@
+using System.CodeDom;
 using Galasias.Core.World.Entities;
+using Galasias.Core.World.Inventory;
+using Galasias.Core.World.Items;
 using Galaxias.Client.Key;
 using Galaxias.Core.Main;
 using Galaxias.Util;
@@ -6,6 +9,7 @@ using Galaxias.Util;
 namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
+    private Inventory inventory;
     private double homeX = 0;
     private double homeY = 80;
     private int invincibleTicks = 50 * 3;
@@ -129,5 +133,11 @@ public class Player : LivingEntity
     public override float GetHeight()
     {
         return 4;
+    }
+    public Item GetItemOnHand(){
+        return this.inventory.QuickBar[this.inventory.onHand];
+    }
+    public Inventory GetInventory(){
+        return this.inventory;
     }
 }
