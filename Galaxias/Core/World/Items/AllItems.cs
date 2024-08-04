@@ -10,7 +10,7 @@ public class AllItems{
         itemRegister.Add(name, item);
         return item;
     }
-    private static Item FromTile(string name,Tile tile){
+    private static Item FromTile(string name, Tile tile){
         Item item = Register(name,new TileItem(tile));
         return item;
     }

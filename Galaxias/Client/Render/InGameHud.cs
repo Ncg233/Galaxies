@@ -58,7 +58,7 @@ public class InGameHud
         for (int m = 0;m<9;m++){
             renderer.Draw("Assets/Textures/Gui/Inventory",width / 2 - 90 + m * 20, 0 ,Color.White);
         }
-        for (int g = 0;g<9;g++){
+        for (int g = 1;g<=9;g++){
             Inventory inventory = player.GetInventory();
             
         }

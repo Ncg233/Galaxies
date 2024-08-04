@@ -9,7 +9,6 @@ public class TileItem : Item{
         this.tile = tile;
     }
     public override Item use(AbstractWorld world,Player player,Item item){
-        
         return item;
     }
 }
