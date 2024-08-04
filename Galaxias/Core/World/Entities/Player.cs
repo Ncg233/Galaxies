@@ -7,7 +7,7 @@ using Galaxias.Util;
 namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
-    private Inventory inventory;
+    private Inventory inventory = new();
     protected double homeX = 0;
     protected double homeY = 80;
     private int invincibleTicks = 50 * 3;
@@ -133,7 +133,7 @@ public class Player : LivingEntity
         return 4;
     }
     public Item GetItemOnHand(){
-        return inventory.QuickBar[inventory.onHand];
+        return inventory.Hotbar[inventory.onHand];
     }
     public Inventory GetInventory(){
         return inventory;

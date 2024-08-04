@@ -15,6 +15,7 @@ public class WorldRenderer
     private AbstractWorld _world;
     private Camera camera;
     private TileRenderer tileRenderer;
+    private ItemRenderer itemRenderer;
     private EntityRenderer entityRenderer = new();
     private float sunRadius;
     private float scaleHeight;
@@ -29,6 +30,7 @@ public class WorldRenderer
             ShadowColor[i] = new Color(modifier, modifier, modifier, 1f);
         }
         _galaxias = galaxias;
+
     }
     public void SetRenderWorld(AbstractWorld world)
     {

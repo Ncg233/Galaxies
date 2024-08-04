@@ -37,6 +37,10 @@ public class IntegrationRenderer
     {
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
     }
+    public void Draw(Texture2D texture, Rectangle rect, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
+    {
+        spriteBatch.Draw(texture, rect, source, color, 0, Vector2.Zero, effects, 0);
+    }
     public void End()
     {
         spriteBatch.End();

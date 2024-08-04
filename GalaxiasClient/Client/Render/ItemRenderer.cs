@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace ClientGalaxias.Client.Render;
 public class ItemRenderer
 {
-    private readonly Dictionary<Item, Texture2D> stateToTexture = new Dictionary<Item, Texture2D>();
+    private readonly Dictionary<Item, Texture2D> itemToTexture = new Dictionary<Item, Texture2D>();
     public ItemRenderer()
     {
     }
@@ -18,18 +18,18 @@ public class ItemRenderer
         {
             if (itemId.Key != "air")
             {
-                stateToTexture.Add(itemId.Value.GetItem(), manager.LoadTexture2D("Assets/Textures/Items/" + itemId.Key));
+                itemToTexture.Add(itemId.Value.GetItem(), manager.LoadTexture2D("Assets/Textures/Items/" + itemId.Key));
             }
         }
     }
-    /*
-    public void Render(IntegrationRenderer renderer, TileState state, float x, float y, Color[] colors)
+    
+    public void Render(IntegrationRenderer renderer, Item item, float x, float y, Color color)
     {
-        Texture2D tileTexture = stateToTexture.GetValueOrDefault(state);
-        int width = tileTexture.Width;
-        int height = tileTexture.Height;
-        float vw = width / (float)GameConstants.TileSize;
-        float vh = height / (float)GameConstants.TileSize;
+        Texture2D itemTexture = itemToTexture.GetValueOrDefault(item);
+        int width = item is TileItem ? 8 : 16;
+        int height = item is TileItem ? 8 : 16;
+        //float vw = width / (float)GameConstants.TileSize;
+        //float vh = height / (float)GameConstants.TileSize;
         //for (float i = 0; i < 2; i += 1)
         //{
         //    for (float j = 0; j < 2; j += 1) {
@@ -37,9 +37,8 @@ public class ItemRenderer
         //            new Rectangle((int)(i / 2 * width), (int)(j / 2 * height), width / 2, height / 2));
         //    }
         //}
-        renderer.Draw(tileTexture, x * GameConstants.TileSize - (width - GameConstants.TileSize) / 2, -(y + 0.5f) * GameConstants.TileSize - height / 2, colors[0],
-                    source :new Rectangle(0, 0, width, height));
+        renderer.Draw(itemTexture ,new Rectangle((int)x - width / 2, (int)y - height / 2, width, height), color);
 
     }
-    */
+    
 }

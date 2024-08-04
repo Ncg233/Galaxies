@@ -1,12 +1,13 @@
 using ClientGalaxias.Client.Key;
 using ClientGalaxias.Client.Main;
+using ClientGalaxias.Client.Render;
 using Galasias.Core.World.Inventory;
 using Galaxias.Core.World.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace ClientGalaxias.Client.Render;
+namespace ClientGalaxias.Client.Gui;
 public class InGameHud
 {
     private readonly string _heartTexture = "Assets/Textures/Gui/heart";
@@ -57,9 +58,11 @@ public class InGameHud
                 break;
             }
         }
+        var inv = player.GetInventory();
         for (int m = 0; m < 9; m++)
         {
-            renderer.Draw("Assets/Textures/Gui/Inventory", width / 2 - 90 + m * 20, 0, Color.White);
+            renderer.Draw("Assets/Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
+            _client.GetItemRenderer().Render(renderer, inv.Hotbar[m], width / 2 - 90 + m * 20 + 10, 10, Color.White);
         }
         for (int g = 1; g <= 9; g++)
         {

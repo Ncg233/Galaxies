@@ -7,6 +7,7 @@ using ClientGalaxias.Client.Gui;
 using ClientGalaxias.Client.Key;
 using ClientGalaxias.Client.Render;
 using ClientGalaxias.Client.Resource;
+using System;
 
 namespace ClientGalaxias.Client.Main;
 public class GalaxiasClient : Game
@@ -19,6 +20,7 @@ public class GalaxiasClient : Game
     private readonly GameRenderer _gameRenderer;
     private readonly WorldRenderer worldRenderer;
     private readonly TileRenderer tileRenderer;
+    private readonly ItemRenderer itemRenderer;
     private readonly TextureManager textureManager;
     private ClientPlayer player;
     private ClientWorld world;
@@ -36,6 +38,7 @@ public class GalaxiasClient : Game
         Window.AllowUserResizing = true;
 
         tileRenderer = new TileRenderer();
+        itemRenderer = new ItemRenderer();
         worldRenderer = new WorldRenderer(this, camera, tileRenderer);
         _gameRenderer = new GameRenderer(this, renderer, worldRenderer, camera);
         camera.OnResize(GetWindowWidth(), GetWindowHeight());
@@ -53,6 +56,7 @@ public class GalaxiasClient : Game
         renderer.LoadContents();
         _gameRenderer.LoadContents();
         tileRenderer.LoadContent(textureManager);
+        itemRenderer.LoadContent(textureManager);
         // TODO: use this.Content to load your game content here
     }
 
@@ -160,5 +164,10 @@ public class GalaxiasClient : Game
     internal void StopMusic(Song mainMusic)
     {
         MediaPlayer.Stop();
+    }
+
+    internal ItemRenderer GetItemRenderer()
+    {
+        return itemRenderer;
     }
 }

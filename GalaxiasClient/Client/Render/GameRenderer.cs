@@ -1,4 +1,5 @@
-﻿using ClientGalaxias.Client.Main;
+﻿using ClientGalaxias.Client.Gui;
+using ClientGalaxias.Client.Main;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ClientGalaxias.Client.Render;
