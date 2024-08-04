@@ -1,4 +1,3 @@
-using Galaxias.Client.Render;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ public abstract class Entity
     public HitBox hitbox { get; protected set; } = HitBox.Empty();
     private AbstractWorld world;
     public float speed;
-    private EntityRenderer renderer;
+    //private EntityRenderer renderer;
     public bool onGround;
     public bool collidedHor;
     public bool collidedVert;
@@ -23,7 +22,7 @@ public abstract class Entity
     public Entity(AbstractWorld world)
     {
         this.world = world;
-        renderer = new EntityRenderer();
+        //renderer = new EntityRenderer();
     }
     public virtual void Update(float dTime)
     {
@@ -54,10 +53,10 @@ public abstract class Entity
     {
         
     }
-    public EntityRenderer GetRenderer()
-    {
-        return renderer;
-    }
+    //public EntityRenderer GetRenderer()
+    //{
+    //    return renderer;
+    //}
     private void HandleCollision(float dTime)
     {
         double motionY = vy;

@@ -2,19 +2,17 @@ using System.CodeDom;
 using Galasias.Core.World.Entities;
 using Galasias.Core.World.Inventory;
 using Galasias.Core.World.Items;
-using Galaxias.Client.Key;
-using Galaxias.Core.Main;
 using Galaxias.Util;
 
 namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
     private Inventory inventory;
-    private double homeX = 0;
-    private double homeY = 80;
+    protected double homeX = 0;
+    protected double homeY = 80;
     private int invincibleTicks = 50 * 3;
     protected bool isJumping;
-    private bool isJetpackEnable;
+    protected bool isJetpackEnable;
     public int jumpTicks;
     public int jumpTimeout;
     public float factor;
@@ -50,66 +48,66 @@ public class Player : LivingEntity
     }
     protected override void HandleMovement(float dTime)
     {
-        float factor = (KeyBind.Sprint.IsKeyDown() ? 1.5f : 1f);
-        if (KeyBind.Left.IsKeyDown())
-        {
-            direction = Direction.Left;
-            if (vx > -speed)
-            {
-                vx -= factor * speed * dTime;
-            }
-        }
-        else if (KeyBind.Right.IsKeyDown())
-        {
-            direction = Direction.Right;
-            if (vx < speed)
-            {
-                vx += factor * speed * dTime;
-            }
-        }
-        if (KeyBind.Jump.IsKeyDown())
-        {
-            Jump(GetJumpHeight());
-        }
-        if (EnableJetpack() && KeyBind.Down.IsKeyDown() && !onGround)
-        {
-            vy = 0;
-        }
-        if (KeyBind.Home.IsKeyDown())
-        {
-            x = homeX;
-            y = homeY;
-            vx = 0;
-            vy = 0;
-        }
-        if (KeyBind.SetHome.IsKeyDown())
-        {
-            homeX = x;
-            homeY = y;
-        }
-        if (KeyBind.JetPack.IsKeyDown())
-        {
-            isJetpackEnable = !isJetpackEnable;
-        }
+        //float factor = (KeyBind.Sprint.IsKeyDown() ? 1.5f : 1f);
+        //if (KeyBind.Left.IsKeyDown())
+        //{
+        //    direction = Direction.Left;
+        //    if (vx > -speed)
+        //    {
+        //        vx -= factor * speed * dTime;
+        //    }
+        //}
+        //else if (KeyBind.Right.IsKeyDown())
+        //{
+        //    direction = Direction.Right;
+        //    if (vx < speed)
+        //    {
+        //        vx += factor * speed * dTime;
+        //    }
+        //}
+        //if (KeyBind.Jump.IsKeyDown())
+        //{
+        //    Jump(GetJumpHeight());
+        //}
+        //if (EnableJetpack() && KeyBind.Down.IsKeyDown() && !onGround)
+        //{
+        //    vy = 0;
+        //}
+        //if (KeyBind.Home.IsKeyDown())
+        //{
+        //    x = homeX;
+        //    y = homeY;
+        //    vx = 0;
+        //    vy = 0;
+        //}
+        //if (KeyBind.SetHome.IsKeyDown())
+        //{
+        //    homeX = x;
+        //    homeY = y;
+        //}
+        //if (KeyBind.JetPack.IsKeyDown())
+        //{
+        //    isJetpackEnable = !isJetpackEnable;
+        //}
     }
     protected int GetJumpTimeout()
     {
         return 3;
     }
-    private float GetJumpHeight()
+    protected float GetJumpHeight()
     {
-        return this.EnableJetpack() ? 0.04f : 0.5f;
+        return EnableJetpack() ? 0.04f : 0.5f;
     }
-    private bool EnableJetpack()
+    protected bool EnableJetpack()
     {
-        return this.isJetpackEnable;
+        return isJetpackEnable;
     }
     public void Jump(double value)
     {
-        if (this.EnableJetpack() || (onGround && !isJumping))
+        if (EnableJetpack() || (onGround && !isJumping))
         {
             vy += value;
-            if (!this.EnableJetpack())
+            if (!EnableJetpack())
             {
                 isJumping = true;
             }
@@ -117,11 +115,11 @@ public class Player : LivingEntity
     }
     public override void Die()
     {
-        GalaxiasClient.GetInstance().Exit();
+        //GalaxiasClient.GetInstance().Exit();
     }
     public override void Hurt(float amout)
     {
-        if (this.invincibleTicks <= 0)
+        if (invincibleTicks <= 0)
         {
             base.Hurt(amout);
         }
@@ -135,9 +133,9 @@ public class Player : LivingEntity
         return 4;
     }
     public Item GetItemOnHand(){
-        return this.inventory.QuickBar[this.inventory.onHand];
+        return inventory.QuickBar[inventory.onHand];
     }
     public Inventory GetInventory(){
-        return this.inventory;
+        return inventory;
     }
 }
