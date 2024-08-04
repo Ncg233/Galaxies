@@ -8,7 +8,7 @@ public class TileItem : Item{
     public TileItem(Tile tile){
         this.tile = tile;
     }
-    public override Item use(AbstractWorld world,Player player,Item item){
+    public override Item Use(AbstractWorld world,Player player,Item item){
         return item;
     }
 }
