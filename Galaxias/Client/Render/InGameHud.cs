@@ -1,5 +1,7 @@
+using Galasias.Core.World.Inventory;
 using Galaxias.Client.Key;
 using Galaxias.Core.Main;
+using Galaxias.Core.World.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -19,6 +21,7 @@ public class InGameHud
     }
     public void Render(IntegrationRenderer renderer, int width, int height,float dTime)
     {
+        Player player = _client.GetPlayer();
 
         _frameCounter.Update(dTime);
         if(KeyBind.DeBug.IsKeyDown()){
@@ -54,6 +57,10 @@ public class InGameHud
         }
         for (int m = 0;m<9;m++){
             renderer.Draw("Assets/Textures/Gui/Inventory",width / 2 - 90 + m * 20, 0 ,Color.White);
+        }
+        for (int g = 0;g<9;g++){
+            Inventory inventory = player.GetInventory();
+            
         }
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
