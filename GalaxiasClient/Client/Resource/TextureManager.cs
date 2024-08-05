@@ -16,7 +16,7 @@ public class TextureManager
         var texture = textureDic.GetValueOrDefault(path, null);
         if (texture == null)
         {
-            texture = contentManager.Load<Texture2D>(path);
+            texture = contentManager.Load<Texture2D>("Assets/" + path);
         }
         return texture;
     }

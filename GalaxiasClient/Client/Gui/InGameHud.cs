@@ -10,8 +10,8 @@ using System;
 namespace ClientGalaxias.Client.Gui;
 public class InGameHud
 {
-    private readonly string _heartTexture = "Assets/Textures/Gui/heart";
-    private readonly string _heartHalfTexture = "Assets/Textures/Gui/heart_half";
+    private readonly string _heartTexture = "Textures/Gui/heart";
+    private readonly string _heartHalfTexture = "Textures/Gui/heart_half";
     private bool debug;
     private GalaxiasClient _client;
     private FrameCounter _frameCounter = new();
@@ -61,7 +61,7 @@ public class InGameHud
         var inv = player.GetInventory();
         for (int m = 0; m < 9; m++)
         {
-            renderer.Draw("Assets/Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
+            renderer.Draw("Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
             _client.GetItemRenderer().Render(renderer, inv.Hotbar[m], width / 2 - 90 + m * 20 + 10, 10, Color.White);
         }
         for (int g = 1; g <= 9; g++)

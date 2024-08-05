@@ -17,7 +17,7 @@ public class TileRenderer
         {
             if (tileId.Key != "air")
             {
-                stateToTexture.Add(tileId.Value.GetDefaultState(), manager.LoadTexture2D("Assets/Textures/Blocks/" + tileId.Key));
+                stateToTexture.Add(tileId.Value.GetDefaultState(), manager.LoadTexture2D("Textures/Blocks/" + tileId.Key));
             }
         }
     }

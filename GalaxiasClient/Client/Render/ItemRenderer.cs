@@ -18,7 +18,7 @@ public class ItemRenderer
         {
             if (itemId.Key != "air")
             {
-                itemToTexture.Add(itemId.Value.GetItem(), manager.LoadTexture2D("Assets/Textures/Items/" + itemId.Key));
+                itemToTexture.Add(itemId.Value.GetItem(), manager.LoadTexture2D("Textures/Items/" + itemId.Key));
             }
         }
     }

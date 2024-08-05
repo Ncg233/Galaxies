@@ -12,7 +12,7 @@ public class MainMenuScreen : AbstractScreen
     }
     public override void Render(IntegrationRenderer renderer)
     {
-        renderer.Draw("Assets/Textures/Misc/a", new Rectangle(0, 0, width, height), Color.White);
+        renderer.Draw("Textures/Misc/a", new Rectangle(0, 0, width, height), Color.White);
         base.Render(renderer);
     }
     protected override void OnInit()
