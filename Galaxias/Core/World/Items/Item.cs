@@ -9,7 +9,7 @@ public class Item{
     public virtual bool Use(AbstractWorld world, Player player, ItemPile item){
         return true;
     }
-    public virtual bool UseOn(AbstractWorld world, Player player, Tile tile, int x,int y){
+    public virtual bool UseOnTile(AbstractWorld world, Player player, TileState tile, int x,int y){
         return true;
     }
     public virtual bool HurtEntity(AbstractWorld world, LivingEntity player, LivingEntity entity){

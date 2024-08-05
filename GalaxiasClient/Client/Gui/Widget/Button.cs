@@ -27,7 +27,7 @@ public class Button : IRenderable
     }
     public void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
-        renderer.Draw("Assets/Textures/Gui/button", new Rectangle(x, y, width, height), Color.White);
+        renderer.Draw("Textures/Gui/button", new Rectangle(x, y, width, height), Color.White);
         renderer.DrawString(_text, x + width / 2 - _text.Length * 4, y, Color.White, Color.Black);
         //renderer.DrawString(GalaxiasClient.GetInstance().Font, _text, x, y, Color.White, Color.Black);
     }

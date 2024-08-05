@@ -89,7 +89,7 @@ public class WorldRenderer
         sunRadius = (w * w + scaleHeight * scaleHeight) / (2 * scaleHeight);
         float x = -camera.GetX() - (float)(sunRadius * Math.Cos(_world.GetSunRotation()) + 24);
         float y = -camera.GetY() + (sunRadius - scaleHeight) - (float)(sunRadius * Math.Sin(_world.GetSunRotation()));
-        renderer.Draw("Assets/Textures/Skys/sun", x, y, Color.White);
+        renderer.Draw("Textures/Skys/sun", x, y, Color.White);
     }
     private Color GetBackgroundColor(float skyLightMod)
     {
