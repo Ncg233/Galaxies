@@ -4,7 +4,7 @@ namespace Galasias.Core.World.Inventory;
 public class Inventory{
     public ItemPile[] Hotbar = new ItemPile[9+1];
     public ItemPile[] Bag = new ItemPile[27];
-    public int onHand = 0;
+    public int onHand = 1;
     public Inventory() {
         for (int i = 0; i < 4; i++) {
             Hotbar[i] = new ItemPile(AllItems.GoldIngot);
