@@ -61,15 +61,11 @@ public class InGameHud
         var inv = player.GetInventory();
         for (int m = 0; m < 9; m++)
         {
-            renderer.Draw("Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
+            if(m == _client.GetPlayer().GetInventory().onHand)renderer.Draw("Textures/Gui/slot_onHand", width / 2 - 90 + _client.GetPlayer().GetInventory().onHand * 20, 0, Color.White);
+            else renderer.Draw("Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
             _client.GetItemRenderer().Render(renderer, inv.Hotbar[m].GetItem(), width / 2 - 90 + m * 20 + 10, 10, Color.White);
         }
-        renderer.Draw("Textures/Gui/slot_onHand", width / 2 - 90 + _client.GetPlayer().GetInventory().onHand * 20, 0, Color.White);
-        for (int g = 0; g < 9; g++)
-        {
-            Inventory inventory = player.GetInventory();
-
-        }
+        
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
     {
