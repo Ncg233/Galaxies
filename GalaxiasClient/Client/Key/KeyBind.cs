@@ -28,6 +28,16 @@ namespace ClientGalaxias.Client.Key
         public static Dictionary<string, KeyBind> keyBinds = new Dictionary<string, KeyBind>();
         public static Dictionary<Keys, bool> canExecutes = new Dictionary<Keys, bool>();
         public static KeyBind Inventory = new KeyBind("inventory", Keys.E);
+        public static KeyBind D1 = new KeyBind("1", Keys.D1);
+        public static KeyBind D2 = new KeyBind("2", Keys.D2);
+        public static KeyBind D3 = new KeyBind("3", Keys.D3);
+        public static KeyBind D4 = new KeyBind("4", Keys.D4);
+        public static KeyBind D5 = new KeyBind("5", Keys.D5);
+        public static KeyBind D6 = new KeyBind("6", Keys.D6);
+        public static KeyBind D7 = new KeyBind("7", Keys.D7);
+        public static KeyBind D8 = new KeyBind("8", Keys.D8);
+        public static KeyBind D9 = new KeyBind("9", Keys.D9);
+        
         public static KeyBind Left = new KeyBind("left", Keys.A);
         public static KeyBind Right = new KeyBind("right", Keys.D);
         public static KeyBind Sprint = new KeyBind("sprint", Keys.LeftControl);

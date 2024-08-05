@@ -2,16 +2,16 @@ using Galasias.Core.World.Items;
 
 namespace Galasias.Core.World.Inventory;
 public class Inventory{
-    public Item[] Hotbar = new Item[9];
-    public Item[] Bag = new Item[27];
-    public int onHand = 0;
+    public ItemPile[] Hotbar = new ItemPile[9+1];
+    public ItemPile[] Bag = new ItemPile[27+1];
+    public int onHand = 1;
     public Inventory() {
-        for (int i = 0; i < 4; i++) {
-            Hotbar[i] = AllItems.GoldIngot;
+        for (int i = 1; i <= 4; i++) {
+            Hotbar[i] = new ItemPile(AllItems.GoldIngot);
         }
-        for (int i = 4; i < 9; i++)
+        for (int i = 5; i <= 9; i++)
         {
-            Hotbar[i] = AllItems.Dirt;
+            Hotbar[i] = new ItemPile(AllItems.Dirt);
         }
     }
 

@@ -8,6 +8,8 @@ namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
     private Inventory inventory = new();
+    public int HitX = 0;
+    public int HitY = 0;
     protected double homeX = 0;
     protected double homeY = 80;
     private int invincibleTicks = 50 * 3;
@@ -92,7 +94,7 @@ public class Player : LivingEntity
     {
         return 4;
     }
-    public Item GetItemOnHand(){
+    public ItemPile GetItemOnHand(){
         return inventory.Hotbar[inventory.onHand];
     }
     public Inventory GetInventory(){
