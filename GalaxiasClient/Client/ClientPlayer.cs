@@ -53,14 +53,14 @@ public class ClientPlayer : Player
         {
             isJetpackEnable = !isJetpackEnable;
         }
-        if (KeyBind.D1.IsKeyDown())this.GetInventory().onHand = 1;
-        if (KeyBind.D2.IsKeyDown())this.GetInventory().onHand = 2;
-        if (KeyBind.D3.IsKeyDown())this.GetInventory().onHand = 3;
-        if (KeyBind.D4.IsKeyDown())this.GetInventory().onHand = 4;
-        if (KeyBind.D5.IsKeyDown())this.GetInventory().onHand = 5;
-        if (KeyBind.D6.IsKeyDown())this.GetInventory().onHand = 6;
-        if (KeyBind.D7.IsKeyDown())this.GetInventory().onHand = 7;
-        if (KeyBind.D8.IsKeyDown())this.GetInventory().onHand = 8;
-        if (KeyBind.D9.IsKeyDown())this.GetInventory().onHand = 9;
+        if (KeyBind.D1.IsKeyDown())this.GetInventory().onHand = 0;
+        if (KeyBind.D2.IsKeyDown())this.GetInventory().onHand = 1;
+        if (KeyBind.D3.IsKeyDown())this.GetInventory().onHand = 2;
+        if (KeyBind.D4.IsKeyDown())this.GetInventory().onHand = 3;
+        if (KeyBind.D5.IsKeyDown())this.GetInventory().onHand = 4;
+        if (KeyBind.D6.IsKeyDown())this.GetInventory().onHand = 5;
+        if (KeyBind.D7.IsKeyDown())this.GetInventory().onHand = 6;
+        if (KeyBind.D8.IsKeyDown())this.GetInventory().onHand = 7;
+        if (KeyBind.D9.IsKeyDown())this.GetInventory().onHand = 8;
     }
 }

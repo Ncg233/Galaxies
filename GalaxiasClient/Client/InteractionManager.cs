@@ -44,7 +44,7 @@ public class InteractionManager
                 player.HitY = y;
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
                 if(player.GetItemOnHand().GetItem() is TileItem){
-                    player.GetItemOnHand().GetItem().UseOn(galaxias.GetWorld(), player, tileState, x, y);
+                    player.GetItemOnHand().GetItem().UseOnTile(galaxias.GetWorld(), player, tileState, x, y);
                 }
                 else player.GetItemOnHand().GetItem().Use(galaxias.GetWorld(), player, player.GetItemOnHand());
             }
