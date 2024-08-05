@@ -13,7 +13,7 @@ public class TileItem : Item{
         var tileState = world.GetTileState(TileLayer.Main, x, y);
                 if (tileState.GetTile() == AllTiles.Air && tile.OnPlace(world, x, y, tileState))
                 {
-                    world.SetTileState(TileLayer.Main, x, y, tile.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x, y, this.tile.GetDefaultState());
                 }
         return true;
     }

@@ -162,7 +162,7 @@ public abstract class Entity
     {
         return 1;
     }
-    public AbstractWorld getWorld(){
+    public AbstractWorld GetWorld(){
         return this.world;
     }
 }
