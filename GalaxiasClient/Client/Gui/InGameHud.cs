@@ -62,7 +62,7 @@ public class InGameHud
         for (int m = 0; m < 9; m++)
         {
             renderer.Draw("Assets/Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
-            _client.GetItemRenderer().Render(renderer, inv.Hotbar[m], width / 2 - 90 + m * 20 + 10, 10, Color.White);
+            _client.GetItemRenderer().Render(renderer, inv.Hotbar[m].GetItem(), width / 2 - 90 + m * 20 + 10, 10, Color.White);
         }
         for (int g = 1; g <= 9; g++)
         {

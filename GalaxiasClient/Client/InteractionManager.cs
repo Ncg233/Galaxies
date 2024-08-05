@@ -1,5 +1,7 @@
 ﻿using ClientGalaxias.Client.Render;
+using Galasias.Core.World.Items;
 using Galaxias.Core.World;
+using Galaxias.Core.World.Entities;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
 using Microsoft.Xna.Framework;
@@ -37,11 +39,14 @@ public class InteractionManager
                 Vector2 p = camera.ScreenToWorldSpace(state.Position);
                 int x = Utils.Floor(p.X / 8);
                 int y = Utils.Floor(-p.Y / 8);
+                Player player = galaxias.GetPlayer();
+                player.HitX = x;
+                player.HitY = y;
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
-                if (tileState.GetTile() == AllTiles.Air && AllTiles.Dirt.OnPlace(world, x, y, tileState))
-                {
-                    world.SetTileState(TileLayer.Main, x, y, AllTiles.Dirt.GetDefaultState());
+                if(player.GetItemOnHand().GetItem() is TileItem){
+                    player.GetItemOnHand().GetItem().UseOn(galaxias.GetWorld(), player, tileState.GetTile(), x, y);
                 }
+                else player.GetItemOnHand().GetItem().Use(galaxias.GetWorld(), player, player.GetItemOnHand());
             }
 
         }
