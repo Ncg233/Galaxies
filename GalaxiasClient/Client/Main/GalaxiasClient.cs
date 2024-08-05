@@ -8,6 +8,7 @@ using ClientGalaxias.Client.Key;
 using ClientGalaxias.Client.Render;
 using ClientGalaxias.Client.Resource;
 using System;
+using Galaxias.Server;
 
 namespace ClientGalaxias.Client.Main;
 public class GalaxiasClient : Game
@@ -22,6 +23,8 @@ public class GalaxiasClient : Game
     private readonly TileRenderer tileRenderer;
     private readonly ItemRenderer itemRenderer;
     private readonly TextureManager textureManager;
+    private readonly Networking.Client client = new();
+    private GalaxiasServer gServer;
     private ClientPlayer player;
     private ClientWorld world;
     private InteractionManager interactionManager;
@@ -63,13 +66,19 @@ public class GalaxiasClient : Game
     protected override void Update(GameTime gameTime)// TODO: Add your update logic here
     {
         base.Update(gameTime);
+        client.Update();
         if (KeyBind.FullScreen.IsKeyDown())
         {
             _graphics.ToggleFullScreen();
             OnResize();
         }
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
+            client.Stop();
+            gServer?.StopServer();
             Exit();
+        }//please quit game with esc key, or the thread will not stop 
+            
         if (width != GetWindowWidth() || height != GetWindowHeight())
         {
             OnResize();
@@ -105,6 +114,15 @@ public class GalaxiasClient : Game
 
         CurrentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
 
+    }
+    public void SetupServer()
+    {
+        if(gServer == null)
+        {
+            gServer = new GalaxiasServer();
+            gServer.StartServerThread();
+        }
+        client.Connect("localhost", 9050);
     }
     public void LoadWorld()
     {

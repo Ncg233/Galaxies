@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Galaxias.Server;
 internal class Server : NetWorkingInterface
 {
-    public Server()
+    public Server() : base()
     {
         Listener.ConnectionRequestEvent += NewConnection;
     }

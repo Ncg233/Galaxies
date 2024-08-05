@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System;
 
 namespace ClientGalaxias.Client.Gui;
 public class MainMenuScreen : AbstractScreen
@@ -22,7 +23,12 @@ public class MainMenuScreen : AbstractScreen
             mainMusic = galaxias.Content.Load<Song>("Assets/Musics/galaxias");
             galaxias.PlayMusic(mainMusic);
         }
-        AddButton(new Widget.Button("Single Player", width / 2 - 100, height / 4 + 48, 200, 20, galaxias.LoadWorld));
+        AddButton(new Widget.Button("Single Player", width / 2 - 100, height / 4 + 48, 200, 20, () =>
+        {
+            galaxias.SetupServer();
+            galaxias.LoadWorld();
+            Console.WriteLine("Load world");
+        }));
         base.OnInit();
     }
     public override void Hid()

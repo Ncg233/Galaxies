@@ -19,18 +19,26 @@ public class NetWorkingInterface
         Manager = new NetManager(Listener);
         
     }
+    public void StartServer(int port)
+    {
+        Manager.Start(port);
+    }
     public void Connect(string address, int port, string key = "key")
     {
         if (Server != null)
         {
             return;
         }
+        Console.WriteLine("Connecting...");
         Manager.Start();
-        Manager.Connect(address, port, key);
+        Server = Manager.Connect(address, port, key);
     }
     public void Stop()
     {
         Manager.Stop();
     }
-
+    public void Update()
+    {
+        Manager.PollEvents();
+    }
 }
