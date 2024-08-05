@@ -13,7 +13,7 @@ public class TreeGen : IChunkGenerator
     public void Generate(AbstractWorld world, Chunk applyChunk)
     {
         Random random = new Random();
-        for (int x = 0; x < GameConstants.ChunkWidth; x++)
+        for (int x = applyChunk.chunkX * GameConstants.ChunkWidth; x < (applyChunk.chunkX + 1) * GameConstants.ChunkWidth; x++)
         {
             for (int y = 0; y < GameConstants.ChunkHeight; y++)
             {
@@ -25,10 +25,10 @@ public class TreeGen : IChunkGenerator
                     {
                         applyChunk.SetTileState(TileLayer.Main, x, ly, AllTiles.Log.GetDefaultState());
                     }
-                    applyChunk.SetTileState(TileLayer.Main, x, y + height, AllTiles.Leaves.GetDefaultState());
-                    applyChunk.SetTileState(TileLayer.Main, x - 1, y + height, AllTiles.Leaves.GetDefaultState());
-                    applyChunk.SetTileState(TileLayer.Main, x + 1, y + height, AllTiles.Leaves.GetDefaultState());
-                    applyChunk.SetTileState(TileLayer.Main, x, y + height + 1, AllTiles.Leaves.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x, y + height, AllTiles.Leaves.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x - 1, y + height, AllTiles.Leaves.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x + 1, y + height, AllTiles.Leaves.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x, y + height + 1, AllTiles.Leaves.GetDefaultState());
                 }
             }
         }

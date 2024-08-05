@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace ClientGalaxias.Client.Render;
 public class TileRenderer
 {
-    private readonly Dictionary<TileState, Texture2D> stateToTexture = new Dictionary<TileState, Texture2D>();
+    private readonly Dictionary<TileState, Texture2D> stateToTexture = [];
     public TileRenderer()
     {
     }
