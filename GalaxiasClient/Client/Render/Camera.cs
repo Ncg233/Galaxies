@@ -16,7 +16,7 @@ public class Camera
     public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
 
     public Vector3 _pos = new();
-    private float _zoom = 0.4f, displayRadio, scale, guiScale;
+    private float _zoom = 0.18f, displayRadio, scale, guiScale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
     public void Update(Player player, float dTime)
@@ -36,7 +36,7 @@ public class Camera
             _zoom += 0.2f * dTime;
         else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
             _zoom -= 0.2f * dTime;
-        _zoom = MathHelper.Clamp(_zoom, 0.2f, 0.5f);
+        _zoom = MathHelper.Clamp(_zoom, 0.18f, 0.4f);
         scale = displayRadio * _zoom;
 
 

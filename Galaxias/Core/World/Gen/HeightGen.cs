@@ -9,7 +9,7 @@ public class HeightGen : IChunkGenerator
     private float noiseFreq = 0.04f;
     private float caveFreq = 0.05f;
     private int seed;
-    private float heightMult = 10f;
+    private float heightMult = 4f;
     private float heightAddition = 120;
     public HeightGen(int seed) {
         this.seed = seed;
