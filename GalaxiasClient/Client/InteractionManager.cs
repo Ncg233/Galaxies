@@ -30,7 +30,7 @@ public class InteractionManager
             Player player = galaxias.GetPlayer();
             player.HitX = x;
             player.HitY = y;
-            player.GetItemOnHand().GetItem().OnHandTime(galaxias.GetWorld(), player, player.GetItemOnHand());
+            //player.GetItemOnHand().GetItem().OnHandTime(galaxias.GetWorld(), player, player.GetItemOnHand());
             if (state.LeftButton == ButtonState.Pressed)
             {
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
@@ -50,6 +50,7 @@ public class InteractionManager
                 else {
                     player.GetItemOnHand().GetItem().Use(galaxias.GetWorld(), player, player.GetItemOnHand());
                     player.GetItemOnHand().GetItem().OnUsingTime(galaxias.GetWorld(), player, player.GetItemOnHand(), dtime);
+                    tileState.GetTile().OnUse(world, x, y, tileState, player);
                 }
             }
             else if (state.RightButton == ButtonState.Released){

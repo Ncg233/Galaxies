@@ -16,11 +16,11 @@ public class EntityRenderer
         //}
     //}
     
-    public void Render(IntegrationRenderer renderer, float renderX, float renderY, float width, float height,Entity entity, int scale, Color colors)
+    public void Render(IntegrationRenderer renderer, float renderX, float renderY, float width, float height,Entity entity, int scale, Color colors, string name)
     {
         //Texture2D entityTexture = entityToTexture.GetValueOrDefault(entity);
         //if(entityTexture != null)
-        renderer.Draw("Textures/Entities/" + "player", renderX - width * scale / 2, renderY - height * scale, colors,
+        renderer.Draw("Textures/Entities/" + name, renderX - width * scale / 2, renderY - height * scale, colors,
             effects: entity.direction == Direction.Left ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
                 
     }

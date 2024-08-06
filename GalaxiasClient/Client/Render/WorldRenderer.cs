@@ -71,7 +71,7 @@ public class WorldRenderer
 
             byte Brightness = _world.GetCombinedLight((int)e.x, (int)e.y + 1);
             //var erenderer = e.GetRenderer();
-            entityRenderer.Render(renderer, (float)e.x * scale, (float)-e.y * scale , 2, 4, e, scale, ShadowColor[Brightness]);
+            entityRenderer.Render(renderer, (float)e.x * scale, (float)-e.y * scale , 2, 4, e, scale, ShadowColor[Brightness], "player");
 
         });
 
