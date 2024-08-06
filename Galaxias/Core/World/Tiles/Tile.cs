@@ -1,4 +1,6 @@
-﻿namespace Galaxias.Core.World.Tiles;
+﻿using Galasias.Core.World.Entities;
+
+namespace Galaxias.Core.World.Tiles;
 public class Tile
 {
     private readonly StateHandler stateHandler;
@@ -35,6 +37,10 @@ public class Tile
         return true;
     }
     public virtual bool OnPlace(AbstractWorld world, int x, int y, TileState state)
+    {
+        return true;
+    }
+    public virtual bool OnUse(AbstractWorld world, int x, int y, TileState state, LivingEntity entity)
     {
         return true;
     }

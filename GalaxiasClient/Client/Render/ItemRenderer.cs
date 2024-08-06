@@ -1,6 +1,5 @@
 ﻿using ClientGalaxias.Client.Resource;
 using Galasias.Core.World.Items;
-using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;

@@ -1,6 +1,7 @@
 using Galaxias.Core.World.Chunks;
 using Galaxias.Core.World.Entities;
 using Galaxias.Core.World.Gen;
+using Galaxias.Core.World.Particle;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
 using System;
@@ -10,6 +11,7 @@ namespace Galaxias.Core.World;
 public class AbstractWorld
 {
     private readonly List<Entity> entities = [];
+    private readonly List<ParticleType> particles = [];
     private readonly Dictionary<int, Chunk> chunksLookup = [];
     private readonly List<IChunkGenerator> generators;
     private int tutolTime = 1440;
@@ -243,7 +245,7 @@ public class AbstractWorld
         ];
         return light;
     }
-    public void addParticle(){
-        
+    public void addParticle(ParticleType particle){
+        particles.Add(particle);
     }
 }
