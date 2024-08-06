@@ -22,6 +22,7 @@ public class GalaxiasClient : Game
     private readonly WorldRenderer worldRenderer;
     private readonly TileRenderer tileRenderer;
     private readonly ItemRenderer itemRenderer;
+    private readonly EntityRenderer entityRenderer;
     private readonly TextureManager textureManager;
     private readonly Networking.Client client = new();
     private GalaxiasServer gServer;
@@ -42,6 +43,7 @@ public class GalaxiasClient : Game
 
         tileRenderer = new TileRenderer();
         itemRenderer = new ItemRenderer();
+        entityRenderer = new EntityRenderer();
         worldRenderer = new WorldRenderer(this, camera, tileRenderer);
         _gameRenderer = new GameRenderer(this, renderer, worldRenderer, camera);
         camera.OnResize(GetWindowWidth(), GetWindowHeight());
@@ -60,6 +62,8 @@ public class GalaxiasClient : Game
         _gameRenderer.LoadContents();
         tileRenderer.LoadContent(textureManager);
         itemRenderer.LoadContent(textureManager);
+        //entityRenderer.LoadContent(textureManager);
+
         // TODO: use this.Content to load your game content here
     }
 
@@ -94,7 +98,7 @@ public class GalaxiasClient : Game
         world?.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         KeyBind.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         CurrentScreen?.Update();
-        interactionManager?.Update(this, _gameRenderer.camera);
+        interactionManager?.Update(this, _gameRenderer.camera, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
     }
 

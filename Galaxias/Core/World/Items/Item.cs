@@ -15,4 +15,14 @@ public class Item{
     public virtual bool HurtEntity(AbstractWorld world, LivingEntity player, LivingEntity entity){
         return true;
     }
+    public virtual bool OnUsingTime(AbstractWorld world, Player player, ItemPile itemPile, float second){
+        return true;
+    }
+    public virtual bool ReleaseUse(AbstractWorld world, Player player, ItemPile itemPile, float second){
+        return true;
+    }
+    public virtual bool OnHandTime(AbstractWorld world, Player player, ItemPile itemPile){
+        return true;
+    }
+    
 }

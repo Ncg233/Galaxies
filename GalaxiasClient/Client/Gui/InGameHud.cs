@@ -36,6 +36,8 @@ public class InGameHud
             RenderString(renderer, "Y:" + Math.Round(_client.GetPlayer().y, 1), 0, 6);
             RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, 12);
             RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(_client.GetPlayer().vx * _client.GetPlayer().vx + _client.GetPlayer().vy * _client.GetPlayer().vy), 1), 0, 18);
+            RenderString(renderer, "Delta Time:" + dTime.ToString(), 0, 24);
+        
         }
 
         int health = (int)Math.Round(_client.GetPlayer().health / 10);
