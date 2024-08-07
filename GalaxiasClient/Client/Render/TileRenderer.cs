@@ -35,8 +35,16 @@ public class TileRenderer
         //            new Rectangle((int)(i / 2 * width), (int)(j / 2 * height), width / 2, height / 2));
         //    }
         //}
-        renderer.Draw(tileTexture, x * GameConstants.TileSize - (width - GameConstants.TileSize) / 2, -(y + 0.5f) * GameConstants.TileSize - height / 2, colors[0],
-                    source: new Rectangle(0, 0, width, height));
+        if (state.GetTile().GetRenderType() == TileRenderType.Center)
+        {
+            renderer.Draw(tileTexture, x * GameConstants.TileSize - (width - GameConstants.TileSize) / 2, -(y + 0.5f) * GameConstants.TileSize - height / 2, colors[0],
+                        source: new Rectangle(0, 0, width, height));
+        }
+        else {
+            renderer.Draw(tileTexture, x * GameConstants.TileSize - (width - GameConstants.TileSize) / 2, -(y + vh) * GameConstants.TileSize, colors[0],
+                        source: new Rectangle(0, 0, width, height));
+        }
+        
 
     }
 }

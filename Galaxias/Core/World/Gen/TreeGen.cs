@@ -27,9 +27,6 @@ public class TreeGen : IChunkGenerator
                         applyChunk.SetTileState(TileLayer.Main, x, ly, AllTiles.Log.GetDefaultState());
                     }
                     world.SetTileState(TileLayer.Main, x, y + height, AllTiles.Leaves.GetDefaultState());
-                    world.SetTileState(TileLayer.Main, x - 1, y + height, AllTiles.Leaves.GetDefaultState());
-                    world.SetTileState(TileLayer.Main, x + 1, y + height, AllTiles.Leaves.GetDefaultState());
-                    world.SetTileState(TileLayer.Main, x, y + height + 1, AllTiles.Leaves.GetDefaultState());
                 }
             }
         }

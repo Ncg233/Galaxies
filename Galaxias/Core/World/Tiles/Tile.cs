@@ -23,7 +23,10 @@ public class Tile
             return layer == TileLayer.Background ? 0.9F : 0.7F;
         }
     }
-
+    public virtual TileRenderType GetRenderType()
+    {
+        return TileRenderType.Center;
+    }
     protected virtual bool IsFullTile()
     {
         return true;

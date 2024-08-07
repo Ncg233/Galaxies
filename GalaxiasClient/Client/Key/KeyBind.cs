@@ -45,9 +45,9 @@ namespace ClientGalaxias.Client.Key
         public static KeyBind Jump = new KeyBind("jump", Keys.Space);
         public static KeyBind Home = new KeyBind("home", Keys.H);
         public static KeyBind SetHome = new KeyBind("set_home", Keys.J);
-        public static KeyBind FullScreen = new KeyBind("full_screen", Keys.F11, false);
-        public static KeyBind DeBug = new KeyBind("debug", Keys.F3, false);
-        public static KeyBind JetPack = new KeyBind("jetpack", Keys.L, false);
+        public static KeyBind FullScreen = new KeyBind("full_screen", Keys.F11);
+        public static KeyBind DeBug = new KeyBind("debug", Keys.F3);
+        public static KeyBind JetPack = new KeyBind("jetpack", Keys.L);
         public static bool Set(string name, Keys key)
         {
             if (keyBinds.ContainsKey(name))
@@ -65,25 +65,22 @@ namespace ClientGalaxias.Client.Key
 
         }
         public bool IsKeyDown()
-        {
-            if (canRepeatExecute)
+        {         
+            return Keyboard.GetState().IsKeyDown(key);
+        }
+        public bool IsKeyPressed()
+        {  
+            if (Keyboard.GetState().IsKeyDown(key))
             {
-                return Keyboard.GetState().IsKeyDown(key);
+                if (!canExecutes[key])
+                {
+                    canExecutes[key] = true;
+                    return true;
+                }
             }
             else
             {
-                if (Keyboard.GetState().IsKeyDown(key))
-                {
-                    if (!canExecutes[key])
-                    {
-                        canExecutes[key] = true;
-                        return true;
-                    }
-                }
-                else
-                {
-                    canExecutes[key] = false;
-                }
+                canExecutes[key] = false; 
             }
             return false;
         }
@@ -91,11 +88,10 @@ namespace ClientGalaxias.Client.Key
         {
             return keyBinds.Keys;
         }
-        public KeyBind(string name, Keys key, bool canRepeatExecute = true)
+        public KeyBind(string name, Keys key)
         {
             this.name = name;
             this.key = key;
-            this.canRepeatExecute = canRepeatExecute;
             keyBinds[name] = this;
             canExecutes[key] = false;
         }

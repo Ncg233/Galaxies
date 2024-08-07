@@ -37,30 +37,30 @@ public class ClientPlayer : Player
         {
             vy = 0;
         }
-        if (KeyBind.Home.IsKeyDown())
+        if (KeyBind.Home.IsKeyPressed())
         {
             x = homeX;
             y = homeY;
             vx = 0;
             vy = 0;
         }
-        if (KeyBind.SetHome.IsKeyDown())
+        if (KeyBind.SetHome.IsKeyPressed())
         {
             homeX = x;
             homeY = y;
         }
-        if (KeyBind.JetPack.IsKeyDown())
+        if (KeyBind.JetPack.IsKeyPressed())
         {
             isJetpackEnable = !isJetpackEnable;
         }
-        if (KeyBind.D1.IsKeyDown())this.GetInventory().onHand = 0;
-        if (KeyBind.D2.IsKeyDown())this.GetInventory().onHand = 1;
-        if (KeyBind.D3.IsKeyDown())this.GetInventory().onHand = 2;
-        if (KeyBind.D4.IsKeyDown())this.GetInventory().onHand = 3;
-        if (KeyBind.D5.IsKeyDown())this.GetInventory().onHand = 4;
-        if (KeyBind.D6.IsKeyDown())this.GetInventory().onHand = 5;
-        if (KeyBind.D7.IsKeyDown())this.GetInventory().onHand = 6;
-        if (KeyBind.D8.IsKeyDown())this.GetInventory().onHand = 7;
-        if (KeyBind.D9.IsKeyDown())this.GetInventory().onHand = 8;
+        if (KeyBind.D1.IsKeyDown()) GetInventory().onHand = 0;
+        if (KeyBind.D2.IsKeyDown()) GetInventory().onHand = 1;
+        if (KeyBind.D3.IsKeyDown()) GetInventory().onHand = 2;
+        if (KeyBind.D4.IsKeyDown()) GetInventory().onHand = 3;
+        if (KeyBind.D5.IsKeyDown()) GetInventory().onHand = 4;
+        if (KeyBind.D6.IsKeyDown()) GetInventory().onHand = 5;
+        if (KeyBind.D7.IsKeyDown()) GetInventory().onHand = 6;
+        if (KeyBind.D8.IsKeyDown()) GetInventory().onHand = 7;
+        if (KeyBind.D9.IsKeyDown()) GetInventory().onHand = 8;
     }
 }

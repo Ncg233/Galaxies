@@ -71,7 +71,7 @@ public class GalaxiasClient : Game
     {
         base.Update(gameTime);
         client.Update();
-        if (KeyBind.FullScreen.IsKeyDown())
+        if (KeyBind.FullScreen.IsKeyPressed())
         {
             _graphics.ToggleFullScreen();
             OnResize();
@@ -101,7 +101,6 @@ public class GalaxiasClient : Game
         interactionManager?.Update(this, _gameRenderer.camera, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
     }
-
     protected override void Draw(GameTime gameTime)
     {
 
