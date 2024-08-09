@@ -9,7 +9,7 @@ public class LivingEntity : Entity
     protected bool isFalling;
     protected double fallDistance = 0;
     private bool lastOnGround = true;
-    public LivingEntity(AbstractWorld world) : base(world)
+    public LivingEntity(EntityType type,AbstractWorld world) : base(type, world)
     {
 
     }

@@ -1,6 +1,7 @@
 ﻿using ClientGalaxias.Client.Main;
 using Galaxias.Core.World;
 using Galaxias.Core.World.Tiles;
+using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -52,14 +53,20 @@ public class WorldRenderer
         {
             for (int y = minY; y < maxY; y++)
             {
-                TileState state = _world.GetTileState(TileLayer.Main, x, y);
-                if (state != AllTiles.Air.GetDefaultState())
+                TileState tileState = _world.GetTileState(TileLayer.Main, x, y);
+                TileState background = _world.GetTileState(TileLayer.Background, x, y);
+                if (tileState != AllTiles.Air.GetDefaultState())
                 {
                     int[] lights = _world.GetInterpolateLight(x, y);
-                    Color[] colors = InterpolateWorldColor(lights);
+                    Color[] colors = InterpolateWorldColor(lights, TileLayer.Main);
 
-                    tileRenderer.Render(renderer, state, x, y, colors: colors);
-                    //renderer.Draw("Assets/Textures/Blocks/dirt", x * 8, -(y + 1) * 8, 1, 1, );
+                    tileRenderer.Render(renderer, tileState, x, y, colors: colors);
+                }else if(background != AllTiles.Air.GetDefaultState())
+                {
+                    int[] lights = _world.GetInterpolateLight(x, y);
+                    Color[] colors = InterpolateWorldColor(lights, TileLayer.Background);
+                    
+                    tileRenderer.RenderBackground(renderer, background, x, y, colors: colors);
                 }
             }
         }
@@ -99,12 +106,13 @@ public class WorldRenderer
     internal void OnResize(int width, int height)
     {
     }
-    public Color[] InterpolateWorldColor(int[] interpolatedLight)
+    public Color[] InterpolateWorldColor(int[] interpolatedLight, TileLayer layer)
     {
+        float factor = layer == TileLayer.Main ? 1 : 0.5f;
         Color[] colors = new Color[interpolatedLight.Length];
         for (int i = 0; i < colors.Length; i++)
         {
-            colors[i] = ShadowColor[interpolatedLight[i]];
+            colors[i] = Utils.MultiplyNoA(ShadowColor[interpolatedLight[i]], factor);
         }
         return colors;
     }

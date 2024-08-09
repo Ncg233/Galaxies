@@ -22,9 +22,11 @@ public class ItemRenderer
         }
     }
     
-    public void Render(IntegrationRenderer renderer, Item item, float x, float y, Color color)
+    public void Render(IntegrationRenderer renderer, ItemPile itemPile, float x, float y, Color color)
     {
+        Item item = itemPile.GetItem();
         Texture2D itemTexture = itemToTexture.GetValueOrDefault(item);
+
         int width = item is TileItem ? 8 : 16;
         int height = item is TileItem ? 8 : 16;
         //float vw = width / (float)GameConstants.TileSize;
@@ -37,6 +39,7 @@ public class ItemRenderer
         //    }
         //}
         renderer.Draw(itemTexture ,new Rectangle((int)x - width / 2, (int)y - height / 2, width, height), color);
+        renderer.DrawString(itemPile.GetCount().ToString(), x, y, 0.5f);
 
     }
     

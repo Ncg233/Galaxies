@@ -25,7 +25,7 @@ public class Tile
     }
     public virtual TileRenderType GetRenderType()
     {
-        return TileRenderType.Center;
+        return TileRenderType.Bottom;
     }
     protected virtual bool IsFullTile()
     {

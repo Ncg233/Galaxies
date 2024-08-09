@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Galaxias.Core.World.Entities;
 public abstract class Entity
 {
+    public readonly EntityType Type;
     private float friction = 0.5f;
     public double x { get; protected set; }
     public double y { get; protected set; }
@@ -19,8 +20,9 @@ public abstract class Entity
     public bool collidedHor;
     public bool collidedVert;
     protected double lastY;
-    public Entity(AbstractWorld world)
+    public Entity(EntityType entity,AbstractWorld world)
     {
+        Type = entity;
         this.world = world;
         //renderer = new EntityRenderer();
     }

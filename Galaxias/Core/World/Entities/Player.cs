@@ -18,7 +18,7 @@ public class Player : LivingEntity
     public int jumpTicks;
     public int jumpTimeout;
     public float factor;
-    public Player(AbstractWorld world) : base(world)
+    public Player(AbstractWorld world) : base(AllEntityTypes.PlayerEntity ,world)
     {
         y = 140;
         speed = 5f;

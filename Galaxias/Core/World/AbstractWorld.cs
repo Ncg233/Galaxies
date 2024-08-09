@@ -134,18 +134,21 @@ public class AbstractWorld
         int highestLight = 0;
         bool nonAir = false;
 
-
-        Tile tile = GetTileState(TileLayer.Main, x, y).GetTile();
-        if (tile != AllTiles.Air)
+        foreach(TileLayer layer in Utils.GetAllLayers())
         {
-            int light = 0;
-            if (light > highestLight)
+            Tile tile = GetTileState(layer, x, y).GetTile();
+            if (tile != AllTiles.Air)
             {
-                highestLight = light;
-            }
+                int light = 0;
+                if (light > highestLight)
+                {
+                    highestLight = light;
+                }
 
-            nonAir = true;
+                nonAir = true;
+            }
         }
+        
 
 
         if (nonAir)
@@ -168,17 +171,22 @@ public class AbstractWorld
         bool nonAir = false;
 
 
-        Tile tile = GetTileState(TileLayer.Main, x, y).GetTile();
-        if (tile != AllTiles.Air)
+        foreach (TileLayer layer in Utils.GetAllLayers())
         {
-            float mod = tile.GetTranslucentModifier(this, x, y, TileLayer.Main, isSky);
-            if (mod < smallestMod)
-            {
-                smallestMod = mod;
-            }
 
-            nonAir = true;
+            Tile tile = GetTileState(layer, x, y).GetTile();
+            if (tile != AllTiles.Air)
+            {
+                float mod = tile.GetTranslucentModifier(this, x, y, TileLayer.Main, isSky);
+                if (mod < smallestMod)
+                {
+                    smallestMod = mod;
+                }
+
+                nonAir = true;
+            }
         }
+            
 
 
         if (nonAir)

@@ -31,7 +31,8 @@ public class IntegrationRenderer
     }
     public void Draw(string textureName, float x, float y, Color color, float width = 1, float height = 1, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
-        spriteBatch.Draw(textureManager.LoadTexture2D(textureName), new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
+        var texture = textureManager.LoadTexture2D(textureName);
+        spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
     }
     public void Draw(Texture2D texture, float x, float y, Color color, float width = 1, float height = 1, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
@@ -44,6 +45,10 @@ public class IntegrationRenderer
     public void End()
     {
         spriteBatch.End();
+    }
+    public void DrawString(string s, float x, float y, float scale = 1)
+    {
+        DrawString(s, x, y, Color.White, Color.Black ,scale);
     }
     public void DrawString(string s, float x, float y, Color color1, Color color2, float scale = 1)
     {

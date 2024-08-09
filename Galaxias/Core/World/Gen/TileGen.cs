@@ -42,15 +42,19 @@ public class TileGen : IChunkGenerator
                             applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Dirt.GetDefaultState());
                         }
                     }
+                    applyChunk.SetTileState(TileLayer.Background, x, y, AllTiles.Dirt.GetDefaultState());
                     
                 }
                 else if(y < height + 1)
                 {
                     applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.GrassTile.GetDefaultState());
+                    applyChunk.SetTileState(TileLayer.Background, x, y, AllTiles.Air.GetDefaultState());
                 }
                 else {
                     applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
+                    applyChunk.SetTileState(TileLayer.Background, x, y, AllTiles.Air.GetDefaultState());
                 }
+                
             }
         }
     }
