@@ -10,6 +10,8 @@ using System.Collections.Generic;
 namespace Galaxias.Core.World;
 public class AbstractWorld
 {
+    private readonly int width = 192;
+    private readonly int height;
     private readonly List<Entity> entities = [];
     private readonly List<ParticleType> particles = [];
     private readonly Dictionary<int, Chunk> chunksLookup = [];
@@ -29,8 +31,10 @@ public class AbstractWorld
     public Chunk GetChunk(int chunkX)
     {
         var chunk = chunksLookup.GetValueOrDefault(chunkX);
+        
         if (chunk == null)
         {
+            Console.WriteLine("generate new chunk x:" + chunkX);
             chunk = LoadChunk(chunkX);
             chunk.GenerateChunk(generators);
         }
@@ -39,8 +43,8 @@ public class AbstractWorld
     }
     public Chunk LoadChunk(int chunkX)
     {
-        Chunk chunk = new Chunk(this, chunkX);
-        chunksLookup.Add(chunkX, chunk);
+        Chunk chunk = new (this, chunkX);
+        chunksLookup[chunkX] = chunk;
 
         return chunk;
     }
@@ -62,11 +66,25 @@ public class AbstractWorld
 
     public TileState GetTileState(TileLayer layer, int x, int y)
     {
-        return GetChunk(Utils.ToGridPos(x)).GetTileState(layer, x, y);
+        return GetChunk(GetChunkX(x)).GetTileState(layer, x, y);
     }
     public void SetTileState(TileLayer layer, int x, int y, TileState id)
     {
-        GetChunk(Utils.ToGridPos(x)).SetTileState(layer, x, y, id);
+        GetChunk(GetChunkX(x)).SetTileState(layer, x, y, id);
+    }
+    private int GetChunkX(int worldX)
+    {
+        while (worldX > width / 2 - 1)
+        {
+            worldX -= width;
+        }
+        while (worldX < -width / 2)
+        {
+
+            worldX += width;
+
+        }
+        return Utils.ToGridPos(worldX);
     }
     public double GetGenSuerfaceHeight(TileLayer layer ,int x)
     {
@@ -82,18 +100,21 @@ public class AbstractWorld
 
             bool change = false;
 
-            byte skylightThere = GetSkyLight(dirX, dirY);
-            byte calcedSkylight = CalcLight(dirX, dirY, true);
-            if (calcedSkylight != skylightThere)
-            {
-                SetSkyLight(dirX, dirY, calcedSkylight);
-                change = true;
+            if (IsChunkLoaded(dirX)){
+                byte skylightThere = GetSkyLight(dirX, dirY);
+                byte calcedSkylight = CalcLight(dirX, dirY, true);
+                if (calcedSkylight != skylightThere)
+                {
+                    SetSkyLight(dirX, dirY, calcedSkylight);
+                    change = true;
+                }
             }
+            
 
-            if (change)
-            {
-                CauseLightUpdate(dirX, dirY);
-            }
+            //if (change)
+            //{
+            //    CauseLightUpdate(dirX, dirY);
+            //}
 
         }
 
@@ -200,16 +221,12 @@ public class AbstractWorld
     }
     public bool IsChunkLoaded(int dirX)
     {
-        return chunksLookup.GetValueOrDefault(Utils.ToGridPos(dirX)) != null;
-    }
-    public bool IsChunkLoadedG(int gridX)
-    {
-        return chunksLookup.GetValueOrDefault(gridX) != null;
+        return chunksLookup.GetValueOrDefault(GetChunkX(dirX)) != null;
     }
 
     private void SetSkyLight(int x, int y, byte light)
     {
-        GetChunk(Utils.ToGridPos(x)).SetSkyLight(x, y, light);
+        GetChunk(GetChunkX(x)).SetSkyLight(x, y, light);
     }
 
     public float GetSunRotation()
@@ -226,10 +243,10 @@ public class AbstractWorld
     }
     public byte GetSkyLight(int x, int y)
     {
-        return GetChunk(Utils.ToGridPos(x)).GetSkyLight(x, y);
+        return GetChunk(GetChunkX(x)).GetSkyLight(x, y);
     }
     public byte GetCombinedLight(int x, int y){
-        return GetChunk(Utils.ToGridPos(x)).GetCombinedLight(x, y);
+        return GetChunk(GetChunkX(x)).GetCombinedLight(x, y);
     }
     public int[] GetInterpolateLight(int x, int y)
     {
@@ -255,5 +272,10 @@ public class AbstractWorld
     }
     public void addParticle(ParticleType particle){
         particles.Add(particle);
+    }
+
+    public int GetWidth()
+    {
+        return width;
     }
 }

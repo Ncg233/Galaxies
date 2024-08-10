@@ -20,7 +20,7 @@ public abstract class Entity
     public bool collidedHor;
     public bool collidedVert;
     protected double lastY;
-    public Entity(EntityType entity,AbstractWorld world)
+    public Entity(EntityType entity, AbstractWorld world)
     {
         Type = entity;
         this.world = world;
@@ -36,6 +36,7 @@ public abstract class Entity
         PreMovement(dTime);
         HandleMovement(dTime);
         HandleCollision(dTime);
+        TpToOtherSide();
         if (onGround)
         {
             vy = 0;
@@ -53,7 +54,7 @@ public abstract class Entity
 
     protected virtual void HandleMovement(float dTime)
     {
-        
+
     }
     //public EntityRenderer GetRenderer()
     //{
@@ -72,10 +73,10 @@ public abstract class Entity
             {
                 for (int y = Utils.Floor(ownBoxMotion.minY); y < Utils.Ceil(ownBoxMotion.maxY); y++)
                 {
-                    
+
                     TileState id = world.GetTileState(TileLayer.Main, x, y);
-                    if(id.GetTile().CanCollide())
-                    { 
+                    if (id.GetTile().CanCollide())
+                    {
                         blockBoxes.Add(new HitBox(x, y, x + 1, y + 1));
                     }
                 }
@@ -164,8 +165,20 @@ public abstract class Entity
     {
         return 1;
     }
-    public AbstractWorld GetWorld(){
-        return this.world;
+    public AbstractWorld GetWorld() {
+        return world;
+    }
+    public void TpToOtherSide()
+    {
+        if (x > world.GetWidth() / 2)
+        {
+            SetPos(x - world.GetWidth(), y);
+        }
+        else if (x < -world.GetWidth() / 2)
+        {
+            
+            SetPos(x + world.GetWidth(), y);
+        }
     }
 }
 

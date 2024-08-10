@@ -16,7 +16,7 @@ public class Utils
     }
     public static Color MultiplyNoA(Color value, float scale)
     {
-        return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), 255);
+        return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), value.A);
     }
     public static int Ceil(double value)
     {

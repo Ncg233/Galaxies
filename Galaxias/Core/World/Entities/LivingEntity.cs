@@ -9,7 +9,7 @@ public class LivingEntity : Entity
     protected bool isFalling;
     protected double fallDistance = 0;
     private bool lastOnGround = true;
-    public LivingEntity(EntityType type,AbstractWorld world) : base(type, world)
+    public LivingEntity(EntityType type, AbstractWorld world) : base(type, world)
     {
 
     }
@@ -25,14 +25,11 @@ public class LivingEntity : Entity
     }
     protected float EvalFallDamage()
     {
-        if (fallDistance <= 5)
-        {
-            return 0;
-        }
-        else
+        if (fallDistance > 5)
         {
             return (float)((float)fallDistance / 1.5);
         }
+        return 0;
     }
     protected virtual void HandleHealth()
     {
