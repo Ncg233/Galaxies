@@ -18,6 +18,7 @@ public class WorldRenderer
     private TileRenderer tileRenderer;
     private ItemRenderer itemRenderer;
     private EntityRenderer entityRenderer = new();
+    private BackgroundRenderer backgroundRenderer = new();
     private float sunRadius;
     private float scaleHeight;
     public WorldRenderer(GalaxiasClient galaxias, Camera camera, TileRenderer tileRenderer)
@@ -42,6 +43,7 @@ public class WorldRenderer
     }
     public void Render(GameTime gameTime, IntegrationRenderer renderer)
     {
+        
         RenderSky(renderer);
         int scale = GameConstants.TileSize;
 
@@ -86,9 +88,10 @@ public class WorldRenderer
 
     private void RenderSky(IntegrationRenderer renderer)
     {
+        
         float skylightMod = _world.GetSkyLightModify(false);
-
-        _galaxias.GraphicsDevice.Clear(GetBackgroundColor(skylightMod));
+        backgroundRenderer.Render(renderer, -camera.GetX(), -camera.GetY(), Utils.Ceil(_galaxias.GetWindowWidth() / camera.GetScale()), Utils.Ceil(_galaxias.GetWindowHeight() / camera.GetScale()), GetBackgroundColor(skylightMod));
+        //
 
 
         float w = _galaxias.GetWindowWidth() / camera.GetScale() / 2;
@@ -100,7 +103,7 @@ public class WorldRenderer
     }
     private Color GetBackgroundColor(float skyLightMod)
     {
-        return Color.Lerp(startColor, endColor, 1 - skyLightMod);
+        return ShadowColor[(int)(GameConstants.MaxLight * skyLightMod)];
     }
 
     internal void OnResize(int width, int height)

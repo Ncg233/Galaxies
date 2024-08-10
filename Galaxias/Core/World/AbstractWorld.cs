@@ -111,10 +111,10 @@ public class AbstractWorld
             }
             
 
-            //if (change)
-            //{
-            //    CauseLightUpdate(dirX, dirY);
-            //}
+            if (change)
+            {
+                CauseLightUpdate(dirX, dirY);
+            }
 
         }
 

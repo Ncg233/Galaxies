@@ -1,5 +1,6 @@
 ﻿using ClientGalaxias.Client.Gui;
 using ClientGalaxias.Client.Main;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ClientGalaxias.Client.Render;
@@ -28,7 +29,7 @@ public class GameRenderer
     }
     public void Render(float dTime)
     {
-
+        _galaxias.GraphicsDevice.Clear(Color.Black);
         if (_galaxias.GetWorld() != null)
         {
             //render world
