@@ -16,7 +16,8 @@ public class Camera
     public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
 
     public Vector3 _pos = new();
-    private float _zoom = 0.18f, displayRadio, scale, guiScale;
+    private float _zoom = 0.18f, displayRadio, guiScale;
+    private float scale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
     public void Update(Player player, float dTime)

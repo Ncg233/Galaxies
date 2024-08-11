@@ -2,6 +2,7 @@
 using ClientGalaxias.Client.Resource;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 
 namespace ClientGalaxias.Client.Render;
@@ -34,6 +35,10 @@ public class IntegrationRenderer
         var texture = textureManager.LoadTexture2D(textureName);
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
     }
+    public void Draw(Texture2D texture, float x, float y, float originX, float originY, float width, float height, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
+    {
+        spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, new Vector2(originX, originY), new Vector2(width, height), effects, 0);
+    }
     public void Draw(Texture2D texture, float x, float y, Color color, float width = 1, float height = 1, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
@@ -41,6 +46,10 @@ public class IntegrationRenderer
     public void Draw(Texture2D texture, Rectangle rect, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
         spriteBatch.Draw(texture, rect, source, color, 0, Vector2.Zero, effects, 0);
+    }
+    public void DrawSpriteMap(SpriteMap map, float x, float y, int pos, Color color)
+    {
+        spriteBatch.Draw(map.SourceTexture, new Vector2(x, y), map.GetSourceRect(pos), color);
     }
     public void End()
     {

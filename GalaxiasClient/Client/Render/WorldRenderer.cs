@@ -40,6 +40,7 @@ public class WorldRenderer
     }
     public void LoadContents()
     {
+        backgroundRenderer.LoadContents();
     }
     public void Render(GameTime gameTime, IntegrationRenderer renderer)
     {
@@ -57,18 +58,18 @@ public class WorldRenderer
             {
                 TileState tileState = _world.GetTileState(TileLayer.Main, x, y);
                 TileState background = _world.GetTileState(TileLayer.Background, x, y);
-                if (tileState != AllTiles.Air.GetDefaultState())
+                if (tileState == AllTiles.Air.GetDefaultState() && background != AllTiles.Air.GetDefaultState())//todo
+                {
+                    int[] lights = _world.GetInterpolateLight(x, y);
+                    Color[] colors = InterpolateWorldColor(lights, TileLayer.Background);
+
+                    tileRenderer.Render(renderer, background, x, y, colors: colors);
+                }else if(tileState != AllTiles.Air.GetDefaultState())
                 {
                     int[] lights = _world.GetInterpolateLight(x, y);
                     Color[] colors = InterpolateWorldColor(lights, TileLayer.Main);
 
                     tileRenderer.Render(renderer, tileState, x, y, colors: colors);
-                }else if(background != AllTiles.Air.GetDefaultState())
-                {
-                    int[] lights = _world.GetInterpolateLight(x, y);
-                    Color[] colors = InterpolateWorldColor(lights, TileLayer.Background);
-                    
-                    tileRenderer.RenderBackground(renderer, background, x, y, colors: colors);
                 }
             }
         }
