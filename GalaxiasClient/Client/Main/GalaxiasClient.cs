@@ -9,11 +9,13 @@ using ClientGalaxias.Client.Render;
 using ClientGalaxias.Client.Resource;
 using System;
 using Galaxias.Server;
+using Microsoft.Xna.Framework.Graphics;
+using System.Reflection;
 
 namespace ClientGalaxias.Client.Main;
 public class GalaxiasClient : Game
 {
-    public static readonly string Version = "0.1.0";
+    public static readonly string Version = "0.2.0";
     private static GalaxiasClient instance;
     private GraphicsDeviceManager _graphics;
     public AbstractScreen CurrentScreen { get; private set; }
@@ -46,6 +48,10 @@ public class GalaxiasClient : Game
         entityRenderer = new EntityRenderer();
         worldRenderer = new WorldRenderer(this, camera, tileRenderer);
         _gameRenderer = new GameRenderer(this, renderer, worldRenderer, camera);
+        //_graphics.IsFullScreen = true;
+        _graphics.PreferredBackBufferWidth = 1280;
+        _graphics.PreferredBackBufferHeight = 720;
+       
         camera.OnResize(GetWindowWidth(), GetWindowHeight());
     }
 
@@ -78,11 +84,8 @@ public class GalaxiasClient : Game
         }
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
         {
-            client.Stop();
-            gServer?.StopServer();
-            Exit();
+            QuitGame();
         }//please quit game with esc key, or the thread will not stop 
-            
         if (width != GetWindowWidth() || height != GetWindowHeight())
         {
             OnResize();
@@ -108,6 +111,12 @@ public class GalaxiasClient : Game
         _gameRenderer.Render((float)gameTime.ElapsedGameTime.TotalSeconds);
 
         base.Draw(gameTime);
+    }
+    public void QuitGame()
+    {
+        client.Stop();
+        gServer?.StopServer();
+        Exit();
     }
     public void SetCurrentScreen(AbstractScreen newScreen)
     {
@@ -142,6 +151,7 @@ public class GalaxiasClient : Game
         height = GetWindowHeight();
         _gameRenderer.onResize(width, height);
         CurrentScreen?.OnResize(camera.guiWidth, camera.guiHeight);
+
     }
     public int GetWindowWidth()
     {

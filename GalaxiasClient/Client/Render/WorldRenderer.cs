@@ -25,7 +25,7 @@ public class WorldRenderer
     {
         this.camera = camera;
         this.tileRenderer = tileRenderer;
-        float step = 1F / GameConstants.MaxLight;
+        float step = 1.2F / GameConstants.MaxLight;
         for (int i = 0; i < ShadowColor.Length; i++)
         {
             float modifier = i * step;

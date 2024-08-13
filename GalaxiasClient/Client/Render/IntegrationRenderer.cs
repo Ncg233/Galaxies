@@ -49,6 +49,7 @@ public class IntegrationRenderer
     }
     public void DrawSpriteMap(SpriteMap map, float x, float y, int pos, Color color)
     {
+
         spriteBatch.Draw(map.SourceTexture, new Vector2(x, y), map.GetSourceRect(pos), color);
     }
     public void End()

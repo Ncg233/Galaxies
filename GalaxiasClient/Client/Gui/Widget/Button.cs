@@ -28,16 +28,25 @@ public class Button : IRenderable
     public void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
         renderer.Draw("Textures/Gui/button", new Rectangle(x, y, width, height), Color.White);
-        renderer.DrawString(_text, x + width / 2 - _text.Length * 4, y, Color.White, Color.Black);
+        if(IsMouseOver(mouseX, mouseY))
+        {
+            renderer.DrawString(_text, x + width / 2 - _text.Length * 4, y, Color.Yellow, Color.Black);
+        }else
+        {
+            renderer.DrawString(_text, x + width / 2 - _text.Length * 4, y, Color.White, Color.Black);
+        }
         //renderer.DrawString(GalaxiasClient.GetInstance().Font, _text, x, y, Color.White, Color.Black);
     }
 
     public void MouseClicked(double mouseX, double mouseY)
     {
-        if (x <= mouseX && mouseX <= x + width && y <= mouseY && mouseY <= y + height)
+        if (IsMouseOver(mouseX, mouseY))
         {
             OnClick();
         }
+    }
+    public bool IsMouseOver(double mouseX, double mouseY) {
+        return x <= mouseX && mouseX <= x + width && y <= mouseY && mouseY <= y + height;
     }
     private void OnClick()
     {

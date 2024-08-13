@@ -1,4 +1,5 @@
 ﻿using Galasias.Core.World.Entities;
+using System;
 
 namespace Galaxias.Core.World.Tiles;
 public class Tile
@@ -10,7 +11,7 @@ public class Tile
     }
     public TileState GetDefaultState()
     {
-        return stateHandler.getDefaultState();
+        return stateHandler.GetDefaultState();
     }
     internal float GetTranslucentModifier(AbstractWorld chunk, int x, int y, TileLayer layer, bool isSky)
     {
@@ -20,14 +21,14 @@ public class Tile
         }
         else
         {
-            return layer == TileLayer.Background ? 0.9F : 0.7F;
+            return layer == TileLayer.Background ? 0.9F : 0.8F;
         }
     }
     public virtual TileRenderType GetRenderType()
     {
         return TileRenderType.Bottom;
     }
-    protected virtual bool IsFullTile()
+    public virtual bool IsFullTile()
     {
         return true;
     }
@@ -46,5 +47,10 @@ public class Tile
     public virtual bool OnUse(AbstractWorld world, int x, int y, TileState state, LivingEntity entity)
     {
         return true;
+    }
+
+    public virtual int GetLight(TileState tileState)
+    {
+        return 0;
     }
 }

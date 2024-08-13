@@ -97,10 +97,25 @@ public class Chunk
             lightGrid.GetValueOrDefault(LightType.Sky)[GetIndex(x & 31, y)] = light;
         }  
     }
+    public byte GetTileLight(int x, int y)
+    {
+        if (IsInWorld(y))
+        {
+            return lightGrid.GetValueOrDefault(LightType.Block)[GetIndex(x & 31, y)];
+        }
+        return GameConstants.MaxLight;
+    }
+    public void SetTileLight(int x, int y, byte light)
+    {
+        if (IsInWorld(y))
+        {
+            lightGrid.GetValueOrDefault(LightType.Block)[GetIndex(x & 31, y)] = light;
+        }
+    }
     public byte GetCombinedLight(int x, int y)
     {
         var skyLight = GetSkyLight(x, y) * world.GetSkyLightModify(true);
-        return (byte)skyLight;
+        return (byte)Math.Min(GameConstants.MaxLight, skyLight + GetTileLight(x, y));
     }
     public void InitLight()
     {

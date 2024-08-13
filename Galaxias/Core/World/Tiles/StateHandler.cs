@@ -11,7 +11,7 @@ internal class StateHandler
         defaultState = new TileState(this.tile);
     }
 
-    public TileState getDefaultState()
+    public TileState GetDefaultState()
     {
         return defaultState;
     }

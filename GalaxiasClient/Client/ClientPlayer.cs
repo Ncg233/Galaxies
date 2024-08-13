@@ -31,7 +31,7 @@ public class ClientPlayer : Player
         }
         if (KeyBind.Jump.IsKeyDown())
         {
-            Jump(GetJumpHeight());
+            Jump(GetJumpHeight(), dTime);
         }
         if (EnableJetpack() && KeyBind.Down.IsKeyDown() && !onGround)
         {

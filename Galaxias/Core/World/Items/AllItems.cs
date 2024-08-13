@@ -7,6 +7,7 @@ public class AllItems{
     public readonly static Item Air = Register("air", new Item());
     public readonly static Item Dirt = FromTile("dirt",AllTiles.Dirt);
     public readonly static Item GoldIngot = Register("gold_ingot", new Item());
+    public readonly static Item Torch = FromTile("torch", AllTiles.Torch);
     private static Item Register(string name, Item item)
     {
         itemRegister.Add(name, item);

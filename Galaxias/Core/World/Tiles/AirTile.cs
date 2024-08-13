@@ -1,7 +1,7 @@
 ﻿namespace Galaxias.Core.World.Tiles;
 internal class AirTile : Tile
 {
-    protected override bool IsFullTile()
+    public override bool IsFullTile()
     {
         return false;
     }

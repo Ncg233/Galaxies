@@ -11,6 +11,7 @@ public class AllTiles
     public static readonly Tile Stone = Register("stone", new Tile());
     public static readonly Tile Log = Register("log", new LogTile());
     public static readonly Tile Leaves = Register("leaves", new LeavesTile());
+    public static readonly Tile Torch = Register("torch", new TorchTile());
 
     private static Tile Register(string name, Tile tile)
     {

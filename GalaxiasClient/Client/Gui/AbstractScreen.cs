@@ -27,11 +27,11 @@ public abstract class AbstractScreen
 
     }
 
-    public virtual void Render(IntegrationRenderer renderer)
+    public virtual void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
         buttons.ForEach(button =>
         {
-            button.Render(renderer, 0, 0);
+            button.Render(renderer, mouseX, mouseY);
         });
     }
     protected Button AddButton(Button button)

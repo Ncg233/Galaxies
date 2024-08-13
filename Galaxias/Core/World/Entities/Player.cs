@@ -7,7 +7,7 @@ using Galaxias.Util;
 namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
-    private Inventory inventory = new();
+    private PlayerInventory inventory = new();
     public int HitX = 0;
     public int HitY = 0;
     protected double homeX = 0;
@@ -54,21 +54,21 @@ public class Player : LivingEntity
     }
     protected int GetJumpTimeout()
     {
-        return 3;
+        return 5;
     }
     protected float GetJumpHeight()
     {
-        return EnableJetpack() ? 0.04f : 0.5f;
+        return EnableJetpack() ? 0.04f : 30f;
     }
     protected bool EnableJetpack()
     {
         return isJetpackEnable;
     }
-    public void Jump(double value)
+    public void Jump(double value, float deltTime)
     {
         if (EnableJetpack() || (onGround && !isJumping))
         {
-            vy += value;
+            vy += value * deltTime;
             if (!EnableJetpack())
             {
                 isJumping = true;
@@ -97,7 +97,7 @@ public class Player : LivingEntity
     public ItemPile GetItemOnHand(){
         return inventory.Hotbar[inventory.onHand];
     }
-    public Inventory GetInventory(){
+    public PlayerInventory GetInventory(){
         return inventory;
     }
 }

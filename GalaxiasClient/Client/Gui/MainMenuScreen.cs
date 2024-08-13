@@ -11,10 +11,10 @@ public class MainMenuScreen : AbstractScreen
     public override void Update()
     {
     }
-    public override void Render(IntegrationRenderer renderer)
+    public override void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
         renderer.Draw("Textures/Misc/a", new Rectangle(0, 0, width, height), Color.White);
-        base.Render(renderer);
+        base.Render(renderer, mouseX, mouseY);
     }
     protected override void OnInit()
     {
@@ -29,6 +29,7 @@ public class MainMenuScreen : AbstractScreen
             galaxias.LoadWorld();
             Console.WriteLine("Load world");
         }));
+        AddButton(new Widget.Button("Quit", width / 2 - 100, height / 4 + 100, 200, 20, galaxias.QuitGame));
         base.OnInit();
     }
     public override void Hid()

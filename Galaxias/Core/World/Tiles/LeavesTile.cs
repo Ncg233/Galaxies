@@ -9,7 +9,7 @@ public class LeavesTile : Tile
     {
         return false;
     }
-    protected override bool IsFullTile()
+    public override bool IsFullTile()
     {
         return false;
     }

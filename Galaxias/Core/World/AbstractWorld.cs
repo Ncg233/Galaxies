@@ -17,7 +17,7 @@ public class AbstractWorld
     private readonly Dictionary<int, Chunk> chunksLookup = [];
     private readonly List<IChunkGenerator> generators;
     private int tutolTime = 1440;
-    private float currnetTime = 240;
+    private float currnetTime = 0;
     private float sunRotation, skyLight;
     private HeightGen heightGen;
     private int seed;
@@ -80,9 +80,9 @@ public class AbstractWorld
         }
         while (worldX < -width / 2)
         {
-
+        
             worldX += width;
-
+        
         }
         return Utils.ToGridPos(worldX);
     }
@@ -97,10 +97,9 @@ public class AbstractWorld
             int dirX = x + direction.X;
             int dirY = y + direction.Y;
 
-
-            bool change = false;
-
             if (IsChunkLoaded(dirX)){
+                bool change = false;
+
                 byte skylightThere = GetSkyLight(dirX, dirY);
                 byte calcedSkylight = CalcLight(dirX, dirY, true);
                 if (calcedSkylight != skylightThere)
@@ -108,14 +107,19 @@ public class AbstractWorld
                     SetSkyLight(dirX, dirY, calcedSkylight);
                     change = true;
                 }
-            }
-            
 
-            if (change)
-            {
-                CauseLightUpdate(dirX, dirY);
+                byte tilelightThere = GetTileLight(dirX, dirY);
+                byte calcedTilelight = CalcLight(dirX, dirY, false);
+                if (calcedTilelight != tilelightThere)
+                {
+                    SetTileLight(dirX, dirY, calcedTilelight);
+                    change = true;
+                }
+                if (change)
+                {
+                    CauseLightUpdate(dirX, dirY);
+                }
             }
-
         }
 
     }
@@ -130,7 +134,7 @@ public class AbstractWorld
 
             if (IsChunkLoaded(dirX))
             {
-                byte light = isSky ? GetSkyLight(dirX, dirY) : (byte)0;
+                byte light = isSky ? GetSkyLight(dirX, dirY) : GetTileLight(dirX, dirY);
                 if (light > maxLight)
                 {
                     maxLight = light;
@@ -148,7 +152,7 @@ public class AbstractWorld
             maxLight = emitted;
         }
 
-        return Math.Min(GameConstants.MaxLight, maxLight);
+        return maxLight;
     }
     public byte GetTileLight(int x, int y, bool isSky)
     {
@@ -157,10 +161,10 @@ public class AbstractWorld
 
         foreach(TileLayer layer in Utils.GetAllLayers())
         {
-            Tile tile = GetTileState(layer, x, y).GetTile();
-            if (tile != AllTiles.Air)
+            TileState tilestate = GetTileState(layer, x, y);
+            if (tilestate != AllTiles.Air.GetDefaultState())
             {
-                int light = 0;
+                int light = tilestate.GetLight();
                 if (light > highestLight)
                 {
                     highestLight = light;
@@ -170,7 +174,6 @@ public class AbstractWorld
             }
         }
         
-
 
         if (nonAir)
         {
@@ -207,9 +210,6 @@ public class AbstractWorld
                 nonAir = true;
             }
         }
-            
-
-
         if (nonAir)
         {
             return smallestMod;
@@ -223,12 +223,6 @@ public class AbstractWorld
     {
         return chunksLookup.GetValueOrDefault(GetChunkX(dirX)) != null;
     }
-
-    private void SetSkyLight(int x, int y, byte light)
-    {
-        GetChunk(GetChunkX(x)).SetSkyLight(x, y, light);
-    }
-
     public float GetSunRotation()
     {
         return sunRotation;
@@ -241,9 +235,21 @@ public class AbstractWorld
         return skyLight;
 
     }
+    public void SetSkyLight(int x, int y, byte light)
+    {
+        GetChunk(GetChunkX(x)).SetSkyLight(x, y, light);
+    }
     public byte GetSkyLight(int x, int y)
     {
         return GetChunk(GetChunkX(x)).GetSkyLight(x, y);
+    }
+    public void SetTileLight(int x, int y, byte light)
+    {
+        GetChunk(GetChunkX(x)).SetTileLight(x, y, light);
+    }
+    public byte GetTileLight(int x, int y)
+    {
+        return GetChunk(GetChunkX(x)).GetTileLight(x, y);
     }
     public byte GetCombinedLight(int x, int y){
         return GetChunk(GetChunkX(x)).GetCombinedLight(x, y);

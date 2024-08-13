@@ -9,12 +9,12 @@ public class TileItem : Item{
     public TileItem(Tile tile){
         this.tile = tile;
     }
-    public override bool UseOnTile(AbstractWorld world,Player player,TileState tile,int x,int y){
+    public override bool UseOnTile(AbstractWorld world,Player player, TileState tile,int x,int y){
         var tileState = world.GetTileState(TileLayer.Main, x, y);
-                if (tileState.GetTile() == AllTiles.Air && tile.GetTile().OnPlace(world, x, y, tileState))
-                {
-                    world.SetTileState(TileLayer.Main, x, y, this.tile.GetDefaultState());
-                }
+        if (tileState.GetTile() == AllTiles.Air && tile.GetTile().OnPlace(world, x, y, tileState))
+        {
+            world.SetTileState(TileLayer.Main, x, y, this.tile.GetDefaultState());
+        }
         return true;
     }
 }

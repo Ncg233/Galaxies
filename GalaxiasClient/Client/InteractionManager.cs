@@ -44,13 +44,14 @@ public class InteractionManager
             {
                 dtime += dTime;
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
-                if(player.GetItemOnHand().GetItem() is TileItem){
-                    player.GetItemOnHand().GetItem().UseOnTile(galaxias.GetWorld(), player, tileState, x, y);
+                var item = player.GetItemOnHand().GetItem();
+                if (item is TileItem){
+                    item.UseOnTile(galaxias.GetWorld(), player, tileState, x, y);
                 }
                 else {
-                    player.GetItemOnHand().GetItem().Use(galaxias.GetWorld(), player, player.GetItemOnHand());
-                    player.GetItemOnHand().GetItem().OnUsingTime(galaxias.GetWorld(), player, player.GetItemOnHand(), dtime);
-                    tileState.GetTile().OnUse(world, x, y, tileState, player);
+                    item.Use(galaxias.GetWorld(), player, player.GetItemOnHand());
+                    item.OnUsingTime(galaxias.GetWorld(), player, player.GetItemOnHand(), dtime);
+                    tileState.OnUse(world, x, y, tileState, player);
                 }
             }
             else if (state.RightButton == ButtonState.Released){

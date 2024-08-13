@@ -26,15 +26,13 @@ public class TileRenderer
         SpriteMap tileTexture = stateToTexture.GetValueOrDefault(state);
         int width = tileTexture.Width;
         int height = tileTexture.Height;
-        float vw = width / (float)GameConstants.TileSize;
-        float vh = height / (float)GameConstants.TileSize;
         
         if (state.GetTile().GetRenderType() == TileRenderType.Center)
         { 
-            renderer.DrawSpriteMap(tileTexture, x * GameConstants.TileSize - (width - GameConstants.TileSize) / 2, -(y + 0.5f) * GameConstants.TileSize - height / 2, 0 ,colors[0]);
+            renderer.DrawSpriteMap(tileTexture, (x + 0.5f) * GameConstants.TileSize - width / 2, -(y + 0.5f) * GameConstants.TileSize - height / 2, 0 ,colors[0]);
         }
         else {
-            renderer.DrawSpriteMap(tileTexture, x * GameConstants.TileSize - (width - GameConstants.TileSize) / 2, -(y + vh) * GameConstants.TileSize, 0,colors[0]);
+            renderer.DrawSpriteMap(tileTexture, (x + 0.5f) * GameConstants.TileSize - width / 2, -y * GameConstants.TileSize - height, 0, colors[0]);
         }
         //for (float i = 0; i < 2; i += 1)
         //{

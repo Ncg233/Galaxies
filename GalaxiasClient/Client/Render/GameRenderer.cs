@@ -2,6 +2,7 @@
 using ClientGalaxias.Client.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace ClientGalaxias.Client.Render;
 public class GameRenderer
@@ -54,7 +55,11 @@ public class GameRenderer
         if (_galaxias.GetCurrentScreen() != null)
         {
             renderer.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera.GuiMatrix);
-            _galaxias.GetCurrentScreen().Render(renderer);
+
+            Point p = Mouse.GetState().Position;
+            double mouseX = p.X * camera.guiWidth / _galaxias.GetWindowWidth();
+            double mouseY = p.Y * camera.guiHeight / _galaxias.GetWindowHeight();
+            _galaxias.GetCurrentScreen().Render(renderer, mouseX, mouseY);
             renderer.End();
         }
     }

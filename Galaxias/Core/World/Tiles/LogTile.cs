@@ -5,7 +5,7 @@ internal class LogTile : Tile
     {
         return false;
     }
-    protected override bool IsFullTile()
+    public override bool IsFullTile()
     {
         return false;
     }
