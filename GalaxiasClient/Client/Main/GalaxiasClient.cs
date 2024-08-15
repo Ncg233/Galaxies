@@ -90,7 +90,7 @@ public class GalaxiasClient : Game
         {
             OnResize();
         }
-        if (Mouse.GetState().LeftButton == ButtonState.Pressed && CurrentScreen != null)
+        if (IsActive && Mouse.GetState().LeftButton == ButtonState.Pressed && CurrentScreen != null)
         {
             Point p = Mouse.GetState().Position;
             double mouseX = p.X * camera.guiWidth / GetWindowWidth();

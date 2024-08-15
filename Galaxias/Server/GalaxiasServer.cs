@@ -12,24 +12,29 @@ public class GalaxiasServer
     private readonly Server server = new();
     private Thread serverThread;
     private bool isServerRunning = false;
+    private int _continueRun = 1;
     public GalaxiasServer() {
-        server.StartServer(Port);
+        
     }
     public void StartServerThread()
     {
         serverThread = new Thread(Run);
         isServerRunning = true;
+        server.StartServer(Port);
         serverThread.Start();
     }
     public void StopServer()
     {
         isServerRunning = false;
+        Interlocked.Exchange(ref _continueRun, 0);
         server.Stop();
     }
     public void Run()
     {
-        while (isServerRunning) {       
+        while (Interlocked.Exchange(ref _continueRun, 1) == 1) {       
             server.Update();
+            Thread.Sleep(1000);
+            
         }
     }
 

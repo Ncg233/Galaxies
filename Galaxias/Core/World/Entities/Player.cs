@@ -1,7 +1,6 @@
 using System.CodeDom;
-using Galasias.Core.World.Entities;
-using Galasias.Core.World.Inventory;
-using Galasias.Core.World.Items;
+using Galaxias.Core.World.Inventory;
+using Galaxias.Core.World.Items;
 using Galaxias.Util;
 
 namespace Galaxias.Core.World.Entities;
@@ -58,7 +57,7 @@ public class Player : LivingEntity
     }
     protected float GetJumpHeight()
     {
-        return EnableJetpack() ? 0.04f : 30f;
+        return EnableJetpack() ? 0.04f : 0.6f;
     }
     protected bool EnableJetpack()
     {
@@ -68,7 +67,7 @@ public class Player : LivingEntity
     {
         if (EnableJetpack() || (onGround && !isJumping))
         {
-            vy += value * deltTime;
+            vy += value;
             if (!EnableJetpack())
             {
                 isJumping = true;

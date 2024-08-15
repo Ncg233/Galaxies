@@ -17,16 +17,19 @@ public class AbstractWorld
     private readonly Dictionary<int, Chunk> chunksLookup = [];
     private readonly List<IChunkGenerator> generators;
     private int tutolTime = 1440;
-    private float currnetTime = 0;
+    public float currnetTime { get; private set; } = 8 * 60;//8:00
     private float sunRotation, skyLight;
     private HeightGen heightGen;
     private int seed;
+    private Random rand;
     public AbstractWorld()
     {
         seed = new Random().Next(-10000, 10000);
-        heightGen = new HeightGen(seed);
+        rand = new Random(seed);
+        
+        heightGen = new HeightGen(seed, rand); 
 
-        generators = [new TileGen(), new TreeGen(seed)];
+        generators = [new TileGen(seed, rand), new TreeGen(seed, rand)];
     }
     public Chunk GetChunk(int chunkX)
     {
@@ -51,8 +54,8 @@ public class AbstractWorld
     public void Update(float dTime)
     {
         currnetTime = (currnetTime + dTime) % 1440;
-        sunRotation = (float)(currnetTime / tutolTime * 2 * Math.PI);
-        skyLight = (float)((Math.Sin(sunRotation) + 1f) / 2f);
+        sunRotation = (float)(currnetTime / tutolTime * 2 * Math.PI - Math.PI / 2);
+        skyLight = (float)(Math.Sin(sunRotation) + 1) / 2;
         entities.ForEach(e => e.Update(dTime));
     }
     public void AddEntity(Entity entity)
@@ -97,7 +100,7 @@ public class AbstractWorld
             int dirX = x + direction.X;
             int dirY = y + direction.Y;
 
-            if (IsChunkLoaded(dirX)){
+            if (IsChunkLoaded(dirX) && IsInWorld(dirY)){
                 bool change = false;
 
                 byte skylightThere = GetSkyLight(dirX, dirY);
@@ -132,7 +135,7 @@ public class AbstractWorld
             int dirX = x + direction.X;
             int dirY = y + direction.Y;
 
-            if (IsChunkLoaded(dirX))
+            if (IsChunkLoaded(dirX) && IsInWorld(dirY))
             {
                 byte light = isSky ? GetSkyLight(dirX, dirY) : GetTileLight(dirX, dirY);
                 if (light > maxLight)
@@ -162,7 +165,7 @@ public class AbstractWorld
         foreach(TileLayer layer in Utils.GetAllLayers())
         {
             TileState tilestate = GetTileState(layer, x, y);
-            if (tilestate != AllTiles.Air.GetDefaultState())
+            if (!tilestate.IsAir())
             {
                 int light = tilestate.GetLight();
                 if (light > highestLight)
@@ -199,7 +202,7 @@ public class AbstractWorld
         {
 
             Tile tile = GetTileState(layer, x, y).GetTile();
-            if (tile != AllTiles.Air)
+            if (!tile.IsAir())
             {
                 float mod = tile.GetTranslucentModifier(this, x, y, TileLayer.Main, isSky);
                 if (mod < smallestMod)
@@ -283,5 +286,9 @@ public class AbstractWorld
     public int GetWidth()
     {
         return width;
+    }
+    public bool IsInWorld(int y)
+    {
+        return y >= 0 && y < GameConstants.ChunkHeight;
     }
 }

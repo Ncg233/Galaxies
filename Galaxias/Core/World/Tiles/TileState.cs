@@ -24,4 +24,13 @@ public class TileState
     {
         tile.OnUse(world, x, y, tileState, player);
     }
+
+    public bool IsFullTile()
+    {
+        return tile.IsFullTile();
+    }
+    public bool IsAir()
+    {
+        return tile.IsAir();
+    }
 }

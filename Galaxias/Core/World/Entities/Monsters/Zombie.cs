@@ -1,5 +1,3 @@
-using Galasias.Core.World.Entities;
-
 namespace Galaxias.Core.World.Entities.Monsters;
 public class Zombie : Monster
 {

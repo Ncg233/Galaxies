@@ -3,19 +3,21 @@ using Galaxias.Core.World.Tiles;
 using System;
 
 namespace Galaxias.Core.World.Gen;
-public class TileGen : IChunkGenerator
+public class TileGen : AbstractChunkGen
 {
-    private readonly Random rand = new Random();
     #region GENERATED
 
     private float noiseFreq = 0.04f;
     private float caveFreq = 0.05f;
-    private float seed = 10;
     private float heightMult = 10f;
     private float heightAddition = 120;
 
+    public TileGen(int seed, Random random) : base(seed, random)
+    {
+    }
+
     #endregion
-    public void Generate(AbstractWorld world ,Chunk applyChunk)
+    public override void Generate(AbstractWorld world ,Chunk applyChunk)
     {
         for (int x = 0; x < GameConstants.ChunkWidth; x++)
         {
@@ -33,7 +35,7 @@ public class TileGen : IChunkGenerator
                     }
                     else
                     {
-                        if (height - (rand.NextInt64() % 2 == 0 ? 10 : 9) >= y)
+                        if (height - (random.NextInt64() % 2 == 0 ? 10 : 9) >= y)
                         {
                             applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Stone.GetDefaultState());
                         }

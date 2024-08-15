@@ -1,23 +1,30 @@
-namespace Galasias.Core.World.Items;
-public class ItemPile{
+namespace Galaxias.Core.World.Items;
+public class ItemPile
+{
     private Item item;
     private int count = 1;
-    public ItemPile(Item item){
+    public ItemPile(Item item)
+    {
         this.item = item;
     }
-    public bool isEmpty(){
-        if(item == AllItems.Air){
+    public bool isEmpty()
+    {
+        if (item == AllItems.Air)
+        {
             return true;
         }
         return false;
     }
-    public Item GetItem(){
-        return this.item;
+    public Item GetItem()
+    {
+        return item;
     }
-    public int GetCount(){
+    public int GetCount()
+    {
         return count;
     }
-    public void SetCount(int count){
+    public void SetCount(int count)
+    {
         this.count = count;
     }
 }

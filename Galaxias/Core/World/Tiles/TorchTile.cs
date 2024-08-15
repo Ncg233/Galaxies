@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 namespace Galaxias.Core.World.Tiles;
 public class TorchTile : Tile
 {
+    public TorchTile(TileSettings settings) : base(settings)
+    {
+    }
+
     public override int GetLight(TileState tileState)
     {
-        return 127;
+        return 80;
     }
     public override bool IsFullTile()
     {

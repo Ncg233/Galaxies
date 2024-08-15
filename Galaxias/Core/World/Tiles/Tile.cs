@@ -1,12 +1,14 @@
-﻿using Galasias.Core.World.Entities;
+﻿using Galaxias.Core.World.Entities;
 using System;
 
 namespace Galaxias.Core.World.Tiles;
 public class Tile
 {
     private readonly StateHandler stateHandler;
-    public Tile()
+    private readonly TileSettings settings;
+    public Tile(TileSettings settings)
     {
+        this.settings = settings;
         stateHandler = new StateHandler(this);
     }
     public TileState GetDefaultState()
@@ -52,5 +54,18 @@ public class Tile
     public virtual int GetLight(TileState tileState)
     {
         return 0;
+    }
+    public bool IsAir()
+    {
+        return settings.IsAir;
+    }
+    public class TileSettings
+    {
+        public bool IsAir { get; private set; }
+        public TileSettings SetAir()
+        {
+            IsAir = true;
+            return this; 
+        }  
     }
 }

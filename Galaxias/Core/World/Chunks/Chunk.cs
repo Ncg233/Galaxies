@@ -114,7 +114,7 @@ public class Chunk
     }
     public byte GetCombinedLight(int x, int y)
     {
-        var skyLight = GetSkyLight(x, y) * world.GetSkyLightModify(true);
+        byte skyLight = (byte)(GetSkyLight(x, y) * world.GetSkyLightModify(true));
         return (byte)Math.Min(GameConstants.MaxLight, skyLight + GetTileLight(x, y));
     }
     public void InitLight()

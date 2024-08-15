@@ -1,7 +1,6 @@
 using Galaxias.Core.World;
-using Galaxias.Core.World.Entities;
 
-namespace Galasias.Core.World.Entities;
+namespace Galaxias.Core.World.Entities;
 public class LivingEntity : Entity
 {
     public float health { get; protected set; }
@@ -21,7 +20,7 @@ public class LivingEntity : Entity
     }
     public virtual void Hurt(float amout)
     {
-        this.health -= amout;
+        health -= amout;
     }
     protected float EvalFallDamage()
     {

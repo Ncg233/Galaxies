@@ -58,13 +58,14 @@ public class WorldRenderer
             {
                 TileState tileState = _world.GetTileState(TileLayer.Main, x, y);
                 TileState background = _world.GetTileState(TileLayer.Background, x, y);
-                if (tileState == AllTiles.Air.GetDefaultState() && background != AllTiles.Air.GetDefaultState())//todo
+                if (!tileState.IsFullTile() && background != AllTiles.Air.GetDefaultState())//todo
                 {
                     int[] lights = _world.GetInterpolateLight(x, y);
                     Color[] colors = InterpolateWorldColor(lights, TileLayer.Background);
 
                     tileRenderer.Render(renderer, background, x, y, colors: colors);
-                }else if(tileState != AllTiles.Air.GetDefaultState())
+                }
+                if(!tileState.IsAir())
                 {
                     int[] lights = _world.GetInterpolateLight(x, y);
                     Color[] colors = InterpolateWorldColor(lights, TileLayer.Main);
@@ -79,7 +80,7 @@ public class WorldRenderer
             //HitBox box = e.hitbox;
             //renderer.Draw("Assets/Textures/Misc/blank", (float)box.minX * scale, (float)-(box.minY + box.GetHeight()) * scale, (float)box.GetWidth(), (float)box.GetHeight(), hitColor);
 
-            byte Brightness = _world.GetCombinedLight((int)e.x, (int)e.y + 1);
+            byte Brightness = _world.GetCombinedLight(Utils.Floor(e.x), Utils.Floor(e.y));
             //var erenderer = e.GetRenderer();
             entityRenderer.Render(renderer, (float)e.x * scale, (float)-e.y * scale , 2, 4, e, scale, ShadowColor[Brightness], "player");
 

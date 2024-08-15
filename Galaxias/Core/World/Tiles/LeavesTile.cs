@@ -1,6 +1,10 @@
 ﻿namespace Galaxias.Core.World.Tiles;
 public class LeavesTile : Tile
 {
+    public LeavesTile(TileSettings settings) : base(settings)
+    {
+    }
+
     public override TileRenderType GetRenderType()
     {
         return TileRenderType.Bottom;

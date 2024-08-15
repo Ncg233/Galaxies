@@ -6,14 +6,12 @@ using System;
 using System.Collections.Generic;
 
 namespace Galaxias.Core.World.Gen;
-public class TreeGen : IChunkGenerator
+public class TreeGen : AbstractChunkGen
 {
-    Random random;
     private Dictionary<int, bool> treePos = [];
-    public TreeGen(int seed) { 
-        random = new Random(seed);
+    public TreeGen(int seed, Random random) : base(seed, random){ 
     }
-    public void Generate(AbstractWorld world, Chunk applyChunk)
+    public override void Generate(AbstractWorld world, Chunk applyChunk)
     {
         Random random = new Random();
         for (int x = applyChunk.chunkX * GameConstants.ChunkWidth; x < (applyChunk.chunkX + 1) * GameConstants.ChunkWidth; x++)
