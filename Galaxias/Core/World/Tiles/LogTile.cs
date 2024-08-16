@@ -13,7 +13,7 @@ internal class LogTile : Tile
     {
         return false;
     }
-    public override bool OnBreak(AbstractWorld world, int x, int y, TileState state)
+    public override bool OnBreak(World world, int x, int y, TileState state)
     {
         int yo = 0;
         for (; world.GetTileState(TileLayer.Main, x, y+yo).GetTile() == this; yo++)

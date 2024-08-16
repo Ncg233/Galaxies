@@ -11,7 +11,7 @@ public class TreeGen : AbstractChunkGen
     private Dictionary<int, bool> treePos = [];
     public TreeGen(int seed, Random random) : base(seed, random){ 
     }
-    public override void Generate(AbstractWorld world, Chunk applyChunk)
+    public override void Generate(World world, Chunk applyChunk)
     {
         Random random = new Random();
         for (int x = applyChunk.chunkX * GameConstants.ChunkWidth; x < (applyChunk.chunkX + 1) * GameConstants.ChunkWidth; x++)
@@ -19,10 +19,15 @@ public class TreeGen : AbstractChunkGen
             for (int y = (int)world.GetGenSuerfaceHeight(TileLayer.Main ,x); y < GameConstants.ChunkHeight; y++)
             {
                 var state = applyChunk.GetTileState(TileLayer.Main, x, y - 1);
+                if (random.NextFloat(0, 1) < 0.7f && state != null && state.GetTile() == AllTiles.GrassTile && applyChunk.GetTileState(TileLayer.Main, x, y).IsAir())
+                {
+                    applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Grass.GetDefaultState());
+                }
                 if (random.NextFloat(0, 1) < 0.1f && state != null && state.GetTile() == AllTiles.GrassTile && !HasTree(x))
                 {
                     PlaceTree(x, y, world, applyChunk);
                 }
+                
             }
         }
     }
@@ -30,7 +35,7 @@ public class TreeGen : AbstractChunkGen
     //{
     //
     //}
-    private void PlaceTree(int x, int y, AbstractWorld world,Chunk applyChunk)
+    private void PlaceTree(int x, int y, World world,Chunk applyChunk)
     {
         var height = GetHeight(random);
         for (int ly = y; ly < y + height; ly++)

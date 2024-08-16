@@ -15,7 +15,7 @@ public class Tile
     {
         return stateHandler.GetDefaultState();
     }
-    internal float GetTranslucentModifier(AbstractWorld chunk, int x, int y, TileLayer layer, bool isSky)
+    internal float GetTranslucentModifier(World chunk, int x, int y, TileLayer layer, bool isSky)
     {
         if (!IsFullTile() && isSky)
         {
@@ -32,21 +32,21 @@ public class Tile
     }
     public virtual bool IsFullTile()
     {
-        return true;
+        return settings.IsFullTile;
     }
     public virtual bool CanCollide()
     {
-        return true;
+        return settings.CanCollide;
     }
-    public virtual bool OnBreak(AbstractWorld world, int x, int y, TileState state)
+    public virtual bool OnBreak(World world, int x, int y, TileState state)
     {
         return true;
     }
-    public virtual bool OnPlace(AbstractWorld world, int x, int y, TileState state)
+    public virtual bool OnPlace(World world, int x, int y, TileState state)
     {
         return true;
     }
-    public virtual bool OnUse(AbstractWorld world, int x, int y, TileState state, LivingEntity entity)
+    public virtual bool OnUse(World world, int x, int y, TileState state, LivingEntity entity)
     {
         return true;
     }
@@ -62,10 +62,22 @@ public class Tile
     public class TileSettings
     {
         public bool IsAir { get; private set; }
+        public bool IsFullTile{ get; private set; } = true;
+        public bool CanCollide { get; private set; } = true;
         public TileSettings SetAir()
         {
             IsAir = true;
             return this; 
-        }  
+        }
+        public TileSettings SetCanCollide(bool canCollide)
+        {
+            CanCollide = canCollide;
+            return this;
+        }
+        public TileSettings SetFullTile(bool isfulltile)
+        {
+            IsFullTile = isfulltile;
+            return this;
+        }
     }
 }

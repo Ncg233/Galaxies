@@ -9,15 +9,15 @@ public class Player : LivingEntity
     private PlayerInventory inventory = new();
     public int HitX = 0;
     public int HitY = 0;
-    protected double homeX = 0;
-    protected double homeY = 80;
+    protected float homeX = 0;
+    protected float homeY = 80;
     private int invincibleTicks = 50 * 3;
     protected bool isJumping;
     protected bool isJetpackEnable;
     public int jumpTicks;
     public int jumpTimeout;
     public float factor;
-    public Player(AbstractWorld world) : base(AllEntityTypes.PlayerEntity ,world)
+    public Player(World world) : base(AllEntityTypes.PlayerEntity ,world)
     {
         y = 140;
         speed = 5f;
@@ -63,7 +63,7 @@ public class Player : LivingEntity
     {
         return isJetpackEnable;
     }
-    public void Jump(double value, float deltTime)
+    public void Jump(float value, float deltTime)
     {
         if (EnableJetpack() || (onGround && !isJumping))
         {

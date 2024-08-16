@@ -20,7 +20,7 @@ public class TileState
         return tile.GetLight(this);
     }
 
-    public void OnUse(AbstractWorld world, int x, int y, TileState tileState, Player player)
+    public void OnUse(World world, int x, int y, TileState tileState, Player player)
     {
         tile.OnUse(world, x, y, tileState, player);
     }

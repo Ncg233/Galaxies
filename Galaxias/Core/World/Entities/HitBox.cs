@@ -1,15 +1,15 @@
 ﻿namespace Galaxias.Core.World.Entities;
 public class HitBox
 {
-    public double minX { get; private set; }
-    public double minY { get; private set; }
-    public double maxX { get; private set; }
-    public double maxY { get; private set; }
+    public float minX { get; private set; }
+    public float minY { get; private set; }
+    public float maxX { get; private set; }
+    public float maxY { get; private set; }
     public static HitBox Empty()
     {
         return new HitBox(0, 0, 0, 0);
     }
-    public HitBox(double minX, double minY, double maxX, double maxY)
+    public HitBox(float minX, float minY, float maxX, float maxY)
     {
         this.minX = minX;
         this.minY = minY;
@@ -33,7 +33,7 @@ public class HitBox
     {
         return new HitBox(this.minX, this.minY, this.maxX, this.maxY);
     }
-    public HitBox Add(double x, double y)
+    public HitBox Add(float x, float y)
     {
         this.minX += x;
         this.maxX += x;
@@ -41,7 +41,7 @@ public class HitBox
         this.maxY += y;
         return this;
     }
-    public bool intersects(double minX, double minY, double maxX, double maxY)
+    public bool intersects(float minX, float minY, float maxX, float maxY)
     {
         return this.minX < maxX && this.maxX > minX && this.minY < maxY && this.maxY > minY;
     }

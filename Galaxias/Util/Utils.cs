@@ -1,5 +1,6 @@
 ﻿using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Galaxias.Util;
 public class Utils
@@ -26,5 +27,12 @@ public class Utils
     public static TileLayer[] GetAllLayers()
     {
         return tileLayers;
+    }
+
+    internal static void Lerp(ref Vector3 from, Vector3 to, float deltaTime)
+    {
+        //if (from.X - to.X > 192 || from.X - to.X < -192 || from.Y - to.Y > 40 || from.Y - to.Y < -40)
+        //    from = to;
+        from = new Vector3(from.X + (to.X - from.X) * deltaTime * 10, from.Y + (to.Y - from.Y) * deltaTime * 10, 0);
     }
 }

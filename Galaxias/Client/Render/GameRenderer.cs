@@ -11,11 +11,11 @@ public class GameRenderer
     private WorldRenderer _worldRenderer;
     private InGameHud hud;
     //private SpriteBatch _spriteBatch;
-    private GalaxiasClient _galaxias;
+    private Main.GalaxiasClient _galaxias;
 
     public Camera camera;
 
-    public GameRenderer(GalaxiasClient galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera)
+    public GameRenderer(Main.GalaxiasClient galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera)
     {
         this.renderer = renderer;
         this.camera = camera;
@@ -37,7 +37,7 @@ public class GameRenderer
             camera.Update(_galaxias.GetPlayer(), dTime);
             renderer.Begin(sortMode: SpriteSortMode.Immediate,
                 samplerState: SamplerState.PointClamp,
-                depthStencilState: DepthStencilState.Default,
+                depthStencilState: DepthStencilState.None,
                 transformMatrix: camera.TransfromMatrix);
 
             _worldRenderer.Render(null, renderer);

@@ -17,8 +17,8 @@ public class IntegrationRenderer
     }
     public void LoadContents()
     {
-        spriteBatch = new SpriteBatch(GalaxiasClient.GetInstance().GraphicsDevice);
-        spriteFont = GalaxiasClient.GetInstance().Content.Load<SpriteFont>("Assets/Fonts/defaultFont");
+        spriteBatch = new SpriteBatch(Main.GalaxiasClient.GetInstance().GraphicsDevice);
+        spriteFont = Main.GalaxiasClient.GetInstance().Content.Load<SpriteFont>("Assets/Fonts/defaultFont");
 
     }
     public void Begin(SpriteSortMode sortMode = SpriteSortMode.Deferred, BlendState blendState = null, SamplerState samplerState = null, DepthStencilState depthStencilState = null, RasterizerState rasterizerState = null, Effect effect = null, Matrix? transformMatrix = null)

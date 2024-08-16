@@ -15,7 +15,7 @@ public class Camera
     public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
 
     public Vector3 _pos = new();
-    private float _zoom = 2.5f, displayRadio, guiScale;
+    private float _zoom = 3f, displayRadio, guiScale;
     private float scale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
@@ -23,20 +23,19 @@ public class Camera
     {
         if (false)
         {
-            float xTarg = (float)-player.x * GameConstants.TileSize;
-            float yTarg = ((float)player.y + 2) * GameConstants.TileSize;
-            _pos.X += (xTarg - _pos.X) * dTime * 3; _pos.Y += (yTarg - _pos.Y) * dTime * 3;
+            Utils.Lerp(ref _pos, new Vector3(-player.x * GameConstants.TileSize, (player.y + 2) * GameConstants.TileSize, 0), dTime);
+            
         }
         else
         {
-            _pos.X = (float)-player.x * GameConstants.TileSize; _pos.Y = ((float)player.y + 2) * GameConstants.TileSize;
+            _pos.X = -player.x * GameConstants.TileSize; _pos.Y = (player.y + 2) * GameConstants.TileSize;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
-            _zoom += 0.2f * dTime;
+            _zoom += dTime;
         else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
-            _zoom -= 0.2f * dTime;
-        _zoom = MathHelper.Clamp(_zoom, 2.5f, 4);
+            _zoom -= dTime;
+        _zoom = MathHelper.Clamp(_zoom, 2.6f, 4);
         scale = _zoom * displayRadio;
 
 

@@ -39,6 +39,6 @@ public class BackgroundRenderer
 
     internal void LoadContents()
     {
-        layer5 = GalaxiasClient.GetInstance().GetTextureManager().LoadTexture2D("Textures/Skys/layer5");
+        layer5 = Main.GalaxiasClient.GetInstance().GetTextureManager().LoadTexture2D("Textures/Skys/layer5");
     }
 }

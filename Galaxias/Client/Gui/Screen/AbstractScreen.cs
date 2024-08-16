@@ -5,15 +5,15 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Galaxias.Client.Gui;
+namespace Galaxias.Client.Gui.Screen;
 
 public abstract class AbstractScreen
 {
     protected int width;
     protected int height;
-    protected GalaxiasClient galaxias;
+    protected Main.GalaxiasClient galaxias;
     private List<Button> buttons = [];
-    public void Init(GalaxiasClient galaxias, int width, int height)
+    public void Init(Main.GalaxiasClient galaxias, int width, int height)
     {
         this.galaxias = galaxias;
         this.width = width;

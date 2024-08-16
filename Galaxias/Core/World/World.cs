@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 namespace Galaxias.Core.World;
-public class AbstractWorld
+public class World
 {
     private readonly int width = 192;
     private readonly int height;
@@ -22,8 +22,10 @@ public class AbstractWorld
     private HeightGen heightGen;
     private int seed;
     private Random rand;
-    public AbstractWorld()
+    public bool IsClient { get; private set; }
+    public World(bool isClient)
     {
+        IsClient = isClient; 
         seed = new Random().Next(-10000, 10000);
         rand = new Random(seed);
         

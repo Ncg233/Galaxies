@@ -8,20 +8,20 @@ public abstract class Entity
 {
     public readonly EntityType Type;
     private float friction = 0.5f;
-    public double x { get; protected set; }
-    public double y { get; protected set; }
-    public double vx { get; protected set; }
-    public double vy { get; protected set; }
+    public float x { get; protected set; }
+    public float y { get; protected set; }
+    public float vx { get; protected set; }
+    public float vy { get; protected set; }
     public Direction direction { get; protected set; }
     public HitBox hitbox { get; protected set; } = HitBox.Empty();
-    private AbstractWorld world;
+    private World world;
     public float speed;
     //private EntityRenderer renderer;
     public bool onGround;
     public bool collidedHor;
     public bool collidedVert;
     protected double lastY;
-    public Entity(EntityType entity, AbstractWorld world)
+    public Entity(EntityType entity, World world)
     {
         Type = entity;
         this.world = world;
@@ -63,8 +63,8 @@ public abstract class Entity
     //}
     private void HandleCollision(float dTime)
     {
-        double motionY = vy;
-        double motionX = vx;
+        float motionY = vy;
+        float motionX = vx;
         HitBox ownBoxMotion = hitbox.Copy().Add(motionX, motionY);
         HitBox ownBox = hitbox;
         if (true)
@@ -91,7 +91,7 @@ public abstract class Entity
                     {
                         if (motionY > 0 && ownBox.maxY <= box.minY)
                         {
-                            double diff = box.minY - ownBox.maxY;
+                            float diff = box.minY - ownBox.maxY;
                             if (diff < motionY)
                             {
                                 motionY = diff;
@@ -99,7 +99,7 @@ public abstract class Entity
                         }
                         else if (motionY < 0 && ownBox.minY >= box.maxY)
                         {
-                            double diff = box.maxY - ownBox.minY;
+                            float diff = box.maxY - ownBox.minY;
                             if (diff > motionY)
                             {
                                 motionY = diff;
@@ -116,7 +116,7 @@ public abstract class Entity
                     {
                         if (motionX > 0 && ownBox.maxX <= box.minX)
                         {
-                            double diff = box.minX - ownBox.maxX;
+                            float diff = box.minX - ownBox.maxX;
                             if (diff < motionX)
                             {
                                 motionX = diff;
@@ -124,7 +124,7 @@ public abstract class Entity
                         }
                         else if (motionX < 0 && ownBox.minX >= box.maxX)
                         {
-                            double diff = box.maxX - ownBox.minX;
+                            float diff = box.maxX - ownBox.minX;
                             if (diff > motionX)
                             {
                                 motionX = diff;
@@ -140,7 +140,7 @@ public abstract class Entity
         onGround = collidedVert && vy < 0;
         SetPos(x + motionX, y + motionY);
     }
-    public void SetPos(double x, double y)
+    public void SetPos(float x, float y)
     {
         this.x = x;
         this.y = y;
@@ -166,7 +166,7 @@ public abstract class Entity
     {
         return 1;
     }
-    public AbstractWorld GetWorld() {
+    public World GetWorld() {
         return world;
     }
     public void TpToOtherSide()

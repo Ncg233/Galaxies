@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Galaxias.Core.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,33 +10,33 @@ namespace Galaxias.Server;
 public class GalaxiasServer
 {
     public static int Port = 9050;
-    private readonly Server server = new();
     private Thread serverThread;
     private bool isServerRunning = false;
     private int _continueRun = 1;
-    public GalaxiasServer() {
-        
+    public GalaxiasServer()
+    {
+
     }
     public void StartServerThread()
     {
         serverThread = new Thread(Run);
         isServerRunning = true;
-        server.StartServer(Port);
+        
         serverThread.Start();
     }
     public void StopServer()
     {
         isServerRunning = false;
         Interlocked.Exchange(ref _continueRun, 0);
-        server.Stop();
+        NetPlayManager.Instance.StopServer();
     }
     public void Run()
     {
-        while (Interlocked.Exchange(ref _continueRun, 1) == 1) {       
-            server.Update();
-            Thread.Sleep(1000);
-            
+        while (Interlocked.Exchange(ref _continueRun, 1) == 1)
+        {
+            NetPlayManager.Instance.UpdateServer();
+            //Thread.Sleep(1000);
+
         }
     }
-
 }

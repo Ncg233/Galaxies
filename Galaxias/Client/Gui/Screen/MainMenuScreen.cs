@@ -1,10 +1,11 @@
 ﻿using Galaxias.Client.Render;
+using Galaxias.Core.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 
-namespace Galaxias.Client.Gui;
+namespace Galaxias.Client.Gui.Screen;
 public class MainMenuScreen : AbstractScreen
 {
     private static Song mainMusic;
@@ -25,11 +26,21 @@ public class MainMenuScreen : AbstractScreen
         }
         AddButton(new Widget.Button("Single Player", width / 2 - 100, height / 4 + 48, 200, 20, () =>
         {
-            galaxias.SetupServer();
-            galaxias.LoadWorld();
-            Console.WriteLine("Load world");
+            Console.WriteLine("Start single player");
+            NetPlayManager.Instance.Init("localhost", 9050, true);
+            galaxias.SetupServer(false);
+            galaxias.SetCurrentScreen(null);
+
+
         }));
-        AddButton(new Widget.Button("Quit", width / 2 - 100, height / 4 + 100, 200, 20, galaxias.QuitGame));
+        AddButton(new Widget.Button("Multiplayer", width / 2 - 100, height / 4 + 78, 200, 20, () =>
+        {
+            //galaxias.SetupServer();
+            //galaxias.StartWorld();
+            //Console.WriteLine("Join world");
+
+        }));
+        AddButton(new Widget.Button("Quit", width / 2 - 100, height / 4 + 108, 200, 20, galaxias.QuitGame));
         base.OnInit();
     }
     public override void Hid()

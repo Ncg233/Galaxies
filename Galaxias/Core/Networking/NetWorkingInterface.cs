@@ -1,4 +1,7 @@
-﻿using LiteNetLib;
+﻿using Galaxias.Client.Render;
+using Galaxias.Core.Networking.Packet;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +20,9 @@ public class NetWorkingInterface
     {
 
         Manager = new NetManager(Listener);
-        
+        Listener.NetworkReceiveEvent += ReceivePacket;
     }
-    public void StartServer(int port)
-    {
-        Manager.Start(port);
-    }
+    
     public void Connect(string address, int port, string key = "key")
     {
         if (Server != null)
@@ -40,5 +40,21 @@ public class NetWorkingInterface
     public void Update()
     {
         Manager.PollEvents();
+    }
+    public void SendPacket(IPacket packet, NetPeer target, DeliveryMethod method = DeliveryMethod.ReliableUnordered)
+    {
+        NetDataWriter writer = new();
+        writer.Put(PacketManager.GetId(packet.GetType()));
+        writer.Put(packet);
+
+        target.Send(writer, method);
+    }
+    public void ReceivePacket(NetPeer peer, NetDataReader reader, byte channelNumber, DeliveryMethod method) {
+        //Console.WriteLine($"Received packet {peer.Id}");
+        int packetId = reader.GetInt();
+        var packet = PacketManager.GetPacket(packetId);
+        packet.Deserialize(reader);
+        
+        packet.Process(peer);
     }
 }

@@ -17,7 +17,7 @@ public class TileGen : AbstractChunkGen
     }
 
     #endregion
-    public override void Generate(AbstractWorld world ,Chunk applyChunk)
+    public override void Generate(World world ,Chunk applyChunk)
     {
         for (int x = 0; x < GameConstants.ChunkWidth; x++)
         {

@@ -12,15 +12,15 @@ public class WorldRenderer
     private readonly Color startColor = new Color(90, 150, 255);
     private readonly Color endColor = new Color(15, 15, 16);
     private readonly Color hitColor = new Color(0, 1, 0, 0.2f);
-    private GalaxiasClient _galaxias;
-    private AbstractWorld _world;
+    private Main.GalaxiasClient _galaxias;
+    private World _world;
     private Camera camera;
     private TileRenderer tileRenderer;
     private ItemRenderer itemRenderer;
     private BackgroundRenderer backgroundRenderer = new();
     private float sunRadius;
     private float scaleHeight;
-    public WorldRenderer(GalaxiasClient galaxias, Camera camera, TileRenderer tileRenderer)
+    public WorldRenderer(Main.GalaxiasClient galaxias, Camera camera, TileRenderer tileRenderer)
     {
         this.camera = camera;
         this.tileRenderer = tileRenderer;
@@ -33,7 +33,7 @@ public class WorldRenderer
         _galaxias = galaxias;
 
     }
-    public void SetRenderWorld(AbstractWorld world)
+    public void SetRenderWorld(World world)
     {
         _world = world;
     }

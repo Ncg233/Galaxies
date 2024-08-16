@@ -5,7 +5,7 @@ using Galaxias.Util;
 namespace Galaxias.Client;
 public class ClientPlayer : Player
 {
-    public ClientPlayer(AbstractWorld world) : base(world)
+    public ClientPlayer(World world) : base(world)
     {
 
     }
@@ -29,7 +29,7 @@ public class ClientPlayer : Player
                 vx += factor * speed * dTime;
             }
         }
-        if (KeyBind.Jump.IsKeyDown())
+        if (KeyBind.Jump.IsKeyPressed())
         {
             Jump(GetJumpHeight(), dTime);
         }

@@ -29,10 +29,10 @@ public class PlayerRenderer : EntityRenderer
         var item = player.GetItemOnHand();
         if (isTurn)
         {
-            GalaxiasClient.GetInstance().GetItemRenderer().RenderInWorld(renderer, item, x - 0.75f, y + 2, colors);
+            Main.GalaxiasClient.GetInstance().GetItemRenderer().RenderInWorld(renderer, item, x - 0.75f, y + 2, colors);
         }else
         {
-            GalaxiasClient.GetInstance().GetItemRenderer().RenderInWorld(renderer, item, x, y + 2, colors);
+            Main.GalaxiasClient.GetInstance().GetItemRenderer().RenderInWorld(renderer, item, x, y + 2, colors);
 
         }
         

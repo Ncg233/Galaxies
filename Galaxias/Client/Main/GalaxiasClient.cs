@@ -2,21 +2,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Galaxias.Core.World.Entities;
 using Microsoft.Xna.Framework.Media;
-using System;
-using Galaxias.Server;
-using Microsoft.Xna.Framework.Graphics;
-using System.Reflection;
 using Galaxias.Client.Resource;
 using Galaxias.Client.Render;
 using Galaxias.Client.Key;
-using Galaxias.Client.Gui;
-using System.Windows.Forms;
+using Galaxias.Core.World;
+using Galaxias.Core.Networking;
+using Galaxias.Client.Gui.Screen;
+using Galaxias.Server;
+using Galaxias.Core.Networking.Packet.C2S;
 
 namespace Galaxias.Client.Main;
 public class GalaxiasClient : Game
 {
     public static readonly string Version = "0.2.0";
     private static GalaxiasClient instance;
+    private GalaxiasServer server;
     private GraphicsDeviceManager _graphics;
     public AbstractScreen CurrentScreen { get; private set; }
     private readonly IntegrationRenderer renderer;
@@ -25,13 +25,13 @@ public class GalaxiasClient : Game
     private readonly TileRenderer tileRenderer;
     private readonly ItemRenderer itemRenderer;
     private readonly TextureManager textureManager;
-    private readonly Networking.Client client = new();
-    private GalaxiasServer gServer;
+    private NetPlayManager netPlayManager;
     private ClientPlayer player;
-    private ClientWorld world;
+    private World world;
     private InteractionManager interactionManager;
     private Camera camera = new();
     private int width, height;
+    private bool isHost;
     public GalaxiasClient()
     {
         instance = this;
@@ -74,7 +74,7 @@ public class GalaxiasClient : Game
     protected override void Update(GameTime gameTime)// TODO: Add your update logic here
     {
         base.Update(gameTime);
-        client.Update();
+        NetPlayManager.Instance.UpdateClient();
         if (KeyBind.FullScreen.IsKeyPressed())
         {
             _graphics.ToggleFullScreen();
@@ -112,8 +112,8 @@ public class GalaxiasClient : Game
     }
     public void QuitGame()
     {
-        client.Stop();
-        gServer?.StopServer();
+        NetPlayManager.Instance.StopClient();
+        server?.StopServer();
         Exit();
     }
     public void SetCurrentScreen(AbstractScreen newScreen)
@@ -125,16 +125,19 @@ public class GalaxiasClient : Game
         CurrentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
 
     }
-    public void SetupServer()
+    public void SetupServer(bool host)
     {
-        if (gServer == null)
-        {
-            gServer = new GalaxiasServer();
-            gServer.StartServerThread();
-        }
-        client.Connect("localhost", 9050);
+        isHost = host;
+        server = new GalaxiasServer();
+        server.StartServerThread();
     }
-    public void LoadWorld()
+    //this method is only used for server start
+    public void StartWorld()
+    {
+        
+    }
+    //this method is used for client join
+    public void JoinWorld()
     {
         world = new ClientWorld();
         player = new ClientPlayer(world);
@@ -163,7 +166,7 @@ public class GalaxiasClient : Game
     {
         return player;
     }
-    public ClientWorld GetWorld()
+    public World GetWorld()
     {
         return world;
     }

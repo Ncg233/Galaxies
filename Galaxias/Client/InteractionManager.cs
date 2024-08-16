@@ -12,9 +12,9 @@ using SharpDX.Direct3D11;
 namespace Galaxias.Client;
 public class InteractionManager
 {
-    private AbstractWorld world;
+    private World world;
     private float dtime = 0;
-    public InteractionManager(AbstractWorld world)
+    public InteractionManager(World world)
     {
         this.world = world;
     }
