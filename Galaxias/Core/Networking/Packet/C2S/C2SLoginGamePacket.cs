@@ -1,24 +1,28 @@
 ﻿using Galaxias.Core.Networking.Packet.S2C;
+using Galaxias.Util;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System;
 
 namespace Galaxias.Core.Networking.Packet.C2S;
-public class C2SLoginGamePacket : IPacket
+public class C2SLoginGamePacket : C2SPacket
 {
+    public int _id;
     public C2SLoginGamePacket() { }
-    public void Process(NetPeer sender)
+    public C2SLoginGamePacket(int remoteId) {
+        _id = remoteId;
+    }
+    public void Process(Server server)
     {
-        Console.WriteLine("Join Game!");
-        NetPlayManager.Instance.SendToClient(new S2CJoinWorldPacket(), sender);
+        server.ProcessLoginGame(this);
 
     }
     public void Deserialize(NetDataReader reader)
     {
-
+        _id = reader.GetInt();
     }
     public void Serialize(NetDataWriter writer)
     {
-        
+        writer.Put(_id);
     }
 }

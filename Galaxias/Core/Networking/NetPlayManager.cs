@@ -1,5 +1,7 @@
-﻿using Galaxias.Core.Networking.Packet;
+﻿using Galaxias.Client.Main;
+using Galaxias.Core.Networking.Packet;
 using Galaxias.Core.Networking.Packet.C2S;
+using Galaxias.Server;
 using LiteNetLib;
 using System;
 
@@ -7,58 +9,47 @@ namespace Galaxias.Core.Networking;
 public class NetPlayManager
 {
     public static readonly NetPlayManager Instance = new();
-    private Client client;
-    private Server server;
-
-    public void Init(string ip, int port, bool isServer)
+    public Client RomateClient {get; private set;}
+    public Server RomateServer {get; private set;}
+    public void InitClient(string ip, int port)
     {
-        if (client != null || server != null)
-        {
-            Console.WriteLine("Cannot init NetPlayerManager");
-        }
-        else
-        {
-            if (isServer)
-            {
-                server = new Server();
-                server.StartServer(port);
+        RomateClient = new Client(GalaxiasClient.GetInstance());
+        RomateClient.Connect(ip, port);
+    }
+    public void InitServer(string ip, int port, GalaxiasServer server)
+    {
+        RomateServer = new Server(server);
+        RomateServer.StartServer(port);
 
-                client = new Client();
-                client.Connect(ip, port);
-            }
-            else
-            {
-                client = new Client();
-                client.Connect(ip, port);
-            }
-        }
+        RomateClient = new Client(GalaxiasClient.GetInstance());
+        RomateClient.Connect(ip, port);
     }
     public void UpdateClient()
     {
-        client?.Update();
+        RomateClient?.Update();
     }
     public void UpdateServer()
     {
-        server?.Update();
+        RomateServer?.Update();
     }
 
     internal void StopServer()
     {
-        server?.Stop();
+        RomateServer?.Stop();
     }
     internal void StopClient()
     {
-        client?.Stop();
+        RomateClient?.Stop();
     }
 
     public void SendToServer(IPacket packet)
     {
-        client.SendToServer(packet);
+        RomateClient.SendToServer(packet);
     }
 
     public void SendToClient(IPacket packet,NetPeer target)
     {
-        server.SendPacket(packet, target);
+        RomateServer.SendPacket(packet, target);
     }
 }
 

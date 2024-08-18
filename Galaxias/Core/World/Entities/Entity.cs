@@ -171,11 +171,11 @@ public abstract class Entity
     }
     public void TpToOtherSide()
     {
-        if (x > world.GetWidth() / 2)
+        if (x > world.GetWidth())
         {
             SetPos(x - world.GetWidth(), y);
         }
-        else if (x < -world.GetWidth() / 2)
+        else if (x < 0)
         {
             
             SetPos(x + world.GetWidth(), y);

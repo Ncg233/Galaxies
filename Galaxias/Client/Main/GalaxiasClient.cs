@@ -10,6 +10,7 @@ using Galaxias.Core.Networking;
 using Galaxias.Client.Gui.Screen;
 using Galaxias.Server;
 using Galaxias.Core.Networking.Packet.C2S;
+using System.Threading;
 
 namespace Galaxias.Client.Main;
 public class GalaxiasClient : Game
@@ -34,6 +35,7 @@ public class GalaxiasClient : Game
     private bool isHost;
     public GalaxiasClient()
     {
+        Thread.CurrentThread.Name = "Client";
         instance = this;
         textureManager = new TextureManager(Content);
         renderer = new IntegrationRenderer(textureManager);
@@ -125,11 +127,12 @@ public class GalaxiasClient : Game
         CurrentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
 
     }
-    public void SetupServer(bool host)
+    public void SetupServer(bool host, out GalaxiasServer gServer)
     {
         isHost = host;
         server = new GalaxiasServer();
         server.StartServerThread();
+        gServer = server;
     }
     //this method is only used for server start
     public void StartWorld()
@@ -137,9 +140,9 @@ public class GalaxiasClient : Game
         
     }
     //this method is used for client join
-    public void JoinWorld()
+    public void JoinWorld(ClientWorld world)
     {
-        world = new ClientWorld();
+        this.world = world;
         player = new ClientPlayer(world);
         world.AddEntity(player);
         SetCurrentScreen(null);

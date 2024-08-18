@@ -17,44 +17,44 @@ public class TileGen : AbstractChunkGen
     }
 
     #endregion
-    public override void Generate(World world ,Chunk applyChunk)
+    public override void Generate(World world)
     {
-        for (int x = 0; x < GameConstants.ChunkWidth; x++)
+        for (int x = 0; x < world.GetWidth(); x++)
         {
-            double height = world.GetGenSuerfaceHeight(TileLayer.Main, applyChunk.chunkX * GameConstants.ChunkWidth + x);
-            for (int y = 0; y < GameConstants.ChunkHeight; y++)
+            double height = world.GetGenSuerfaceHeight(TileLayer.Main, x);
+            for (int y = 0; y < world.height; y++)
             {
-                double v = NoiseGen.Make2dNoise((applyChunk.chunkX * GameConstants.ChunkWidth + x + seed) * caveFreq, (y + seed) * caveFreq);
+                double v = NoiseGen.Make2dNoise((x + seed) * caveFreq, (y + seed) * caveFreq);
         
                 if (y < height)
                 {
                     //this will be used to generate cave and it will move to CaveGen
                     if(v < 0.2f && y < 80)
                     {
-                        applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
+                        world.SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
                     }
                     else
                     {
                         if (height - (random.NextInt64() % 2 == 0 ? 10 : 9) >= y)
                         {
-                            applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Stone.GetDefaultState());
+                            world.SetTileState(TileLayer.Main, x, y, AllTiles.Stone.GetDefaultState());
                         }
                         else
                         {
-                            applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Dirt.GetDefaultState());
+                            world.SetTileState(TileLayer.Main, x, y, AllTiles.Dirt.GetDefaultState());
                         }
                     }
-                    applyChunk.SetTileState(TileLayer.Background, x, y, AllTiles.Dirt.GetDefaultState());
+                    world.SetTileState(TileLayer.Background, x, y, AllTiles.Dirt.GetDefaultState());
                     
                 }
                 else if(y < height + 1)
                 {
-                    applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.GrassTile.GetDefaultState());
-                    applyChunk.SetTileState(TileLayer.Background, x, y, AllTiles.Air.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x, y, AllTiles.GrassTile.GetDefaultState());
+                    world.SetTileState(TileLayer.Background, x, y, AllTiles.Air.GetDefaultState());
                 }
                 else {
-                    applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
-                    applyChunk.SetTileState(TileLayer.Background, x, y, AllTiles.Air.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
+                    world.SetTileState(TileLayer.Background, x, y, AllTiles.Air.GetDefaultState());
                 }
                 
             }

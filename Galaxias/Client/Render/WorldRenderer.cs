@@ -113,7 +113,7 @@ public class WorldRenderer
     }
     public Color[] InterpolateWorldColor(int[] interpolatedLight, TileLayer layer)
     {
-        float factor = layer == TileLayer.Main ? 1 : 0.5f;
+        float factor = layer == TileLayer.Main ? 1 : 0.7f;
         Color[] colors = new Color[interpolatedLight.Length];
         for (int i = 0; i < colors.Length; i++)
         {

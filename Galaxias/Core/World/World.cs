@@ -4,17 +4,20 @@ using Galaxias.Core.World.Gen;
 using Galaxias.Core.World.Particle;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Galaxias.Core.World;
 public class World
 {
-    private readonly int width = 192;
-    private readonly int height;
+    public int width { get; private set; } = 192;
+    public int height { get; private set; } = 256;
     private readonly List<Entity> entities = [];
     private readonly List<ParticleType> particles = [];
-    private readonly Dictionary<int, Chunk> chunksLookup = [];
+    private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = [];
+    private readonly Dictionary<LightType, byte[]> lightGrid = [];
     private readonly List<IChunkGenerator> generators;
     private int tutolTime = 1440;
     public float currnetTime { get; private set; } = 8 * 60;//8:00
@@ -31,27 +34,20 @@ public class World
         
         heightGen = new HeightGen(seed, rand); 
 
-        generators = [new TileGen(seed, rand), new TreeGen(seed, rand)];
-    }
-    public Chunk GetChunk(int chunkX)
-    {
-        var chunk = chunksLookup.GetValueOrDefault(chunkX);
-        
-        if (chunk == null)
+        lightGrid.Add(LightType.Sky, new byte[width * height]);
+        lightGrid.Add(LightType.Tile, new byte[width * height]);
+        blockStateGrid.Add(TileLayer.Background, new TileState[width * height]);
+        blockStateGrid.Add(TileLayer.Main, new TileState[width * height]);
+        if (!isClient)
         {
-            Console.WriteLine("generate new chunk x:" + chunkX);
-            chunk = LoadChunk(chunkX);
-            chunk.GenerateChunk(generators);
+            generators = [new TileGen(seed, rand), new TreeGen(seed, rand)];
+            foreach (var generator in generators)
+            {
+                generator.Generate(this);
+            }
+            InitLight();
         }
-        return chunk;
 
-    }
-    public Chunk LoadChunk(int chunkX)
-    {
-        Chunk chunk = new (this, chunkX);
-        chunksLookup[chunkX] = chunk;
-
-        return chunk;
     }
     public void Update(float dTime)
     {
@@ -68,14 +64,39 @@ public class World
     {
         return entities;
     }
+    private int GetTileIndex(int x, int y)
+    {
+        while(x > width -1)
+        {
+            x -= width;
+        }
+        while (x < 0)
+        {
+            x += width;
+        }
+        return y * width + x;
+    }
 
     public TileState GetTileState(TileLayer layer, int x, int y)
     {
-        return GetChunk(GetChunkX(x)).GetTileState(layer, x, y);
+        if (IsInWorld(y))
+        {
+            var grid = blockStateGrid.GetValueOrDefault(layer);
+            var tilestate = grid[GetTileIndex(x, y)];
+            if(tilestate != null)
+            {
+                return tilestate;
+            }
+        }
+        return AllTiles.Air.GetDefaultState();
     }
     public void SetTileState(TileLayer layer, int x, int y, TileState id)
     {
-        GetChunk(GetChunkX(x)).SetTileState(layer, x, y, id);
+        if (IsInWorld(y))
+        {
+            var grid = blockStateGrid.GetValueOrDefault(layer);
+            grid[GetTileIndex(x, y)] = id;
+        }
     }
     private int GetChunkX(int worldX)
     {
@@ -95,6 +116,25 @@ public class World
     {
         return heightGen.GetHeight(layer, x);
     }
+    public void InitLight()
+    {
+        for (int x = width - 1; x >= 0; x--)
+        {
+            for (int y = height - 1; y >= 0; y--)
+            {
+                byte light = CalcLight(x, y, true);
+                SetSkyLight(x, y, light);
+            }
+        }
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                byte light = CalcLight(x, y, true);
+                SetSkyLight(x, y, light);
+            }
+        }
+    }
     public void CauseLightUpdate(int x, int y)
     {
         foreach (Direction direction in Direction.SurroundingIncludNone)
@@ -102,7 +142,7 @@ public class World
             int dirX = x + direction.X;
             int dirY = y + direction.Y;
 
-            if (IsChunkLoaded(dirX) && IsInWorld(dirY)){
+            if (IsInWorld(dirY)){
                 bool change = false;
 
                 byte skylightThere = GetSkyLight(dirX, dirY);
@@ -137,7 +177,7 @@ public class World
             int dirX = x + direction.X;
             int dirY = y + direction.Y;
 
-            if (IsChunkLoaded(dirX) && IsInWorld(dirY))
+            if (IsInWorld(dirY))
             {
                 byte light = isSky ? GetSkyLight(dirX, dirY) : GetTileLight(dirX, dirY);
                 if (light > maxLight)
@@ -206,7 +246,7 @@ public class World
             Tile tile = GetTileState(layer, x, y).GetTile();
             if (!tile.IsAir())
             {
-                float mod = tile.GetTranslucentModifier(this, x, y, TileLayer.Main, isSky);
+                float mod = tile.GetTranslucentModifier(this, x, y, layer, isSky);
                 if (mod < smallestMod)
                 {
                     smallestMod = mod;
@@ -224,10 +264,10 @@ public class World
             return isSky ? 1F : 0.8F;
         }
     }
-    public bool IsChunkLoaded(int dirX)
-    {
-        return chunksLookup.GetValueOrDefault(GetChunkX(dirX)) != null;
-    }
+    //public bool IsChunkLoaded(int dirX)
+    //{
+    //    return chunksLookup.GetValueOrDefault(GetChunkX(dirX)) != null;
+    //}
     public float GetSunRotation()
     {
         return sunRotation;
@@ -242,22 +282,41 @@ public class World
     }
     public void SetSkyLight(int x, int y, byte light)
     {
-        GetChunk(GetChunkX(x)).SetSkyLight(x, y, light);
+        if (IsInWorld(y))
+        {
+            var grid = lightGrid[LightType.Sky];
+            grid[GetTileIndex(x, y)] = light;
+        }
     }
     public byte GetSkyLight(int x, int y)
     {
-        return GetChunk(GetChunkX(x)).GetSkyLight(x, y);
+        if (IsInWorld(y))
+        {
+            var grid = lightGrid[LightType.Sky];
+            return grid[GetTileIndex(x, y)];
+        }
+        return GameConstants.MaxLight;
     }
     public void SetTileLight(int x, int y, byte light)
     {
-        GetChunk(GetChunkX(x)).SetTileLight(x, y, light);
+        if (IsInWorld(y))
+        {
+            var grid = lightGrid[LightType.Tile];
+            grid[GetTileIndex(x, y)] = light;
+        }
     }
     public byte GetTileLight(int x, int y)
     {
-        return GetChunk(GetChunkX(x)).GetTileLight(x, y);
+        if (IsInWorld(y))
+        {
+            var grid = lightGrid[LightType.Tile];
+            return grid[GetTileIndex(x, y)];
+        }
+        return GameConstants.MaxLight;
     }
     public byte GetCombinedLight(int x, int y){
-        return GetChunk(GetChunkX(x)).GetCombinedLight(x, y);
+        byte skyLight = (byte)(GetSkyLight(x, y) * GetSkyLightModify(true));
+        return (byte)Math.Min(GameConstants.MaxLight, skyLight + GetTileLight(x, y));
     }
     public int[] GetInterpolateLight(int x, int y)
     {
@@ -266,7 +325,7 @@ public class World
         for (int i = 0; i < dirs.Length; i++)
         {
             Direction dir = dirs[i];
-            if (IsChunkLoaded(x + dir.X))
+            if (true)
             {
                 lightAround[i] = GetCombinedLight(x + dir.X, y + dir.Y);
             }
@@ -281,7 +340,7 @@ public class World
         ];
         return light;
     }
-    public void addParticle(ParticleType particle){
+    public void AddParticle(ParticleType particle){
         particles.Add(particle);
     }
 
@@ -291,6 +350,6 @@ public class World
     }
     public bool IsInWorld(int y)
     {
-        return y >= 0 && y < GameConstants.ChunkHeight;
+        return y >= 0 && y < height;
     }
 }

@@ -23,7 +23,7 @@ public class Tile
         }
         else
         {
-            return layer == TileLayer.Background ? 0.9F : 0.8F;
+            return layer == TileLayer.Background ? 0.9F : 0.75F;
         }
     }
     public virtual TileRenderType GetRenderType()

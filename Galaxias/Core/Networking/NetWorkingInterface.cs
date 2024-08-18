@@ -1,5 +1,8 @@
 ﻿using Galaxias.Client.Render;
 using Galaxias.Core.Networking.Packet;
+using Galaxias.Core.Networking.Packet.C2S;
+using Galaxias.Core.Networking.Packet.S2C;
+using Galaxias.Util;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System;
@@ -14,25 +17,14 @@ public class NetWorkingInterface
 {
     protected readonly EventBasedNetListener Listener = new();
     protected readonly NetManager Manager;
-    public NetPeer? Server { get; private set; }
 
     protected NetWorkingInterface()
     {
-
         Manager = new NetManager(Listener);
         Listener.NetworkReceiveEvent += ReceivePacket;
     }
     
-    public void Connect(string address, int port, string key = "key")
-    {
-        if (Server != null)
-        {
-            return;
-        }
-        Console.WriteLine("Connecting...");
-        Manager.Start();
-        Server = Manager.Connect(address, port, key);
-    }
+    
     public void Stop()
     {
         Manager.Stop();
@@ -54,7 +46,18 @@ public class NetWorkingInterface
         int packetId = reader.GetInt();
         var packet = PacketManager.GetPacket(packetId);
         packet.Deserialize(reader);
-        
-        packet.Process(peer);
+        if (packet is C2SPacket c2spacket)
+        {
+            c2spacket.Process(NetPlayManager.Instance.RomateServer);
+        }
+        else if (packet is S2CPacket s2cpacket)
+        {
+            
+            s2cpacket.Process(NetPlayManager.Instance.RomateClient);
+            
+        }else
+        {
+            Log.Error("Bad Packet");
+        }
     }
 }

@@ -1,4 +1,8 @@
-﻿using LiteNetLib;
+﻿using Galaxias.Client.Main;
+using Galaxias.Core.Networking.Packet.C2S;
+using Galaxias.Server;
+using Galaxias.Util;
+using LiteNetLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,26 +10,42 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Galaxias.Core.Networking;
-internal class Server : NetWorkingInterface
+public class Server : NetWorkingInterface
 {
-    public Server() : base()
+    private readonly NetPeer[] connetionClient = new NetPeer[128];
+    public GalaxiasServer GalaxiasServer;
+    public Server(GalaxiasServer server) : base()
     {
+        GalaxiasServer = server;
         Listener.ConnectionRequestEvent += NewConnection;
         Listener.PeerConnectedEvent += NewPeer;
     }
     private void NewConnection(ConnectionRequest request)
     {
-        Console.WriteLine("New Connection");
+        Log.Info("New Connection");
         request.AcceptIfKey("key");
     }
     private void NewPeer(NetPeer netPeer)
     {
-        Console.WriteLine("New Peer");
+        Log.Info("New Peer");
+        connetionClient[netPeer.Id] = netPeer;
 
     }
     public void StartServer(int port)
     {
         Manager.Start(port);
+    }
+
+    public void ProcessLoginGame(C2SLoginGamePacket packet)
+    {
+        var peer = connetionClient[packet._id];
+        if (peer == null) {
+            Log.Error("?");
+        }else
+        {
+            GalaxiasServer.InitConnectionPlayer(peer);
+        }
+
     }
 }
 

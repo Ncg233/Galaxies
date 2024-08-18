@@ -18,7 +18,7 @@ public class Chunk
         this.rand = new Random();
         this.chunkX = chunkX;
         lightGrid.Add(LightType.Sky, new byte[GameConstants.ChunkWidth * GameConstants.ChunkHeight]);
-        lightGrid.Add(LightType.Block, new byte[GameConstants.ChunkWidth * GameConstants.ChunkHeight]);
+        lightGrid.Add(LightType.Tile, new byte[GameConstants.ChunkWidth * GameConstants.ChunkHeight]);
         this.world = world;
     }
     public void GenerateChunk(List<IChunkGenerator> generators)
@@ -26,7 +26,7 @@ public class Chunk
         isGenerated = true;
         foreach(IChunkGenerator generator in generators)
         {
-            generator.Generate(world, this);
+            //generator.Generate(world, this);
         }
         InitLight();
         isGenerated = false;
@@ -101,7 +101,7 @@ public class Chunk
     {
         if (IsInWorld(y))
         {
-            return lightGrid.GetValueOrDefault(LightType.Block)[GetIndex(x & 31, y)];
+            return lightGrid.GetValueOrDefault(LightType.Tile)[GetIndex(x & 31, y)];
         }
         return GameConstants.MaxLight;
     }
@@ -109,7 +109,7 @@ public class Chunk
     {
         if (IsInWorld(y))
         {
-            lightGrid.GetValueOrDefault(LightType.Block)[GetIndex(x & 31, y)] = light;
+            lightGrid.GetValueOrDefault(LightType.Tile)[GetIndex(x & 31, y)] = light;
         }
     }
     public byte GetCombinedLight(int x, int y)

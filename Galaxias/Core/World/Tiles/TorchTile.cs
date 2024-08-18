@@ -13,7 +13,7 @@ public class TorchTile : Tile
 
     public override int GetLight(TileState tileState)
     {
-        return 80;
+        return GameConstants.MaxLight;
     }
     public override bool IsFullTile()
     {

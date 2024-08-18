@@ -1,4 +1,5 @@
 ﻿using Galaxias.Client.Main;
+using Galaxias.Util;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System;
@@ -8,16 +9,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Galaxias.Core.Networking.Packet.S2C;
-public class S2CJoinWorldPacket : IPacket
+public class S2CJoinWorldPacket : S2CPacket
 {
     public void Deserialize(NetDataReader reader)
     {
         
     }
 
-    public void Process(NetPeer sender)
+    public void Process(Client client)
     {
-        GalaxiasClient.GetInstance().JoinWorld();
+        client.ProcessJoinWorld(this);
+        
     }
 
     public void Serialize(NetDataWriter writer)

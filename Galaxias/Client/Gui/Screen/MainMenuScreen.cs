@@ -1,5 +1,7 @@
 ﻿using Galaxias.Client.Render;
 using Galaxias.Core.Networking;
+using Galaxias.Server;
+using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -26,9 +28,10 @@ public class MainMenuScreen : AbstractScreen
         }
         AddButton(new Widget.Button("Single Player", width / 2 - 100, height / 4 + 48, 200, 20, () =>
         {
-            Console.WriteLine("Start single player");
-            NetPlayManager.Instance.Init("localhost", 9050, true);
-            galaxias.SetupServer(false);
+            Log.Info("Single player");
+            GalaxiasServer server;
+            galaxias.SetupServer(false, out server);
+            NetPlayManager.Instance.InitServer("localhost", 9050, server);
             galaxias.SetCurrentScreen(null);
 
 
@@ -38,6 +41,9 @@ public class MainMenuScreen : AbstractScreen
             //galaxias.SetupServer();
             //galaxias.StartWorld();
             //Console.WriteLine("Join world");
+            Log.Info("Multiplayer");
+            NetPlayManager.Instance.InitClient("localhost", 9050);
+            galaxias.SetCurrentScreen(null);
 
         }));
         AddButton(new Widget.Button("Quit", width / 2 - 100, height / 4 + 108, 200, 20, galaxias.QuitGame));

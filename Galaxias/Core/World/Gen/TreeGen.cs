@@ -11,21 +11,22 @@ public class TreeGen : AbstractChunkGen
     private Dictionary<int, bool> treePos = [];
     public TreeGen(int seed, Random random) : base(seed, random){ 
     }
-    public override void Generate(World world, Chunk applyChunk)
+    public override void Generate(World world)
     {
         Random random = new Random();
-        for (int x = applyChunk.chunkX * GameConstants.ChunkWidth; x < (applyChunk.chunkX + 1) * GameConstants.ChunkWidth; x++)
+        for (int x = 0; x < world.width; x++)
         {
             for (int y = (int)world.GetGenSuerfaceHeight(TileLayer.Main ,x); y < GameConstants.ChunkHeight; y++)
             {
-                var state = applyChunk.GetTileState(TileLayer.Main, x, y - 1);
-                if (random.NextFloat(0, 1) < 0.7f && state != null && state.GetTile() == AllTiles.GrassTile && applyChunk.GetTileState(TileLayer.Main, x, y).IsAir())
+                var state = world.GetTileState(TileLayer.Main, x, y - 1);
+                if (random.NextFloat(0, 1) < 0.7f && state != null && state.GetTile() == AllTiles.GrassTile && world.GetTileState(TileLayer.Main, x, y).IsAir())
                 {
-                    applyChunk.SetTileState(TileLayer.Main, x, y, AllTiles.Grass.GetDefaultState());
+                    world.SetTileState(TileLayer.Main, x, y, AllTiles.Grass.GetDefaultState());
                 }
                 if (random.NextFloat(0, 1) < 0.1f && state != null && state.GetTile() == AllTiles.GrassTile && !HasTree(x))
                 {
-                    PlaceTree(x, y, world, applyChunk);
+                    PlaceTree(x, y, world);
+                    continue;
                 }
                 
             }
@@ -35,14 +36,14 @@ public class TreeGen : AbstractChunkGen
     //{
     //
     //}
-    private void PlaceTree(int x, int y, World world,Chunk applyChunk)
+    private void PlaceTree(int x, int y, World world)
     {
         var height = GetHeight(random);
         for (int ly = y; ly < y + height; ly++)
         {
-            applyChunk.SetTileState(TileLayer.Main, x, ly, AllTiles.Log.GetDefaultState());
+            world.SetTileState(TileLayer.Main, x, ly, AllTiles.Log.GetDefaultState());
         }
-        if (world.IsChunkLoaded(x))
+        if (true)
         {
             world.SetTileState(TileLayer.Main, x, y + height, AllTiles.Leaves.GetDefaultState());
         }

@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 namespace Galaxias.Core.Networking.Packet;
 public interface IPacket : INetSerializable
 {
-    public void Process(NetPeer sender);
+    
 
 }
