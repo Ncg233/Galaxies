@@ -1,9 +1,11 @@
 ﻿using Galaxias.Core.World.Entities;
+using Galaxias.Util;
 using System;
 
 namespace Galaxias.Core.World.Tiles;
 public class Tile
 {
+    public static readonly IntIdentityDictionary<TileState> TileStateId = [];
     private readonly StateHandler stateHandler;
     private readonly TileSettings settings;
     public Tile(TileSettings settings)
@@ -15,7 +17,7 @@ public class Tile
     {
         return stateHandler.GetDefaultState();
     }
-    internal float GetTranslucentModifier(World chunk, int x, int y, TileLayer layer, bool isSky)
+    internal float GetTranslucentModifier(AbstractWorld chunk, int x, int y, TileLayer layer, bool isSky)
     {
         if (!IsFullTile() && isSky)
         {
@@ -38,15 +40,15 @@ public class Tile
     {
         return settings.CanCollide;
     }
-    public virtual bool OnBreak(World world, int x, int y, TileState state)
+    public virtual bool OnBreak(AbstractWorld world, int x, int y, TileState state)
     {
         return true;
     }
-    public virtual bool OnPlace(World world, int x, int y, TileState state)
+    public virtual bool OnPlace(AbstractWorld world, int x, int y, TileState state)
     {
         return true;
     }
-    public virtual bool OnUse(World world, int x, int y, TileState state, LivingEntity entity)
+    public virtual bool OnUse(AbstractWorld world, int x, int y, TileState state, LivingEntity entity)
     {
         return true;
     }

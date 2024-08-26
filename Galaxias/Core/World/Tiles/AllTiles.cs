@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using static Galaxias.Core.World.Tiles.Tile;
 
 namespace Galaxias.Core.World.Tiles;
-public class AllTiles
+public static class AllTiles
 {
     public static readonly Dictionary<string, Tile> tileRegister = new Dictionary<string, Tile>();
     public static readonly Tile Air = Register("air", new AirTile());
@@ -15,6 +15,13 @@ public class AllTiles
     public static readonly Tile Torch = Register("torch", new TorchTile(new TileSettings()));
     public static readonly Tile Grass = Register("grass", new Tile(new TileSettings().SetFullTile(false).SetCanCollide(false)));
 
+    public static void Init()
+    {
+        foreach (var item in tileRegister)
+        {
+            TileStateId.Add(item.Value.GetDefaultState());
+        }
+    }
     private static Tile Register(string name, Tile tile)
     {
         tileRegister.Add(name, tile);

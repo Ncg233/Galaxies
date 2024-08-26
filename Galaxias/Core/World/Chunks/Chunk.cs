@@ -6,14 +6,14 @@ using Galaxias.Core.World.Gen;
 namespace Galaxias.Core.World.Chunks;
 public class Chunk
 {
-    private readonly World world;
+    private readonly AbstractWorld world;
     private readonly Random rand;
     private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = new();
     private readonly Dictionary<LightType, byte[]> lightGrid = new();
     public int chunkX { get; private set; }
     private static bool isGenerated;
     
-    public Chunk(World world, int chunkX)
+    public Chunk(AbstractWorld world, int chunkX)
     {
         this.rand = new Random();
         this.chunkX = chunkX;

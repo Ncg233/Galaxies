@@ -29,7 +29,13 @@ public class PacketManager
 
     static PacketManager()
     {
+        //join game
         Register(0, typeof(C2SLoginGamePacket));
         Register(1, typeof(S2CJoinWorldPacket));
+        Register(2, typeof(S2CWorldDataPacket));
+
+        //playe
+        Register(3, typeof(C2SPlayerDiggingPacket));
+        Register(4, typeof(S2CTileChangePacket));
     }
 }

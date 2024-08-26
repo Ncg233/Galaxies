@@ -13,12 +13,15 @@ namespace Galaxias.Server;
 public class ServerPlayer : Player
 {
     private readonly NetPeer _connetionClient;
-    public ServerPlayer(World world, NetPeer peer) : base(world)
+    public readonly InteractionManagerServer interactionManager; 
+
+    public ServerPlayer(ServerWorld world, NetPeer peer) : base(world)
     {
         _connetionClient = peer;
+        interactionManager = new InteractionManagerServer(world);
     }
     public void SendPacket(IPacket packet)
     {
-        NetPlayManager.Instance.SendToClient(packet, _connetionClient);
+        NetPlayManager.SendToClient(packet, _connetionClient);
     }
 }

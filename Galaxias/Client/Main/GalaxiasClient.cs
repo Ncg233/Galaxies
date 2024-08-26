@@ -11,6 +11,7 @@ using Galaxias.Client.Gui.Screen;
 using Galaxias.Server;
 using Galaxias.Core.Networking.Packet.C2S;
 using System.Threading;
+using Galaxias.Core.World.Tiles;
 
 namespace Galaxias.Client.Main;
 public class GalaxiasClient : Game
@@ -28,8 +29,8 @@ public class GalaxiasClient : Game
     private readonly TextureManager textureManager;
     private NetPlayManager netPlayManager;
     private ClientPlayer player;
-    private World world;
-    private InteractionManager interactionManager;
+    private ClientWorld world;
+    private InteractionManagerClient interactionManager;
     private Camera camera = new();
     private int width, height;
     private bool isHost;
@@ -37,6 +38,7 @@ public class GalaxiasClient : Game
     {
         Thread.CurrentThread.Name = "Client";
         instance = this;
+        AllTiles.Init();
         textureManager = new TextureManager(Content);
         renderer = new IntegrationRenderer(textureManager);
         _graphics = new GraphicsDeviceManager(this);
@@ -76,7 +78,7 @@ public class GalaxiasClient : Game
     protected override void Update(GameTime gameTime)// TODO: Add your update logic here
     {
         base.Update(gameTime);
-        NetPlayManager.Instance.UpdateClient();
+        NetPlayManager.UpdateClient();
         if (KeyBind.FullScreen.IsKeyPressed())
         {
             _graphics.ToggleFullScreen();
@@ -114,7 +116,7 @@ public class GalaxiasClient : Game
     }
     public void QuitGame()
     {
-        NetPlayManager.Instance.StopClient();
+        NetPlayManager.StopClient();
         server?.StopServer();
         Exit();
     }
@@ -147,7 +149,7 @@ public class GalaxiasClient : Game
         world.AddEntity(player);
         SetCurrentScreen(null);
         worldRenderer.SetRenderWorld(world);
-        interactionManager = new InteractionManager(world);
+        interactionManager = new InteractionManagerClient(world);
     }
     private void OnResize()
     {
@@ -169,7 +171,7 @@ public class GalaxiasClient : Game
     {
         return player;
     }
-    public World GetWorld()
+    public AbstractWorld GetWorld()
     {
         return world;
     }

@@ -13,7 +13,7 @@ public class WorldRenderer
     private readonly Color endColor = new Color(15, 15, 16);
     private readonly Color hitColor = new Color(0, 1, 0, 0.2f);
     private Main.GalaxiasClient _galaxias;
-    private World _world;
+    private AbstractWorld _world;
     private Camera camera;
     private TileRenderer tileRenderer;
     private ItemRenderer itemRenderer;
@@ -33,7 +33,7 @@ public class WorldRenderer
         _galaxias = galaxias;
 
     }
-    public void SetRenderWorld(World world)
+    public void SetRenderWorld(AbstractWorld world)
     {
         _world = world;
     }

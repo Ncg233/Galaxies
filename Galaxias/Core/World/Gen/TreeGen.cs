@@ -11,10 +11,10 @@ public class TreeGen : AbstractChunkGen
     private Dictionary<int, bool> treePos = [];
     public TreeGen(int seed, Random random) : base(seed, random){ 
     }
-    public override void Generate(World world)
+    public override void Generate(AbstractWorld world)
     {
         Random random = new Random();
-        for (int x = 0; x < world.width; x++)
+        for (int x = 0; x < world.Width; x++)
         {
             for (int y = (int)world.GetGenSuerfaceHeight(TileLayer.Main ,x); y < GameConstants.ChunkHeight; y++)
             {
@@ -36,7 +36,7 @@ public class TreeGen : AbstractChunkGen
     //{
     //
     //}
-    private void PlaceTree(int x, int y, World world)
+    private void PlaceTree(int x, int y, AbstractWorld world)
     {
         var height = GetHeight(random);
         for (int ly = y; ly < y + height; ly++)

@@ -31,7 +31,7 @@ public class MainMenuScreen : AbstractScreen
             Log.Info("Single player");
             GalaxiasServer server;
             galaxias.SetupServer(false, out server);
-            NetPlayManager.Instance.InitServer("localhost", 9050, server);
+            NetPlayManager.InitServer("127.0.0.1", 9050, server);
             galaxias.SetCurrentScreen(null);
 
 
@@ -42,7 +42,7 @@ public class MainMenuScreen : AbstractScreen
             //galaxias.StartWorld();
             //Console.WriteLine("Join world");
             Log.Info("Multiplayer");
-            NetPlayManager.Instance.InitClient("localhost", 9050);
+            NetPlayManager.InitClient("127.0.0.1", 9050);
             galaxias.SetCurrentScreen(null);
 
         }));

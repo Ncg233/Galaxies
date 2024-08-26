@@ -1,4 +1,5 @@
 ﻿using Galaxias.Client.Main;
+using Galaxias.Core.Networking.Packet;
 using Galaxias.Core.Networking.Packet.C2S;
 using Galaxias.Server;
 using Galaxias.Util;
@@ -6,6 +7,7 @@ using LiteNetLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,9 +35,19 @@ public class Server : NetWorkingInterface
     }
     public void StartServer(int port)
     {
-        Manager.Start(port);
+        Manager.Start(IPAddress.Any, IPAddress.IPv6Any, port, false);
     }
-
+    public void SendToAllClients(IPacket packet)
+    {
+        foreach (var peer in connetionClient)
+        {
+            if(peer != null)
+            {
+                SendPacket(packet, peer);
+            }
+        }
+    }
+    //process packet
     public void ProcessLoginGame(C2SLoginGamePacket packet)
     {
         var peer = connetionClient[packet._id];
@@ -47,5 +59,12 @@ public class Server : NetWorkingInterface
         }
 
     }
+    public void ProcessDigging(C2SPlayerDiggingPacket packet)
+    {
+        var player = GalaxiasServer.GetPlayer(packet._id);
+        player.interactionManager.DestroyTile(packet.x, packet.y);
+    }
+
+    
 }
 

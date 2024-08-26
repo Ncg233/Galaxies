@@ -1,4 +1,5 @@
 ﻿using Galaxias.Core.World.Tiles;
+using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -34,5 +35,37 @@ public class Utils
         //if (from.X - to.X > 192 || from.X - to.X < -192 || from.Y - to.Y > 40 || from.Y - to.Y < -40)
         //    from = to;
         from = new Vector3(from.X + (to.X - from.X) * deltaTime * 10, from.Y + (to.Y - from.Y) * deltaTime * 10, 0);
+    }
+    public static void PutIntArray(NetDataWriter writer, int[] data)
+    {
+        writer.Put(data.Length);
+        foreach (int item in data)
+        {
+            writer.Put(item);
+        }
+    }
+    public static void GetIntArray(NetDataReader reader, out int[] data)
+    {
+        data = new int[reader.GetInt()];
+        for(int i = 0; i < data.Length; i++)
+        {
+            data[i] = reader.GetInt();
+        }
+    }
+    public static void PutByteArray(NetDataWriter writer, byte[] data)
+    {
+        writer.Put(data.Length);
+        foreach (byte item in data)
+        {
+            writer.Put(item);
+        }
+    }
+    public static void GetByteArray(NetDataReader reader, out byte[] data)
+    {
+        data = new byte[reader.GetInt()];
+        for (int i = 0; i < data.Length; i++)
+        {
+            data[i] = reader.GetByte();
+        }
     }
 }

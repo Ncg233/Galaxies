@@ -15,7 +15,7 @@ public class HeightGen : AbstractChunkGen
     }
 
     #endregion
-    public override void Generate(World world)
+    public override void Generate(AbstractWorld world)
     {
         
     }

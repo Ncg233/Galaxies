@@ -4,5 +4,5 @@ namespace Galaxias.Core.World.Gen;
 public interface IChunkGenerator
 {
 
-    public void Generate(World world);
+    public void Generate(AbstractWorld world);
 }

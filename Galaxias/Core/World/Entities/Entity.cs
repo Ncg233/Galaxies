@@ -14,14 +14,14 @@ public abstract class Entity
     public float vy { get; protected set; }
     public Direction direction { get; protected set; }
     public HitBox hitbox { get; protected set; } = HitBox.Empty();
-    private World world;
+    private AbstractWorld world;
     public float speed;
     //private EntityRenderer renderer;
     public bool onGround;
     public bool collidedHor;
     public bool collidedVert;
     protected double lastY;
-    public Entity(EntityType entity, World world)
+    public Entity(EntityType entity, AbstractWorld world)
     {
         Type = entity;
         this.world = world;
@@ -166,7 +166,7 @@ public abstract class Entity
     {
         return 1;
     }
-    public World GetWorld() {
+    public AbstractWorld GetWorld() {
         return world;
     }
     public void TpToOtherSide()

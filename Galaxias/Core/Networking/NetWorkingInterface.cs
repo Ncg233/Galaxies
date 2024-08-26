@@ -48,12 +48,12 @@ public class NetWorkingInterface
         packet.Deserialize(reader);
         if (packet is C2SPacket c2spacket)
         {
-            c2spacket.Process(NetPlayManager.Instance.RomateServer);
+            c2spacket._id = peer.Id;
+            c2spacket.Process(NetPlayManager.RomateServer);
         }
         else if (packet is S2CPacket s2cpacket)
         {
-            
-            s2cpacket.Process(NetPlayManager.Instance.RomateClient);
+            s2cpacket.Process(NetPlayManager.RomateClient);
             
         }else
         {

@@ -15,5 +15,5 @@ public abstract class AbstractChunkGen : IChunkGenerator
         this.seed = seed;
         this.random = random;
     }
-    public abstract void Generate(World world);
+    public abstract void Generate(AbstractWorld world);
 }
