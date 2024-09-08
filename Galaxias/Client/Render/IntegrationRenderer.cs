@@ -47,10 +47,10 @@ public class IntegrationRenderer
     {
         spriteBatch.Draw(texture, rect, source, color, 0, Vector2.Zero, effects, 0);
     }
-    public void DrawSpriteMap(SpriteMap map, float x, float y, int pos, Color color)
+    public void DrawSpriteMap(SpriteMap map, float x, float y, float originX, float originY, int pos, Color color)
     {
 
-        spriteBatch.Draw(map.SourceTexture, new Vector2(x, y), map.GetSourceRect(pos), color);
+        spriteBatch.Draw(map.SourceTexture, new Vector2(x, y), map.GetSourceRect(pos),color, 0, new Vector2(originX, originY), 1, SpriteEffects.None, 0);
     }
     public void End()
     {

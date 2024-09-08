@@ -12,64 +12,79 @@ using Galaxias.Server;
 using Galaxias.Core.Networking.Packet.C2S;
 using System.Threading;
 using Galaxias.Core.World.Tiles;
+using Galaxias.Client.Gui;
 
 namespace Galaxias.Client.Main;
 public class GalaxiasClient : Game
 {
-    public static readonly string Version = "0.2.0";
+    public static readonly string Version = "0.2.9";
+    public static float DeltaTime;
     private static GalaxiasClient instance;
     private GalaxiasServer server;
     private GraphicsDeviceManager _graphics;
-    public AbstractScreen CurrentScreen { get; private set; }
-    private readonly IntegrationRenderer renderer;
-    private readonly GameRenderer _gameRenderer;
-    private readonly WorldRenderer worldRenderer;
-    private readonly TileRenderer tileRenderer;
-    private readonly ItemRenderer itemRenderer;
-    private readonly TextureManager textureManager;
+    public readonly ScreenManager ScreenManager;
+    public readonly IntegrationRenderer Renderer;
+    public readonly GameRenderer GameRenderer;
+    public readonly WorldRenderer WorldRenderer;
+    public readonly TileRenderer TileRenderer;
+    public readonly ItemRenderer ItemRenderer;
+    public readonly TextureManager TextureManager;
+    public readonly Camera camera = new();
+    public readonly InGameHud inGameHud;
     private NetPlayManager netPlayManager;
     private ClientPlayer player;
     private ClientWorld world;
     private InteractionManagerClient interactionManager;
-    private Camera camera = new();
+    
     private int width, height;
     private bool isHost;
+    private Song song;
     public GalaxiasClient()
     {
         Thread.CurrentThread.Name = "Client";
         instance = this;
         AllTiles.Init();
-        textureManager = new TextureManager(Content);
-        renderer = new IntegrationRenderer(textureManager);
+        TextureManager = new TextureManager(Content);
+        Renderer = new IntegrationRenderer(TextureManager);
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         Window.AllowUserResizing = true;
 
-        tileRenderer = new TileRenderer();
-        itemRenderer = new ItemRenderer();
-        worldRenderer = new WorldRenderer(this, camera, tileRenderer);
-        _gameRenderer = new GameRenderer(this, renderer, worldRenderer, camera);
+        TileRenderer = new TileRenderer();
+        ItemRenderer = new ItemRenderer();
+        WorldRenderer = new WorldRenderer(this, camera, TileRenderer);
+        inGameHud = new InGameHud(this);
+        GameRenderer = new GameRenderer(this, Renderer, WorldRenderer, camera, inGameHud);
+        ScreenManager = new ScreenManager(this);
+        
         //_graphics.IsFullScreen = true;
         _graphics.PreferredBackBufferWidth = 1920;
         _graphics.PreferredBackBufferHeight = 1080;
 
         camera.OnResize(GetWindowWidth(), GetWindowHeight());
     }
-
+    public static float GetDeltaTime()
+    {
+        return DeltaTime;
+    }
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
         base.Initialize();
-        SetCurrentScreen(new MainMenuScreen());
+        
     }
 
     protected override void LoadContent()
     {
-        renderer.LoadContents();
-        _gameRenderer.LoadContents();
-        tileRenderer.LoadContent(textureManager);
-        itemRenderer.LoadContent(textureManager);
+        Renderer.LoadContents();
+        GameRenderer.LoadContents();
+        TileRenderer.LoadContent(TextureManager);
+        ItemRenderer.LoadContent(TextureManager);
+        song = Content.Load<Song>("Assets/Musics/earth_forest");
+
+        SetCurrentScreen(new MainMenuScreen());
+        ScreenManager.FadeIn(1f);
         //entityRenderer.LoadContent(textureManager);
 
         // TODO: use this.Content to load your game content here
@@ -78,55 +93,77 @@ public class GalaxiasClient : Game
     protected override void Update(GameTime gameTime)// TODO: Add your update logic here
     {
         base.Update(gameTime);
+        DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         NetPlayManager.UpdateClient();
         if (KeyBind.FullScreen.IsKeyPressed())
         {
             _graphics.ToggleFullScreen();
             OnResize();
         }
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
-        {
-            QuitGame();
-        }//please quit game with esc key, or the thread will not stop 
+        //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        //{
+        //    QuitGame();
+        //}//please quit game with esc key, or the thread will not stop 
         if (width != GetWindowWidth() || height != GetWindowHeight())
         {
             OnResize();
         }
-        if (IsActive && Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && CurrentScreen != null)
-        {
-            Point p = Mouse.GetState().Position;
-            double mouseX = p.X * camera.guiWidth / GetWindowWidth();
-            double mouseY = p.Y * camera.guiHeight / GetWindowHeight();
-            CurrentScreen.MouseClicked(mouseX, mouseY);
+        ScreenManager.Update(DeltaTime);
+        world?.Update(DeltaTime);
+        KeyBind.Update(DeltaTime);
+        
+        interactionManager?.Update(this, GameRenderer.camera, (float)gameTime.ElapsedGameTime.TotalSeconds);
+        HandleKey();
 
+    }
+    private void HandleKey()
+    {
+        if (!IsActive) return;
+
+        if (KeyBind.InventoryKey.IsKeyPressed())
+        {
+            inGameHud.ToggleInventory();
         }
-        world?.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-        KeyBind.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-        CurrentScreen?.Update();
-        interactionManager?.Update(this, _gameRenderer.camera, (float)gameTime.ElapsedGameTime.TotalSeconds);
+        if (KeyBind.Esc.IsKeyPressed())
+        {
+            if (ScreenManager.CurrentScreen != null && ScreenManager.CurrentScreen.CanCloseWithEsc)
+            {
+                SetCurrentScreen(null);
+            }
+            else if (world != null)
+            {
+                SetCurrentScreen(new MenuScreen());
+            }
+        }
 
     }
     protected override void Draw(GameTime gameTime)
     {
 
         // TODO: Add your drawing code here
-        _gameRenderer.Render((float)gameTime.ElapsedGameTime.TotalSeconds);
+        GameRenderer.Render((float)gameTime.ElapsedGameTime.TotalSeconds);
 
         base.Draw(gameTime);
     }
     public void QuitGame()
     {
         NetPlayManager.StopClient();
-        server?.StopServer();
+        server?.ServerShutdown();
         Exit();
+    }
+    public void QuitWorld()
+    {
+        NetPlayManager.StopClient();
+        server?.ServerShutdown();
+        LoadWorld(null);
+        StopMusic();
+        SetCurrentScreen(new MainMenuScreen());
+
+        
     }
     public void SetCurrentScreen(AbstractScreen newScreen)
     {
-        CurrentScreen?.Hid();
-
-        CurrentScreen = newScreen;
-
-        CurrentScreen?.Init(this, camera.guiWidth, camera.guiHeight);
+        ScreenManager.SetCurrentScreen(newScreen, camera.guiWidth, camera.guiHeight);
 
     }
     public void SetupServer(bool host, out GalaxiasServer gServer)
@@ -136,27 +173,33 @@ public class GalaxiasClient : Game
         server.StartServerThread();
         gServer = server;
     }
-    //this method is only used for server start
-    public void StartWorld()
-    {
-        
-    }
     //this method is used for client join
-    public void JoinWorld(ClientWorld world)
+    public void LoadWorld(ClientWorld world)
     {
         this.world = world;
-        player = new ClientPlayer(world);
-        world.AddEntity(player);
-        SetCurrentScreen(null);
-        worldRenderer.SetRenderWorld(world);
-        interactionManager = new InteractionManagerClient(world);
+        if (world != null)
+        {
+            player = new ClientPlayer(world);
+            world.AddEntity(player);
+            SetCurrentScreen(null);
+            WorldRenderer.SetRenderWorld(world);
+            interactionManager = new InteractionManagerClient(world, player);
+            PlayMusic(song, 0.5f, true);
+        }else
+        {
+            player = null;
+            interactionManager = null;
+        }
+        
+        
     }
     private void OnResize()
     {
         width = GetWindowWidth();
         height = GetWindowHeight();
-        _gameRenderer.onResize(width, height);
-        CurrentScreen?.OnResize(camera.guiWidth, camera.guiHeight);
+        GameRenderer.onResize(width, height);
+        ScreenManager.OnResize(camera.guiWidth, camera.guiHeight);
+        inGameHud.OnResize(camera.guiWidth, camera.guiWidth);
 
     }
     public int GetWindowWidth()
@@ -175,14 +218,9 @@ public class GalaxiasClient : Game
     {
         return world;
     }
-
-    public AbstractScreen GetCurrentScreen()
-    {
-        return CurrentScreen;
-    }
     public TextureManager GetTextureManager()
     {
-        return textureManager;
+        return TextureManager;
     }
     public static GalaxiasClient GetInstance()
     {
@@ -191,20 +229,22 @@ public class GalaxiasClient : Game
 
     internal GameRenderer GetGameRenderer()
     {
-        return _gameRenderer;
+        return GameRenderer;
     }
-    internal void PlayMusic(Song song)
+    internal void PlayMusic(Song song, float volume, bool isRepeating)
     {
+        MediaPlayer.IsRepeating = isRepeating;
+        MediaPlayer.Volume = volume;
         MediaPlayer.Play(song);
     }
 
-    internal void StopMusic(Song mainMusic)
+    internal void StopMusic()
     {
         MediaPlayer.Stop();
     }
 
     internal ItemRenderer GetItemRenderer()
     {
-        return itemRenderer;
+        return ItemRenderer;
     }
 }

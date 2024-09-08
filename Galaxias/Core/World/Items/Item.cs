@@ -10,7 +10,7 @@ public class Item
     {
         return true;
     }
-    public virtual bool UseOnTile(AbstractWorld world, Player player, TileState tile, int x, int y)
+    public virtual bool UseOnTile(AbstractWorld world, Player player, int x, int y)
     {
         return true;
     }

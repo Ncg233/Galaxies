@@ -30,7 +30,7 @@ public class Tile
     }
     public virtual TileRenderType GetRenderType()
     {
-        return TileRenderType.Bottom;
+        return TileRenderType.Center;
     }
     public virtual bool IsFullTile()
     {

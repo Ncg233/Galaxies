@@ -1,3 +1,4 @@
+using Galaxias.Client.Gui.Screen;
 using Galaxias.Client.Key;
 using Galaxias.Client.Main;
 using Galaxias.Client.Render;
@@ -11,14 +12,16 @@ public class InGameHud
     private readonly string _heartTexture = "Textures/Gui/heart";
     private readonly string _heartHalfTexture = "Textures/Gui/heart_half";
     private bool debug = true;
-    private Main.GalaxiasClient _client;
+    private int guiWidth, guiHeight;
+    private GalaxiasClient _client;
     private FrameCounter _frameCounter = new();
-    public InGameHud(Main.GalaxiasClient galaxias)
+    private InventoryScreen inventoryScreen = new InventoryScreen();
+    public InGameHud(GalaxiasClient galaxias)
     {
         _client = galaxias;
 
     }
-    public void Render(IntegrationRenderer renderer, int width, int height, float dTime)
+    public void Render(IntegrationRenderer renderer, double mouseX, double mouseY ,float dTime)
     {
         Player player = _client.GetPlayer();
 
@@ -46,11 +49,11 @@ public class InGameHud
                 health -= 2;
                 if (health < 0)
                 {
-                    renderer.Draw(_heartHalfTexture, width / 2 + 150 - i * 8, 1, Color.White);
+                    renderer.Draw(_heartHalfTexture, guiWidth / 2 + 150 - i * 8, 1, Color.White);
                 }
                 else
                 {
-                    renderer.Draw(_heartTexture, width / 2 + 150 - i * 8, 1, Color.White);
+                    renderer.Draw(_heartTexture, guiWidth / 2 + 150 - i * 8, 1, Color.White);
                 }
             }
             else
@@ -58,14 +61,21 @@ public class InGameHud
                 break;
             }
         }
-        var inv = player.GetInventory();
-        for (int m = 0; m < 9; m++)
+        
+        if(_client.GetWorld() != null)
         {
-            if (m == _client.GetPlayer().GetInventory().onHand) renderer.Draw("Textures/Gui/slot_onHand", width / 2 - 90 + _client.GetPlayer().GetInventory().onHand * 20, 0, Color.White);
-            else renderer.Draw("Textures/Gui/slot", width / 2 - 90 + m * 20, 0, Color.White);
-            _client.GetItemRenderer().RenderInGui(renderer, inv.Hotbar[m], width / 2 - 90 + m * 20 + 10, 10, Color.White);
+            inventoryScreen.Render(renderer ,mouseX, mouseY);
         }
-
+    }
+    public void OnResize(int guiWidth, int guiHeight)
+    {
+        this.guiHeight = guiHeight;
+        this.guiHeight = guiHeight;
+        inventoryScreen.OnResize(guiWidth, guiHeight);
+    }
+    public void ToggleInventory()
+    {
+        inventoryScreen.Toggle();
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
     {

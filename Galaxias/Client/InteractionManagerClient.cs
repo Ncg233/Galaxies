@@ -1,4 +1,6 @@
 ﻿using System;
+using Galaxias.Client.Gui.Screen;
+using Galaxias.Client.Key;
 using Galaxias.Client.Main;
 using Galaxias.Client.Render;
 using Galaxias.Core.Networking;
@@ -15,24 +17,23 @@ namespace Galaxias.Client;
 public class InteractionManagerClient
 {
     private ClientWorld world;
-    public InteractionManagerClient(ClientWorld world)
+    ClientPlayer player;
+    private int currentItem;
+    public InteractionManagerClient(ClientWorld world, ClientPlayer player)
     {
         this.world = world;
+        this.player = player;
     }
 
     public void Update(GalaxiasClient galaxias, Camera camera, float dTime)
     {
         if (galaxias.IsActive)
         {
+            SyncHeldItem();
             var state = Mouse.GetState();
-            Vector2 p = camera.ScreenToWorldSpace(state.Position);
-            int x = Utils.Floor(p.X / 8);
-            int y = Utils.Floor(-p.Y / 8);
-            Player player = galaxias.GetPlayer();
-            player.HitX = x;
-            player.HitY = y;
             if (state.LeftButton == ButtonState.Pressed)
             {
+                GetMosuePos(camera, out int x, out int y);
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
                 if (!tileState.IsAir())
                 {
@@ -42,14 +43,24 @@ public class InteractionManagerClient
             }
             else if (state.RightButton == ButtonState.Pressed)
             {
-                var tileState = world.GetTileState(TileLayer.Main, x, y);
-                var item = player.GetItemOnHand().GetItem();
-                if (item is TileItem)
-                {
-                    item.UseOnTile(galaxias.GetWorld(), player, tileState, x, y);
-                }
+                GetMosuePos(camera, out int x, out int y);
+                NetPlayManager.SendToServer(new C2SUseItemPacket(x, y));
             }
-
+            
+        }
+    }
+    public void GetMosuePos(Camera camera, out int x, out int y)
+    {
+        Vector2 p = camera.ScreenToWorldSpace(Mouse.GetState().Position);
+        x = Utils.Floor(p.X / 8);
+        y = Utils.Floor(-p.Y / 8);
+    }
+    public void SyncHeldItem()
+    {
+        int i = player.Inventory.onHand;
+        if (i != currentItem) { 
+            currentItem = i;
+            NetPlayManager.SendToServer(new C2SSyncHeldItemPacket(i));
         }
     }
 }

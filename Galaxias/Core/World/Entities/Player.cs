@@ -6,7 +6,7 @@ using Galaxias.Util;
 namespace Galaxias.Core.World.Entities;
 public class Player : LivingEntity
 {
-    private PlayerInventory inventory = new();
+    public PlayerInventory Inventory { get; private set; } = new();
     public int HitX = 0;
     public int HitY = 0;
     protected float homeX = 0;
@@ -94,9 +94,9 @@ public class Player : LivingEntity
         return 4;
     }
     public ItemPile GetItemOnHand(){
-        return inventory.Hotbar[inventory.onHand];
+        return Inventory.Hotbar[Inventory.onHand];
     }
     public PlayerInventory GetInventory(){
-        return inventory;
+        return Inventory;
     }
 }

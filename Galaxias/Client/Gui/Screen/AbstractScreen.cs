@@ -2,6 +2,7 @@
 using Galaxias.Client.Main;
 using Galaxias.Client.Render;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 
@@ -9,15 +10,16 @@ namespace Galaxias.Client.Gui.Screen;
 
 public abstract class AbstractScreen
 {
-    protected int width;
-    protected int height;
-    protected Main.GalaxiasClient galaxias;
+    public int Width;
+    public int Height;
+    protected GalaxiasClient galaxias;
     private List<Button> buttons = [];
-    public void Init(Main.GalaxiasClient galaxias, int width, int height)
+    public bool CanCloseWithEsc = true;
+    public void OnResize(int guiWidth, int guiHeight)
     {
-        this.galaxias = galaxias;
-        this.width = width;
-        this.height = height;
+        galaxias = GalaxiasClient.GetInstance();
+        Width = guiWidth;
+        Height = guiHeight;
         buttons.Clear();
         OnInit();
     }
@@ -26,7 +28,6 @@ public abstract class AbstractScreen
     {
 
     }
-
     public virtual void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
         buttons.ForEach(button =>
@@ -34,11 +35,7 @@ public abstract class AbstractScreen
             button.Render(renderer, mouseX, mouseY);
         });
     }
-    protected Button AddButton(Button button)
-    {
-        buttons.Add(button);
-        return button;
-    }
+    
     public virtual void Update()
     {
 
@@ -48,6 +45,11 @@ public abstract class AbstractScreen
     {
 
     }
+    protected Button AddButton(Button button)
+    {
+        buttons.Add(button);
+        return button;
+    }
     public void MouseClicked(double mouseX, double mouseY)
     {
         buttons.ForEach(button =>
@@ -55,8 +57,9 @@ public abstract class AbstractScreen
             button.MouseClicked(mouseX, mouseY);
         });
     }
-    public void OnResize(int guiWidth, int guiHeight)
+    
+    public void FadeOut()
     {
-        Init(galaxias, guiWidth, guiHeight);
+
     }
 }

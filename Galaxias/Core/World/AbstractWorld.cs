@@ -22,15 +22,14 @@ public abstract class AbstractWorld
     private HeightGen heightGen;
     private readonly List<IChunkGenerator> generators;
     #endregion
-
     private int tutolTime = 1440;
-    public float currnetTime { get; private set; } = 8 * 60;//8:00
+    public float currnetTime { get; protected set; } = 8 * 60;//8:00
     private float sunRotation, skyLight;
     
     private int seed;
     private Random rand;
     public bool IsClient { get; private set; }
-    private bool isGenerated = true;
+    protected bool isGenerated = true;
     public AbstractWorld(bool isClient)
     {
         IsClient = isClient; 
@@ -45,15 +44,18 @@ public abstract class AbstractWorld
         {
             heightGen = new HeightGen(seed, rand);
             generators = [new TileGen(seed, rand), new TreeGen(seed, rand)];
-            isGenerated = true;
-            foreach (var generator in generators)
-            {
-                generator.Generate(this);
-            }
-            isGenerated = false;
-            InitLight();
         }
 
+    }
+    public void Generate()
+    {
+        isGenerated = true;
+        foreach (var generator in generators)
+        {
+            generator.Generate(this);
+        }
+        isGenerated = false;
+        InitLight();
     }
     public void Update(float dTime)
     {
@@ -368,14 +370,16 @@ public abstract class AbstractWorld
     }
     public void WriteTileData(out int[] tileData, out byte[] skyLight, out byte[] tileLight)
     {
-        tileData = new int[Width * Height];
-        skyLight = new byte[Width * Height];
-        tileLight = new byte[Width * Height];
+        int size = Width * Height;
+        tileData = new int[2 * size];
+        skyLight = new byte[size];
+        tileLight = new byte[size];
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 tileData[y * Width + x] = Tile.TileStateId.Get(GetTileState(TileLayer.Main, x, y));
+                tileData[y * Width + x + size] = Tile.TileStateId.Get(GetTileState(TileLayer.Background, x, y));
                 skyLight[y * Width + x] = GetSkyLight(x, y);
                 tileLight[y * Width + x] = GetTileLight(x, y);
             }
@@ -383,12 +387,14 @@ public abstract class AbstractWorld
     }
     public void ReadTileData(int[] tileData, byte[] skyLight, byte[] tileLight)
     {
+        int size = Height * Width;
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 
                 SetTileState(TileLayer.Main, x, y, Tile.TileStateId.Get(tileData[y * Width + x]));
+                SetTileState(TileLayer.Background, x, y, Tile.TileStateId.Get(tileData[size + y * Width + x]));
                 SetSkyLight(x, y, skyLight[y * Width + x]);
                 SetTileLight(x, y, tileLight[y * Width + x]);
                 
@@ -396,5 +402,9 @@ public abstract class AbstractWorld
         }
         isGenerated = false;
         //isLoaded = true;
+    }
+    public void SetCurrentTime(float currentTime)
+    {
+        currnetTime = currentTime;
     }
 }

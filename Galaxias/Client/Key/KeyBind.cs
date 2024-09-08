@@ -28,6 +28,8 @@ namespace Galaxias.Client.Key
         public static KeyBind FullScreen = new KeyBind("full_screen", Keys.F11);
         public static KeyBind DeBug = new KeyBind("debug", Keys.F3);
         public static KeyBind JetPack = new KeyBind("jetpack", Keys.L);
+        public static KeyBind InventoryKey = new KeyBind("inventory", Keys.E);
+        public static KeyBind Esc = new KeyBind("inventory", Keys.Escape);
         public static bool Set(string name, Keys key)
         {
             if (keyBinds.ContainsKey(name))
@@ -80,6 +82,7 @@ namespace Galaxias.Client.Key
         public Keys key { get; set; }
 
         private bool canRepeatExecute;
+        
     }
 
 }

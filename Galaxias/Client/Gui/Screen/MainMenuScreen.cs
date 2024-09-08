@@ -1,4 +1,5 @@
-﻿using Galaxias.Client.Render;
+﻿using Galaxias.Client.Main;
+using Galaxias.Client.Render;
 using Galaxias.Core.Networking;
 using Galaxias.Server;
 using Galaxias.Util;
@@ -11,32 +12,37 @@ namespace Galaxias.Client.Gui.Screen;
 public class MainMenuScreen : AbstractScreen
 {
     private static Song mainMusic;
+    public MainMenuScreen ()
+    {
+        CanCloseWithEsc = false;
+        if (mainMusic == null)
+        {
+            mainMusic = GalaxiasClient.GetInstance().Content.Load<Song>("Assets/Musics/galaxias");
+        }
+        GalaxiasClient.GetInstance().PlayMusic(mainMusic, 0.7f, true);
+    }
     public override void Update()
     {
     }
     public override void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
-        renderer.Draw("Textures/Misc/a", new Rectangle(0, 0, width, height), Color.White);
+        renderer.Draw("Textures/Misc/a", new Rectangle(0, 0, Width, Height), Color.White);
         base.Render(renderer, mouseX, mouseY);
     }
     protected override void OnInit()
     {
-        if (mainMusic == null)
-        {
-            mainMusic = galaxias.Content.Load<Song>("Assets/Musics/galaxias");
-            galaxias.PlayMusic(mainMusic);
-        }
-        AddButton(new Widget.Button("Single Player", width / 2 - 100, height / 4 + 48, 200, 20, () =>
+        
+        AddButton(new Widget.Button("Single Player", Width / 2 - 100, Height / 4 + 48, 200, 20, () =>
         {
             Log.Info("Single player");
-            GalaxiasServer server;
-            galaxias.SetupServer(false, out server);
-            NetPlayManager.InitServer("127.0.0.1", 9050, server);
-            galaxias.SetCurrentScreen(null);
-
-
+            
+            galaxias.ScreenManager.FadeOut(1f, () => {
+                galaxias.SetupServer(false, out GalaxiasServer server);
+                NetPlayManager.InitLocalServer(server);
+                galaxias.SetCurrentScreen(null);
+            });
         }));
-        AddButton(new Widget.Button("Multiplayer", width / 2 - 100, height / 4 + 78, 200, 20, () =>
+        AddButton(new Widget.Button("Multiplayer", Width / 2 - 100, Height / 4 + 78, 200, 20, () =>
         {
             //galaxias.SetupServer();
             //galaxias.StartWorld();
@@ -46,12 +52,12 @@ public class MainMenuScreen : AbstractScreen
             galaxias.SetCurrentScreen(null);
 
         }));
-        AddButton(new Widget.Button("Quit", width / 2 - 100, height / 4 + 108, 200, 20, galaxias.QuitGame));
+        AddButton(new Widget.Button("Quit", Width / 2 - 100, Height / 4 + 108, 200, 20, galaxias.QuitGame));
         base.OnInit();
     }
     public override void Hid()
     {
-        galaxias.StopMusic(mainMusic);
+        galaxias.StopMusic();
     }
 
 }

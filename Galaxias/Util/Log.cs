@@ -13,10 +13,10 @@ public class Log
         Console.WriteLine($"[{Thread.CurrentThread.Name}]:" + message);
     }
 
-    public static void Error(string error)
+    public static void Error(string error, Exception? exception = null)
     {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"[{Thread.CurrentThread.Name}]:" + error);
+        Console.WriteLine($"[{Thread.CurrentThread.Name}]:" + error + exception?.ToString());
         Console.ForegroundColor = ConsoleColor.White;
     }
 }

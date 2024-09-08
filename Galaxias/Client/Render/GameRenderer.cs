@@ -15,12 +15,12 @@ public class GameRenderer
 
     public Camera camera;
 
-    public GameRenderer(Main.GalaxiasClient galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera)
+    public GameRenderer(GalaxiasClient galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera, InGameHud inGameHud)
     {
         this.renderer = renderer;
         this.camera = camera;
         _galaxias = galaxias;
-        hud = new InGameHud(_galaxias);
+        hud = inGameHud;
         _worldRenderer = worldRenderer;
     }
     public void LoadContents()
@@ -31,6 +31,11 @@ public class GameRenderer
     public void Render(float dTime)
     {
         _galaxias.GraphicsDevice.Clear(Color.Black);
+
+        Point p = Mouse.GetState().Position;
+        double mouseX = p.X * camera.guiWidth / _galaxias.GetWindowWidth();
+        double mouseY = p.Y * camera.guiHeight / _galaxias.GetWindowHeight();
+
         if (_galaxias.GetWorld() != null)
         {
             //render world
@@ -48,20 +53,16 @@ public class GameRenderer
                 samplerState: SamplerState.PointClamp,
                 depthStencilState: DepthStencilState.Default,
                 transformMatrix: camera.GuiMatrix);
-            hud.Render(renderer, camera.guiWidth, camera.guiHeight, dTime);
+            hud.Render(renderer, mouseX, mouseY, dTime);
             renderer.End();
 
         }
-        if (_galaxias.GetCurrentScreen() != null)
-        {
-            renderer.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera.GuiMatrix);
-
-            Point p = Mouse.GetState().Position;
-            double mouseX = p.X * camera.guiWidth / _galaxias.GetWindowWidth();
-            double mouseY = p.Y * camera.guiHeight / _galaxias.GetWindowHeight();
-            _galaxias.GetCurrentScreen().Render(renderer, mouseX, mouseY);
-            renderer.End();
-        }
+        //render gui
+        renderer.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera.GuiMatrix, blendState: BlendState.AlphaBlend);
+        
+        _galaxias.ScreenManager.Render(renderer, mouseX, mouseY);
+        renderer.End();
+        
     }
 
     internal void onResize(int width, int height)

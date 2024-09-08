@@ -3,6 +3,7 @@ using Galaxias.Core.World.Items;
 using Galaxias.Core.World.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Galaxias.Client.Render;
@@ -37,7 +38,7 @@ public class ItemRenderer
 
     public void RenderInGui(IntegrationRenderer renderer, ItemPile itemPile, float x, float y, Color color)
     {
-        if (itemPile != null)
+        if (itemPile != null && !itemPile.isEmpty())
         {
             Item item = itemPile.GetItem();
             Texture2D itemTexture = itemToTexture.GetValueOrDefault(item);
@@ -49,5 +50,4 @@ public class ItemRenderer
         }
 
     }
-
 }

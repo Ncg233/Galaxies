@@ -1,19 +1,27 @@
+using Galaxias.Core.World.Entities;
+using Galaxias.Core.World.Tiles;
+using System;
+
 namespace Galaxias.Core.World.Items;
 public class ItemPile
 {
     private Item item;
-    private int count = 1;
+    private int count = 0;
+    public static ItemPile Empty = new ItemPile(AllItems.Air);
+
+    public ItemPile(Item item, int count)
+    {
+        this.item = item;
+        this.count = count;
+    }
     public ItemPile(Item item)
     {
         this.item = item;
+        count = 1;
     }
     public bool isEmpty()
     {
-        if (item == AllItems.Air)
-        {
-            return true;
-        }
-        return false;
+        return item == null || item == AllItems.Air || count == 0;
     }
     public Item GetItem()
     {
@@ -26,5 +34,10 @@ public class ItemPile
     public void SetCount(int count)
     {
         this.count = count;
+    }
+
+    public void UseOnTile(AbstractWorld world, Player player, int x, int y)
+    {
+        item.UseOnTile(world, player,  x, y);
     }
 }
