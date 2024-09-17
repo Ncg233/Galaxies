@@ -6,7 +6,7 @@ public class LivingEntity : Entity
     public float health { get; protected set; }
     public float maxHealth { get; protected set; }
     protected bool isFalling;
-    protected double fallDistance = 0;
+    protected float fallDistance = 0;
     private bool lastOnGround = true;
     public LivingEntity(EntityType type, AbstractWorld world) : base(type, world)
     {
@@ -24,9 +24,9 @@ public class LivingEntity : Entity
     }
     protected float EvalFallDamage()
     {
-        if (fallDistance > 5)
+        if (fallDistance > 20)
         {
-            return (float)((float)fallDistance / 1.5);
+            return fallDistance / 1.5f;
         }
         return 0;
     }
@@ -43,7 +43,7 @@ public class LivingEntity : Entity
     }
     protected virtual void HandleFalling()
     {
-        if (lastOnGround == false && onGround == true)
+        if (!lastOnGround && onGround)
         {
             Hurt(EvalFallDamage());
         }

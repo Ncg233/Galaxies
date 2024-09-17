@@ -1,4 +1,5 @@
-﻿using LiteNetLib.Utils;
+﻿using Galaxias.Core.Networking.Server;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ public class C2SSyncHeldItemPacket : C2SPacket
         throw new NotImplementedException();
     }
 
-    public override void Process(Server server)
+    public override void Process(ServerManager server)
     {
         server.ProcessSyncHeldItem(this);
     }

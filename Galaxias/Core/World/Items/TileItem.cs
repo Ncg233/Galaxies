@@ -11,10 +11,10 @@ public class TileItem : Item
     {
         this.tile = tile;
     }
-    public override bool UseOnTile(AbstractWorld world, Player player, int x, int y)
+    public override bool UseOnTile(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
         var tileState = world.GetTileState(TileLayer.Main, x, y);
-        if (tileState.GetTile() == AllTiles.Air && tile.OnPlace(world, x, y, tileState))
+        if (tileState.GetTile() == AllTiles.Air)
         {
             world.SetTileState(TileLayer.Main, x, y, tile.GetDefaultState());
         }

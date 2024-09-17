@@ -37,5 +37,6 @@ public class PacketManager
         //playe
         Register(3, typeof(C2SPlayerDiggingPacket));
         Register(4, typeof(S2CTileChangePacket));
+        Register(5, typeof(C2SPlayerMovePacket));
     }
 }

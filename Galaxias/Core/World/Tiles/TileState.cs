@@ -1,5 +1,6 @@
 ﻿using Galaxias.Core.World.Entities;
 using System;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace Galaxias.Core.World.Tiles;
 public class TileState
@@ -20,11 +21,6 @@ public class TileState
         return tile.GetLight(this);
     }
 
-    public void OnUse(AbstractWorld world, int x, int y, TileState tileState, Player player)
-    {
-        tile.OnUse(world, x, y, tileState, player);
-    }
-
     public bool IsFullTile()
     {
         return tile.IsFullTile();
@@ -32,5 +28,10 @@ public class TileState
     public bool IsAir()
     {
         return tile.IsAir();
+    }
+
+    public void OnNeighborChanged(AbstractWorld abstractWorld, int x, int y, Tile changedTile)
+    {
+        tile.OnNeighborChanged(this, abstractWorld, x, y, changedTile);
     }
 }

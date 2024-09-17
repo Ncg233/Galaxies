@@ -36,7 +36,7 @@ public class ItemPile
         this.count = count;
     }
 
-    public void UseOnTile(AbstractWorld world, Player player, int x, int y)
+    public void UseOnTile(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
         item.UseOnTile(world, player,  x, y);
     }

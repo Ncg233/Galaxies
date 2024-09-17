@@ -1,71 +1,72 @@
-﻿using Galaxias.Client.Main;
+﻿using Galaxias.Client;
 using Galaxias.Core.Networking.Packet;
 using Galaxias.Core.Networking.Packet.C2S;
 using Galaxias.Core.Networking.Packet.S2C;
-using Galaxias.Server;
+using Galaxias.Core.Networking.Server;
 using LiteNetLib;
 using System;
 
 namespace Galaxias.Core.Networking;
 public class NetPlayManager
 {
-    public static bool IsRomate { get; private set; }
     public static Client RomateClient {get; private set;}
-    public static Server RomateServer {get; private set;}
+    public static ServerManager RomateServer {get; private set;}
     public static void InitClient(string ip, int port)
     {
-        IsRomate = true;
-        RomateClient = new Client();
+
+        RomateClient = new Client(Main.GetInstance());
         RomateClient.Connect(ip, port);
     }
-    public static void InitServer(string ip, int port, GalaxiasServer server)
+    public static void InitServer(string ip, int port)
     {
-        IsRomate = true;
-        RomateServer = new Server(server);
+        RomateServer = new ServerManager(Main.GetInstance());
         RomateServer.StartServer(port);
-
-        RomateClient = new Client();
-        RomateClient.Connect(ip, port);
     }
-    public static void InitLocalServer(GalaxiasServer server)
+    public static void Update()
     {
-        IsRomate = false;
-        RomateServer = new Server(server);
-        //RomateServer.StartServer(port);
-
-        RomateClient = new Client();
-        RomateClient.Connect();
+        if (IsClient())
+        {
+            RomateClient.Update();
+        }
+        if(IsServer()) { 
+            RomateServer.Update();
+        }
     }
-    public static void UpdateClient()
+    public static void Stop()
     {
-        RomateClient?.Update();
-    }
-    public static void UpdateServer()
-    {
-        RomateServer?.Update();
-    }
-
-    internal static void StopServer()
-    {
-        RomateServer?.Stop();
-    }
-    internal static void StopClient()
-    {
-        RomateClient?.Stop();
+        if (IsClient()) {
+            RomateClient.Stop();
+        }
+        if (IsServer()) {
+            RomateServer.Stop();
+        }
     }
 
+    public static bool IsClient()
+    {
+        return RomateClient != null;
+    }
+    public static bool IsServer()
+    {
+        return RomateServer != null;
+    }
     public static void SendToServer(C2SPacket packet)
     { 
-         RomateClient.SendToServer(packet);
+         RomateClient?.SendToServer(packet);
     }
 
     public static void SendToClient(S2CPacket packet,NetPeer target)
     {
-        RomateServer.SendToClient(packet, target);
+        RomateServer?.SendToClient(packet, target);
     }
     public static void SendToAllClients(S2CPacket packet)
     {
-        RomateServer.SendToAllClients(packet);
+        RomateServer?.SendToAllClients(packet);
+    }
+
+    internal static bool IsInit()
+    {
+        return RomateClient != null || RomateServer != null;
     }
 }
 

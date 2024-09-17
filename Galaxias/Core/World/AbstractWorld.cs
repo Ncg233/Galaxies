@@ -1,10 +1,13 @@
+using Galaxias.Client;
 using Galaxias.Core.Networking;
 using Galaxias.Core.Networking.Packet.S2C;
 using Galaxias.Core.World.Entities;
 using Galaxias.Core.World.Gen;
-using Galaxias.Core.World.Particle;
+using Galaxias.Core.World.Particles;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
+using LiteNetLib;
+using SharpDX;
 using System;
 using System.Collections.Generic;
 
@@ -19,15 +22,16 @@ public abstract class AbstractWorld
     private readonly Dictionary<LightType, byte[]> lightGrid = [];
     #region SERVER_ONLY
 
-    private HeightGen heightGen;
-    private readonly List<IChunkGenerator> generators;
+    protected HeightGen heightGen;
+    protected readonly List<IChunkGenerator> generators;
+
     #endregion
     private int tutolTime = 1440;
     public float currnetTime { get; protected set; } = 8 * 60;//8:00
     private float sunRotation, skyLight;
     
-    private int seed;
-    private Random rand;
+    protected int seed;
+    protected Random rand;
     public bool IsClient { get; private set; }
     protected bool isGenerated = true;
     public AbstractWorld(bool isClient)
@@ -108,6 +112,7 @@ public abstract class AbstractWorld
             grid[GetTileIndex(x, y)] = id;
             if (!isGenerated) { 
                 CauseLightUpdate(x, y);
+                NotifyNeighbors(x, y, id.GetTile());
                 if (!IsClient)
                 {
                     NetPlayManager.SendToAllClients(new S2CTileChangePacket(x, y, id));
@@ -117,20 +122,37 @@ public abstract class AbstractWorld
             
         }
     }
-    private int GetChunkX(int worldX)
+    //private int GetChunkX(int worldX)
+    //{
+    //    while (worldX > Width / 2 - 1)
+    //    {
+    //        worldX -= Width;
+    //    }
+    //    while (worldX < -Width / 2)
+    //    {
+    //    
+    //        worldX += Width;
+    //    
+    //    }
+    //    return Utils.ToGridPos(worldX);
+    //}
+    public void NotifyNeighbors(int x, int y, Tile tile)
     {
-        while (worldX > Width / 2 - 1)
+        foreach (var dir in Direction.Adjacent)
         {
-            worldX -= Width;
+            NotifyNeighbor(x + dir.X, y + dir.Y, tile);
         }
-        while (worldX < -Width / 2)
-        {
         
-            worldX += Width;
-        
-        }
-        return Utils.ToGridPos(worldX);
     }
+    public void NotifyNeighbor(int x, int y, Tile changedTile)
+    {
+        if (!IsClient)
+        {
+            var state = GetTileState(TileLayer.Main, x, y);
+            state.OnNeighborChanged(this, x, y, changedTile);
+        }   
+    }
+
     public double GetGenSuerfaceHeight(TileLayer layer ,int x)
     {
         return heightGen.GetHeight(layer, x);
@@ -355,7 +377,7 @@ public abstract class AbstractWorld
             (lightAround[0] + lightAround[8] + lightAround[1] + lightAround[2]) / 4,
             (lightAround[0] + lightAround[6] + lightAround[7] + lightAround[8]) / 4,
             (lightAround[0] + lightAround[2] + lightAround[3] + lightAround[4]) / 4,
-            (lightAround[0] + lightAround[4] + lightAround[5] + lightAround[6]) / 4
+            (lightAround[0] + lightAround[4] + lightAround[5] + lightAround[6]) / 4,
         ];
         return light;
     }
@@ -407,4 +429,26 @@ public abstract class AbstractWorld
     {
         currnetTime = currentTime;
     }
+
+    public virtual void SaveData()
+    {
+        
+    }
+
+    public void DestoryTile(int x, int y)
+    {
+        for (int i = 0; i < Utils.Random.Next(5) + 5; i++)
+        {
+            float motionX = (float)Utils.Rand(0, 0.1f);
+            float motionY = (float)Utils.Rand(0, 0.1f);
+            float maxLife = Utils.Random.NextFloat(1, 3);
+            AddParticle(new TileParticle(GetTileState(TileLayer.Main, x, y),this, x + 0.5f, y + 0.5f, motionX, motionY, maxLife));
+        }
+        SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
+    }
+    public void AddParticle(Particle particle)
+    {
+        Main.GetInstance().GetParticleManager().AddParticle(particle);
+    }
+    public abstract AbstractPlayerEntity CreatePlayer(NetPeer peer);
 }

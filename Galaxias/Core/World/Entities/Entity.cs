@@ -1,26 +1,38 @@
+using Galaxias.Client;
 using Galaxias.Client.Render;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
+using Microsoft.Xna.Framework;
+using SharpDX.Direct3D9;
+using System;
 using System.Collections.Generic;
 
 namespace Galaxias.Core.World.Entities;
 public abstract class Entity
 {
+    public float existedTime { get; private set; }
+    public float nextSyncTime;
     public readonly EntityType Type;
     private float friction = 0.5f;
     public float x { get; protected set; }
     public float y { get; protected set; }
-    public float vx { get; protected set; }
-    public float vy { get; protected set; }
-    public Direction direction { get; protected set; }
+    protected float lastY;
+    protected float lastX;
+    public float lastSyncX { get; protected set; }
+    public float lastSyncY { get; protected set; }
+    private float renderX;
+    public float vx;
+    public float vy;
+    public Direction direction { get; set; }
     public HitBox hitbox { get; protected set; } = HitBox.Empty();
-    private AbstractWorld world;
+    public AbstractWorld world { get; protected set; }
     public float speed;
     //private EntityRenderer renderer;
     public bool onGround;
     public bool collidedHor;
     public bool collidedVert;
-    protected double lastY;
+    
+    public bool IsDead;
     public Entity(EntityType entity, AbstractWorld world)
     {
         Type = entity;
@@ -30,6 +42,7 @@ public abstract class Entity
     public virtual void Update(float dTime)
     {
         lastY = y;
+        existedTime += dTime;
         if (y < -20)
         {
             Die();
@@ -42,8 +55,12 @@ public abstract class Entity
         {
             vy = 0;
         }
+        if (!world.IsClient)
+        {
+
+        }
     }
-    private void PreMovement(float dTime)
+    public virtual void PreMovement(float dTime)
     {
         vx *= friction;
         if (vy > -3) vy -= GameConstants.Gravity * dTime;
@@ -52,15 +69,14 @@ public abstract class Entity
     {
 
     }
-
+    public void SetDead()
+    {
+        IsDead = true;
+    }
     protected virtual void HandleMovement(float dTime)
     {
 
     }
-    //public EntityRenderer GetRenderer()
-    //{
-    //    return renderer;
-    //}
     private void HandleCollision(float dTime)
     {
         float motionY = vy;
@@ -140,6 +156,10 @@ public abstract class Entity
         onGround = collidedVert && vy < 0;
         SetPos(x + motionX, y + motionY);
     }
+    public virtual void Render(IntegrationRenderer renderer, Color light)
+    {
+
+    }
     public void SetPos(float x, float y)
     {
         this.x = x;
@@ -158,11 +178,11 @@ public abstract class Entity
         return new HitBox(x - u, y, x + u, y + h);
     }
 
-    public virtual float GetWidth()
+    public virtual float GetWidth()//1 -> 8Pixel
     {
         return 1;
     }
-    public virtual float GetHeight()
+    public virtual float GetHeight()//1 -> 8Pixel
     {
         return 1;
     }
@@ -171,15 +191,42 @@ public abstract class Entity
     }
     public void TpToOtherSide()
     {
-        if (x > world.GetWidth())
+        if (x >= world.Width)
         {
             SetPos(x - world.GetWidth(), y);
         }
         else if (x < 0)
         {
-            
             SetPos(x + world.GetWidth(), y);
+        }         
+    }
+    //client use
+    public float GetRenderX()
+    {
+        if (Main.GetInstance().GetPlayer() != null)
+        {
+            var playerX = Main.GetInstance().GetPlayer().x;
+            if (Math.Abs(playerX - x) > world.Width / 2)//the distance between player and entity
+            {
+                if (playerX < world.Width / 2)
+                {
+                    return renderX = (x - world.Width) * GameConstants.TileSize;
+                }
+                else
+                {
+                    return renderX = (x + world.Width) * GameConstants.TileSize;
+                }
+            }
+            else
+            {
+                return renderX = x * GameConstants.TileSize;
+            }
         }
+        return renderX;
+    }
+    public float GetRenderY()
+    {
+        return -y * GameConstants.TileSize;
     }
 }
 

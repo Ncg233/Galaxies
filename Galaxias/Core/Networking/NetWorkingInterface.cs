@@ -32,19 +32,19 @@ public class NetWorkingInterface
     {
         Manager.Stop();
     }
-    public virtual void Update()
+    public void Update()
     {
-        
+        Manager.PollEvents();
     }
     public void SendPacket(IPacket packet, NetPeer target, DeliveryMethod method = DeliveryMethod.ReliableUnordered)
     {
-        if (NetPlayManager.IsRomate) {
-            NetDataWriter writer = new();
-            writer.Put(PacketManager.GetId(packet.GetType()));
-            writer.Put(packet);
+        
+        NetDataWriter writer = new();
+        writer.Put(PacketManager.GetId(packet.GetType()));
+        writer.Put(packet);
 
-            target.Send(writer, method);
-        }
+        target.Send(writer, method);
+        
     }
     public void SendLoaclPacket(IPacket packet, NetWorkingInterface bound)
     {

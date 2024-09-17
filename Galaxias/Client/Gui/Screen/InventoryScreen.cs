@@ -1,5 +1,4 @@
-﻿using Galaxias.Client.Main;
-using Galaxias.Client.Render;
+﻿using Galaxias.Client.Render;
 using Galaxias.Core.Networking;
 using Galaxias.Core.World.Inventory;
 using Galaxias.Core.World.Items;
@@ -18,7 +17,7 @@ public class InventoryScreen : AbstractScreen
     private PlayerInventory playerInventory;
     public InventoryScreen()
     {
-        galaxias = GalaxiasClient.GetInstance();
+        galaxias = Main.GetInstance();
     }
     public override void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
@@ -29,7 +28,7 @@ public class InventoryScreen : AbstractScreen
             for (int x = 0; x < 9; x++)
             {
                 renderer.Draw("Textures/Gui/slot", Width / 2 - 90 + x * 20, y * 20, Color.White);
-                galaxias.GetItemRenderer().RenderInGui(renderer, galaxias.GetPlayer().Inventory.Hotbar[x], Width / 2 - 90 + x * 20 + 10,  y * 20 + 10, Color.White);
+                ItemRenderer.RenderInGui(renderer, galaxias.GetPlayer().Inventory.Hotbar[y * 9 + x], Width / 2 - 90 + x * 20 + 10,  y * 20 + 10, Color.White);
             }
         }
         

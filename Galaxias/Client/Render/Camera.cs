@@ -19,7 +19,7 @@ public class Camera
     private float scale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
-    public void Update(Player player, float dTime)
+    public void Update(AbstractPlayerEntity player, float dTime)
     {
         if (false)
         {
@@ -28,7 +28,7 @@ public class Camera
         }
         else
         {
-            _pos.X = -player.x * GameConstants.TileSize; _pos.Y = (player.y + 2) * GameConstants.TileSize;
+            _pos.X = -player.x * GameConstants.TileSize; _pos.Y = (player.y + 1) * GameConstants.TileSize;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))

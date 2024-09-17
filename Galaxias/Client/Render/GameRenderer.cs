@@ -1,5 +1,4 @@
 ﻿using Galaxias.Client.Gui;
-using Galaxias.Client.Main;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,11 +10,11 @@ public class GameRenderer
     private WorldRenderer _worldRenderer;
     private InGameHud hud;
     //private SpriteBatch _spriteBatch;
-    private Main.GalaxiasClient _galaxias;
+    private Main _galaxias;
 
     public Camera camera;
 
-    public GameRenderer(GalaxiasClient galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera, InGameHud inGameHud)
+    public GameRenderer(Main galaxias, IntegrationRenderer renderer, WorldRenderer worldRenderer, Camera camera, InGameHud inGameHud)
     {
         this.renderer = renderer;
         this.camera = camera;
@@ -45,7 +44,7 @@ public class GameRenderer
                 depthStencilState: DepthStencilState.None,
                 transformMatrix: camera.TransfromMatrix);
 
-            _worldRenderer.Render(null, renderer);
+            _worldRenderer.Render(renderer);
             renderer.End();
             //render hud
             renderer.Begin(sortMode: SpriteSortMode.Immediate,

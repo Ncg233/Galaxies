@@ -1,5 +1,4 @@
-﻿using Galaxias.Client.Main;
-using Galaxias.Client.Resource;
+﻿using Galaxias.Client.Resource;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,18 +7,12 @@ using System;
 namespace Galaxias.Client.Render;
 public class IntegrationRenderer
 {
-    private SpriteBatch spriteBatch;
-    private TextureManager textureManager;
-    private SpriteFont spriteFont;
-    public IntegrationRenderer(TextureManager textureManager)
+    private static SpriteBatch spriteBatch;
+    private static SpriteFont spriteFont;
+    public static void LoadContents()
     {
-        this.textureManager = textureManager;
-    }
-    public void LoadContents()
-    {
-        spriteBatch = new SpriteBatch(Main.GalaxiasClient.GetInstance().GraphicsDevice);
-        spriteFont = Main.GalaxiasClient.GetInstance().Content.Load<SpriteFont>("Assets/Fonts/defaultFont");
-
+        spriteBatch = new SpriteBatch(Main.GetInstance().GraphicsDevice);
+        spriteFont = Main.GetInstance().Content.Load<SpriteFont>("Assets/Fonts/defaultFont");
     }
     public void Begin(SpriteSortMode sortMode = SpriteSortMode.Deferred, BlendState blendState = null, SamplerState samplerState = null, DepthStencilState depthStencilState = null, RasterizerState rasterizerState = null, Effect effect = null, Matrix? transformMatrix = null)
     {
@@ -28,12 +21,17 @@ public class IntegrationRenderer
 
     public void Draw(string textureName, Rectangle rect, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
-        spriteBatch.Draw(textureManager.LoadTexture2D(textureName), rect, source, color, 0, Vector2.Zero, effects, 0);
+        spriteBatch.Draw(TextureManager.LoadTexture2D(textureName), rect, source, color, 0, Vector2.Zero, effects, 0);
     }
     public void Draw(string textureName, float x, float y, Color color, float width = 1, float height = 1, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
-        var texture = textureManager.LoadTexture2D(textureName);
+        var texture = TextureManager.LoadTexture2D(textureName);
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, Vector2.Zero, new Vector2(width, height), effects, 0);
+    }
+    public void Draw(string textureName, float x, float y, float originX, float originY, float width, float height, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
+    {
+        var texture = TextureManager.LoadTexture2D(textureName);
+        spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, new Vector2(originX, originY), new Vector2(width / texture.Width, height / texture.Height), effects, 0);
     }
     public void Draw(Texture2D texture, float x, float y, float originX, float originY, float width, float height, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
@@ -47,10 +45,11 @@ public class IntegrationRenderer
     {
         spriteBatch.Draw(texture, rect, source, color, 0, Vector2.Zero, effects, 0);
     }
-    public void DrawSpriteMap(SpriteMap map, float x, float y, float originX, float originY, int pos, Color color)
+    public void DrawSpriteMap(SpriteMap map, float x, float y, float originX, float originY,float width, float height , 
+        int sourceX, int sourceY, int sourceWidth, int sourceHeight,int pos, Color color)
     {
-
-        spriteBatch.Draw(map.SourceTexture, new Vector2(x, y), map.GetSourceRect(pos),color, 0, new Vector2(originX, originY), 1, SpriteEffects.None, 0);
+        Texture2D tex = map.SourceTexture;
+        spriteBatch.Draw(tex, new Vector2(x, y), new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),color, 0, new Vector2(originX, originY),new Vector2(width / tex.Width, height / tex.Height), SpriteEffects.None, 0);
     }
     public void End()
     {

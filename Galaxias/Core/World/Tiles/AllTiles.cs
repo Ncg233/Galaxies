@@ -13,7 +13,7 @@ public static class AllTiles
     public static readonly Tile Log = Register("log", new LogTile(new TileSettings()));
     public static readonly Tile Leaves = Register("leaves", new LeavesTile(new TileSettings()));
     public static readonly Tile Torch = Register("torch", new TorchTile(new TileSettings()));
-    public static readonly Tile Grass = Register("grass", new Tile(new TileSettings().SetFullTile(false).SetCanCollide(false)));
+    public static readonly Tile Grass = Register("grass", new GrassPlantTile(new TileSettings().SetFullTile(false).SetCanCollide(false)));
 
     public static void Init()
     {

@@ -3,8 +3,7 @@ using Galaxias.Core.World.Items;
 namespace Galaxias.Core.World.Inventory;
 public class PlayerInventory
 {
-    public ItemPile[] Hotbar = new ItemPile[9];
-    public ItemPile[] Bag = new ItemPile[27];
+    public ItemPile[] Hotbar = new ItemPile[36];
     public int onHand = 0;
     public PlayerInventory()
     {

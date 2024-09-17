@@ -1,4 +1,5 @@
-﻿using LiteNetLib.Utils;
+﻿using Galaxias.Core.Networking.Server;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ public class C2SUseItemPacket : C2SPacket
         
     }
 
-    public override void Process(Server server)
+    public override void Process(ServerManager server)
     {
         server.ProcessUseItem(this);
     }

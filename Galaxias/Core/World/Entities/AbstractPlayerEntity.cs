@@ -1,26 +1,32 @@
+using System;
 using System.CodeDom;
+using Galaxias.Client.Key;
+using Galaxias.Client.Render;
+using Galaxias.Core.Networking.Packet.S2C;
 using Galaxias.Core.World.Inventory;
 using Galaxias.Core.World.Items;
 using Galaxias.Util;
+using Microsoft.Xna.Framework;
 
 namespace Galaxias.Core.World.Entities;
-public class Player : LivingEntity
+// server: PlayerEntity ConnectPlayer
+// client: ClientPlayer
+public abstract class AbstractPlayerEntity : LivingEntity
 {
+    private static readonly PlayerRenderer s_playerRender = new PlayerRenderer();
     public PlayerInventory Inventory { get; private set; } = new();
     public int HitX = 0;
     public int HitY = 0;
     protected float homeX = 0;
     protected float homeY = 80;
-    private int invincibleTicks = 50 * 3;
+    private float invincibleTicks = 3;
     protected bool isJumping;
-    protected bool isJetpackEnable;
     public int jumpTicks;
     public int jumpTimeout;
-    public float factor;
-    public Player(AbstractWorld world) : base(AllEntityTypes.PlayerEntity ,world)
+    public AbstractPlayerEntity(AbstractWorld world) : base(AllEntityTypes.PlayerEntity ,world)
     {
         y = 140;
-        speed = 5f;
+        speed = 10f;
         maxHealth = 100;
         health = 100;
     }
@@ -29,7 +35,7 @@ public class Player : LivingEntity
         base.Update(dTime);
         if (invincibleTicks > 0)
         {
-            invincibleTicks--;
+            invincibleTicks-=dTime;
         }
         if (isJumping)
         {
@@ -47,6 +53,10 @@ public class Player : LivingEntity
         }
         
     }
+    public override void Render(IntegrationRenderer renderer, Color light)
+    {
+        s_playerRender.Render(renderer, this, 1, light);
+    }
     protected override void HandleMovement(float dTime)
     {
         
@@ -57,26 +67,18 @@ public class Player : LivingEntity
     }
     protected float GetJumpHeight()
     {
-        return EnableJetpack() ? 0.04f : 0.6f;
-    }
-    protected bool EnableJetpack()
-    {
-        return isJetpackEnable;
+        return 45f;
     }
     public void Jump(float value, float deltTime)
     {
-        if (EnableJetpack() || (onGround && !isJumping))
+        if (onGround && !isJumping)
         {
-            vy += value;
-            if (!EnableJetpack())
-            {
-                isJumping = true;
-            }
+            vy += value * deltTime;
+            isJumping = true;
         }
     }
     public override void Die()
     {
-        //GalaxiasClient.GetInstance().Exit();
     }
     public override void Hurt(float amout)
     {
@@ -98,5 +100,31 @@ public class Player : LivingEntity
     }
     public PlayerInventory GetInventory(){
         return Inventory;
+    }
+    public abstract void SendToClient(S2CPacket packet);
+
+    public void Move(Direction moveDir, float deltaTime)
+    {
+        if (moveDir == Direction.Left)
+        {
+            direction = Direction.Left;
+            if (vx > -speed)
+            {
+                vx -= speed * deltaTime;
+            }
+        }
+        if (moveDir == Direction.Right)
+        {
+            direction = Direction.Right;
+            if (vx < speed)
+            {
+                vx += speed * deltaTime;
+            }
+        }
+        if (moveDir == Direction.Up)
+        {
+            Jump(GetJumpHeight(), deltaTime);
+        }
+
     }
 }

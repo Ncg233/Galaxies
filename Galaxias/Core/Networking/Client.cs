@@ -1,5 +1,4 @@
 ﻿using Galaxias.Client;
-using Galaxias.Client.Main;
 using Galaxias.Core.Networking.Packet;
 using Galaxias.Core.Networking.Packet.C2S;
 using Galaxias.Core.Networking.Packet.S2C;
@@ -21,28 +20,24 @@ public class Client : NetWorkingInterface
     
     public int RemoteId { get; private set; }
     public NetPeer? Server { get; private set; }
-    private GalaxiasClient gClient;
+    private Main gClient;
     private ClientWorld world;
-    public Client() : base()
+    public Client(Main gClient) : base()
     {
-        gClient = GalaxiasClient.GetInstance(); 
+        this.gClient = gClient; 
         Listener.PeerConnectedEvent += PeerConnected;
+        Listener.PeerDisconnectedEvent += PeerDisconnected;
         
     }
-    public override void Update()
+    private void PeerConnected(NetPeer peer)
     {
-        if (NetPlayManager.IsRomate)
-        {
-            Manager.PollEvents();
-        }else
-        {
-            for (int i = 0; i < localS2CPacket.Count; i++)
-            {
-                localS2CPacket[i].Process(this);
-                localS2CPacket.RemoveAt(i);
-            }
-
-        }
+        Log.Info($"Connected to server {peer.Address}:{peer.Port} as {peer.RemoteId}");
+        RemoteId = peer.RemoteId;
+        SendToServer(new C2SLoginGamePacket());
+    }
+    public void PeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
+    {
+        gClient.QuitWorld();
     }
     public void Connect(string address, int port, string key = "key")
     {
@@ -54,34 +49,16 @@ public class Client : NetWorkingInterface
         Manager.Start();
         Server = Manager.Connect(new IPEndPoint(IPAddress.Parse(address), port), key);
     }
-    public void Connect()
-    {
-        SendToServer(new C2SLoginGamePacket());
-    }
+    
     public void SendToServer(C2SPacket packet)
     {
-        if(NetPlayManager.IsRomate)
-        {
-            SendPacket(packet, Server);
-        }else
-        {
-            SendLoaclPacket(packet, NetPlayManager.RomateServer);
-        }
-        
+        SendPacket(packet, Server);
     }
-
-    private void PeerConnected(NetPeer peer)
-    {
-        Log.Info($"Connected to server {peer.Address}:{peer.Port} as {peer.RemoteId}");
-        RemoteId = peer.RemoteId;
-        Connect();
-    }
-
     public void ProcessJoinWorld(S2CJoinWorldPacket packet)
     {
         Log.Info("Join Game!");
         world = new ClientWorld(gClient.WorldRenderer);
-        GalaxiasClient.GetInstance().LoadWorld(world);
+        gClient.LoadWorld(world);
     }
 
     public void ProcessWorldData(S2CWorldDataPacket packet)

@@ -1,44 +1,33 @@
-﻿using Galaxias.Client.Main;
-using Galaxias.Core.World.Entities;
+﻿using Galaxias.Core.World.Entities;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Galaxias.Client.Render;
-public class PlayerRenderer : EntityRenderer
+public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
 {
-    public override void Render(IntegrationRenderer renderer, Entity entity, int scale, Color colors)
+    public override void Render(IntegrationRenderer renderer, AbstractPlayerEntity player, int scale, Color colors)
     {
-        Player player = (Player)entity;
-        var x = (float)player.x;
-        var y = (float)player.y;
-        var width = 2;
-        var height = player.GetHeight();
-        bool isTurn = entity.direction == Direction.Left;
+        var x = player.GetRenderX();
+        var y = player.GetRenderY();
+        var width = 16;
+        var height = 32;
+        bool isTurn = player.direction == Direction.Left;
         //BODY
-        renderer.Draw(GetSpriteName(), (x - width / 2) * GameConstants.TileSize, (-y - height) * GameConstants.TileSize,
-            colors,
+        renderer.Draw(GetSpriteName(), x, y,
+            width / 2f, height, width, height, colors,
             effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
         //HELD ITEM
         var item = player.GetItemOnHand();
         if (isTurn)
         {
-            Main.GalaxiasClient.GetInstance().GetItemRenderer().RenderInWorld(renderer, item, x - 0.75f, y + 2, colors);
+            ItemRenderer.RenderInWorld(renderer, item, x - 0.75f, y + 2, colors);
         }else
         {
-            Main.GalaxiasClient.GetInstance().GetItemRenderer().RenderInWorld(renderer, item, x, y + 2, colors);
+            ItemRenderer.RenderInWorld(renderer, item, x, y + 2, colors);
 
         }
-        
-
     }
-
     protected override string GetSpriteName()
     {
         return "Textures/Entities/player";

@@ -1,5 +1,4 @@
 ﻿using Galaxias.Client.Gui.Widget;
-using Galaxias.Client.Main;
 using Galaxias.Client.Render;
 using Microsoft.Xna.Framework;
 using SharpDX.Direct3D9;
@@ -12,12 +11,12 @@ public abstract class AbstractScreen
 {
     public int Width;
     public int Height;
-    protected GalaxiasClient galaxias;
+    protected Main galaxias;
     private List<Button> buttons = [];
     public bool CanCloseWithEsc = true;
     public void OnResize(int guiWidth, int guiHeight)
     {
-        galaxias = GalaxiasClient.GetInstance();
+        galaxias = Main.GetInstance();
         Width = guiWidth;
         Height = guiHeight;
         buttons.Clear();

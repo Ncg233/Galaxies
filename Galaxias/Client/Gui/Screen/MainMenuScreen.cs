@@ -1,25 +1,22 @@
-﻿using Galaxias.Client.Main;
+﻿using Galaxias.Client;
 using Galaxias.Client.Render;
-using Galaxias.Core.Networking;
-using Galaxias.Server;
+using Galaxias.Core.Audio;
 using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.IO;
 
 namespace Galaxias.Client.Gui.Screen;
 public class MainMenuScreen : AbstractScreen
 {
     private static Song mainMusic;
+    private static DirectoryInfo rootPath = new DirectoryInfo("C:\\Users\\MC\\Documents\\.galaxias\\");
     public MainMenuScreen ()
     {
         CanCloseWithEsc = false;
-        if (mainMusic == null)
-        {
-            mainMusic = GalaxiasClient.GetInstance().Content.Load<Song>("Assets/Musics/galaxias");
-        }
-        GalaxiasClient.GetInstance().PlayMusic(mainMusic, 0.7f, true);
+        AllSounds.Galaxias.PlayMusic(1f);
     }
     public override void Update()
     {
@@ -37,9 +34,10 @@ public class MainMenuScreen : AbstractScreen
             Log.Info("Single player");
             
             galaxias.ScreenManager.FadeOut(1f, () => {
-                galaxias.SetupServer(false, out GalaxiasServer server);
-                NetPlayManager.InitLocalServer(server);
-                galaxias.SetCurrentScreen(null);
+                //galaxias.SetupServer(false, out GalaxiasServer server);
+                //NetPlayManager.InitLocalServer(server);
+                galaxias.StartWorld(rootPath);
+                
             });
         }));
         AddButton(new Widget.Button("Multiplayer", Width / 2 - 100, Height / 4 + 78, 200, 20, () =>
@@ -47,9 +45,10 @@ public class MainMenuScreen : AbstractScreen
             //galaxias.SetupServer();
             //galaxias.StartWorld();
             //Console.WriteLine("Join world");
-            Log.Info("Multiplayer");
-            NetPlayManager.InitClient("127.0.0.1", 9050);
-            galaxias.SetCurrentScreen(null);
+            //Log.Info("Multiplayer");
+            //NetPlayManager.InitClient("127.0.0.1", 9050);
+            //galaxias.SetCurrentScreen(null);
+            galaxias.SetCurrentScreen(new MultiplayerScreen());
 
         }));
         AddButton(new Widget.Button("Quit", Width / 2 - 100, Height / 4 + 108, 200, 20, galaxias.QuitGame));

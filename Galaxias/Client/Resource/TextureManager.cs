@@ -5,18 +5,19 @@ using System.Collections.Generic;
 namespace Galaxias.Client.Resource;
 public class TextureManager
 {
-    private ContentManager contentManager;
-    private Dictionary<string, Texture2D> textureDic = new Dictionary<string, Texture2D>();
-    public TextureManager(ContentManager contentManager)
+    private static readonly Dictionary<string, Texture2D> textureDic = [];
+    public static Texture2D BlankTexture { get; private set; }
+
+    public static void LoadContent()
     {
-        this.contentManager = contentManager;
+        BlankTexture = LoadTexture2D("Textures/Misc/blank");
     }
-    public Texture2D LoadTexture2D(string path)
+    public static Texture2D LoadTexture2D(string path)
     {
         var texture = textureDic.GetValueOrDefault(path, null);
         if (texture == null)
         {
-            texture = contentManager.Load<Texture2D>("Assets/" + path);
+            texture = Main.GetInstance().Content.Load<Texture2D>("Assets/" + path);
         }
         return texture;
     }

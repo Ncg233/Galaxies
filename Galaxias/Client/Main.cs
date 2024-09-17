@@ -8,62 +8,59 @@ using Galaxias.Client.Key;
 using Galaxias.Core.World;
 using Galaxias.Core.Networking;
 using Galaxias.Client.Gui.Screen;
-using Galaxias.Server;
-using Galaxias.Core.Networking.Packet.C2S;
 using System.Threading;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Client.Gui;
+using System;
+using System.IO;
+using Galaxias.Core.Audio;
+using Galaxias.Core.World.Particles;
+using Galaxias.Core.Networking.Server;
 
-namespace Galaxias.Client.Main;
-public class GalaxiasClient : Game
+namespace Galaxias.Client;
+public class Main : Game
 {
     public static readonly string Version = "0.2.9";
     public static float DeltaTime;
-    private static GalaxiasClient instance;
-    private GalaxiasServer server;
+    private static Main instance;
+    //private GalaxiasServer server;
     private GraphicsDeviceManager _graphics;
     public readonly ScreenManager ScreenManager;
     public readonly IntegrationRenderer Renderer;
     public readonly GameRenderer GameRenderer;
     public readonly WorldRenderer WorldRenderer;
-    public readonly TileRenderer TileRenderer;
-    public readonly ItemRenderer ItemRenderer;
-    public readonly TextureManager TextureManager;
     public readonly Camera camera = new();
     public readonly InGameHud inGameHud;
     private NetPlayManager netPlayManager;
-    private ClientPlayer player;
-    private ClientWorld world;
-    private InteractionManagerClient interactionManager;
-    
+    private AbstractPlayerEntity player;
+    private AbstractWorld world;
+    private InteractionManager interactionManager;
+    private ParticleManager particleManager;
     private int width, height;
-    private bool isHost;
-    private Song song;
-    public GalaxiasClient()
+    public Main()
     {
         Thread.CurrentThread.Name = "Client";
         instance = this;
         AllTiles.Init();
-        TextureManager = new TextureManager(Content);
-        Renderer = new IntegrationRenderer(TextureManager);
+        Renderer = new IntegrationRenderer();
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         Window.AllowUserResizing = true;
 
-        TileRenderer = new TileRenderer();
-        ItemRenderer = new ItemRenderer();
-        WorldRenderer = new WorldRenderer(this, camera, TileRenderer);
+        particleManager = new ParticleManager();
+        WorldRenderer = new WorldRenderer(this, camera, particleManager);
         inGameHud = new InGameHud(this);
         GameRenderer = new GameRenderer(this, Renderer, WorldRenderer, camera, inGameHud);
         ScreenManager = new ScreenManager(this);
-        
+
         //_graphics.IsFullScreen = true;
         _graphics.PreferredBackBufferWidth = 1920;
         _graphics.PreferredBackBufferHeight = 1080;
 
         camera.OnResize(GetWindowWidth(), GetWindowHeight());
     }
+
     public static float GetDeltaTime()
     {
         return DeltaTime;
@@ -72,16 +69,17 @@ public class GalaxiasClient : Game
     {
         // TODO: Add your initialization logic here
         base.Initialize();
-        
+
     }
 
     protected override void LoadContent()
     {
-        Renderer.LoadContents();
+        IntegrationRenderer.LoadContents();
         GameRenderer.LoadContents();
-        TileRenderer.LoadContent(TextureManager);
-        ItemRenderer.LoadContent(TextureManager);
-        song = Content.Load<Song>("Assets/Musics/earth_forest");
+        TileRenderer.LoadContent();
+        ItemRenderer.LoadContent();
+        AllSounds.LoadContent();
+        TextureManager.LoadContent();
 
         SetCurrentScreen(new MainMenuScreen());
         ScreenManager.FadeIn(1f);
@@ -94,7 +92,7 @@ public class GalaxiasClient : Game
     {
         base.Update(gameTime);
         DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        NetPlayManager.UpdateClient();
+        NetPlayManager.Update();
         if (KeyBind.FullScreen.IsKeyPressed())
         {
             _graphics.ToggleFullScreen();
@@ -108,17 +106,30 @@ public class GalaxiasClient : Game
         {
             OnResize();
         }
-        ScreenManager.Update(DeltaTime);
-        world?.Update(DeltaTime);
-        KeyBind.Update(DeltaTime);
-        
-        interactionManager?.Update(this, GameRenderer.camera, (float)gameTime.ElapsedGameTime.TotalSeconds);
-        HandleKey();
+        if (IsActive || NetPlayManager.IsInit())
+        {
+            if (MediaPlayer.State == MediaState.Paused)
+            {
+                MediaPlayer.Resume();
+            }
+            ScreenManager.Update(DeltaTime);
+            world?.Update(DeltaTime);
+            particleManager.update(DeltaTime);
+
+            interactionManager?.Update(this, GameRenderer.camera, DeltaTime);
+            HandleKey();
+        }else
+        {
+            if(MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.Pause();
+            }
+        }
+
 
     }
     private void HandleKey()
     {
-        if (!IsActive) return;
 
         if (KeyBind.InventoryKey.IsKeyPressed())
         {
@@ -140,58 +151,61 @@ public class GalaxiasClient : Game
     protected override void Draw(GameTime gameTime)
     {
 
-        // TODO: Add your drawing code here
         GameRenderer.Render((float)gameTime.ElapsedGameTime.TotalSeconds);
 
         base.Draw(gameTime);
     }
     public void QuitGame()
     {
-        NetPlayManager.StopClient();
-        server?.ServerShutdown();
+        NetPlayManager.Stop();
         Exit();
     }
     public void QuitWorld()
     {
-        NetPlayManager.StopClient();
-        server?.ServerShutdown();
-        LoadWorld(null);
-        StopMusic();
+        NetPlayManager.Stop();
+        if (world != null)
+        {
+            particleManager.Clear();
+            world.SaveData();
+            world = null;
+            player = null;
+        }
         SetCurrentScreen(new MainMenuScreen());
-
-        
     }
     public void SetCurrentScreen(AbstractScreen newScreen)
     {
         ScreenManager.SetCurrentScreen(newScreen, camera.guiWidth, camera.guiHeight);
 
     }
-    public void SetupServer(bool host, out GalaxiasServer gServer)
+    //this method is used for server start
+    internal void StartWorld(DirectoryInfo info)
     {
-        isHost = host;
-        server = new GalaxiasServer();
-        server.StartServerThread();
-        gServer = server;
+        world = new ServerWorld(info);
+        player = world.CreatePlayer(null);// PlayerEntity
+        interactionManager = new InteractionManager(world, player);
+        world.AddEntity(player);
+        WorldRenderer.SetRenderWorld(world);
+        SetCurrentScreen(null);
+        AllSounds.EarthForest.PlayMusic(0.5f);
     }
     //this method is used for client join
-    public void LoadWorld(ClientWorld world)
+    internal void LoadWorld(ClientWorld world)
     {
         this.world = world;
         if (world != null)
         {
-            player = new ClientPlayer(world);
+            player = world.CreatePlayer(null);//ClientPlayer
             world.AddEntity(player);
             SetCurrentScreen(null);
             WorldRenderer.SetRenderWorld(world);
-            interactionManager = new InteractionManagerClient(world, player);
-            PlayMusic(song, 0.5f, true);
-        }else
+            interactionManager = new InteractionManager(world, player);
+            //AllSounds.EarthForest.PlayMusic(0.5f);
+        }
+        else
         {
             player = null;
             interactionManager = null;
         }
-        
-        
     }
     private void OnResize()
     {
@@ -210,7 +224,7 @@ public class GalaxiasClient : Game
     {
         return _graphics.PreferredBackBufferHeight;
     }
-    public Player GetPlayer()
+    public AbstractPlayerEntity GetPlayer()
     {
         return player;
     }
@@ -218,11 +232,7 @@ public class GalaxiasClient : Game
     {
         return world;
     }
-    public TextureManager GetTextureManager()
-    {
-        return TextureManager;
-    }
-    public static GalaxiasClient GetInstance()
+    public static Main GetInstance()
     {
         return instance;
     }
@@ -242,9 +252,8 @@ public class GalaxiasClient : Game
     {
         MediaPlayer.Stop();
     }
-
-    internal ItemRenderer GetItemRenderer()
+    public ParticleManager GetParticleManager()
     {
-        return ItemRenderer;
+        return particleManager;
     }
 }

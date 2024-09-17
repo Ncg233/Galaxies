@@ -27,4 +27,7 @@
   <ItemGroup>
     <NPLContentReferences Remove="Content\Content.npl" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Assets\Models\" />
+  </ItemGroup>
 </Project>

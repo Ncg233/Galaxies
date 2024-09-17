@@ -1,4 +1,5 @@
 ﻿using Galaxias.Client.Render;
+using Galaxias.Core.Audio;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ public class Button : IRenderable
         if (IsMouseOver(mouseX, mouseY))
         {
             OnClick();
+            AllSounds.ButtonClick.PlayEffect(1f, 1f, 0.5f);
         }
     }
     public bool IsMouseOver(double mouseX, double mouseY)

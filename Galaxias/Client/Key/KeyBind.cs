@@ -42,10 +42,6 @@ namespace Galaxias.Client.Key
                 return false;
             }
         }
-        public static void Update(float dTime)
-        {
-
-        }
         public bool IsKeyDown()
         {
             return Keyboard.GetState().IsKeyDown(key);

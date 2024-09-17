@@ -40,18 +40,6 @@ public class Tile
     {
         return settings.CanCollide;
     }
-    public virtual bool OnBreak(AbstractWorld world, int x, int y, TileState state)
-    {
-        return true;
-    }
-    public virtual bool OnPlace(AbstractWorld world, int x, int y, TileState state)
-    {
-        return true;
-    }
-    public virtual bool OnUse(AbstractWorld world, int x, int y, TileState state, LivingEntity entity)
-    {
-        return true;
-    }
 
     public virtual int GetLight(TileState tileState)
     {
@@ -61,6 +49,25 @@ public class Tile
     {
         return settings.IsAir;
     }
+
+    public virtual void OnNeighborChanged(TileState tileState, AbstractWorld world, int x, int y, Tile changedTile)
+    {
+        if (!world.IsClient && !CanStay(world, x, y)) {
+            
+            DestoryTile(world, x, y);
+        }
+    }
+    public virtual bool CanStay(AbstractWorld world, int x, int y)
+    {
+        return true;
+    }
+    public virtual void DestoryTile(AbstractWorld world, int x, int y)
+    {
+        if (!world.IsClient) { 
+            world.DestoryTile(x, y);
+        }
+    }
+
     public class TileSettings
     {
         public bool IsAir { get; private set; }

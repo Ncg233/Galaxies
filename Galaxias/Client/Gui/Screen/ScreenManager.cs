@@ -1,5 +1,4 @@
-﻿using Galaxias.Client.Main;
-using Galaxias.Client.Render;
+﻿using Galaxias.Client.Render;
 using Galaxias.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -17,11 +16,13 @@ public class ScreenManager
     private bool isFadeIn;
     private bool isFading;
     private Action afterAction;
+    private float counter;
+    private bool pressed;
 
-    private GalaxiasClient galaxias;
+    private Main galaxias;
     //private InventoryScreen inventoryScreen = new();
     public AbstractScreen CurrentScreen { get; set; }
-    public ScreenManager(GalaxiasClient client)
+    public ScreenManager(Main client)
     {
         galaxias = client;
         //inventoryScreen.Init(galaxias, 0, 0);
@@ -35,13 +36,17 @@ public class ScreenManager
     }
     public void Update(float deltaTime)
     {
-        if (CurrentScreen != null && galaxias.IsActive && Mouse.GetState().LeftButton == ButtonState.Pressed && !isFading)
+        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+        { 
+            pressed = true;
+        }
+        if(CurrentScreen != null && pressed && Mouse.GetState().LeftButton == ButtonState.Released && !isFading)
         {
             Point p = Mouse.GetState().Position;
             double mouseX = p.X * CurrentScreen.Width / galaxias.GetWindowWidth();
             double mouseY = p.Y * CurrentScreen.Height / galaxias.GetWindowHeight();
             CurrentScreen.MouseClicked(mouseX, mouseY);
-            
+            pressed = false;
         }
         CurrentScreen?.Update();
         if (fadeTime < fadeTotal)

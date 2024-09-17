@@ -9,21 +9,18 @@ using System.Collections.Generic;
 namespace Galaxias.Client.Render;
 public class ItemRenderer
 {
-    private readonly Dictionary<Item, Texture2D> itemToTexture = new Dictionary<Item, Texture2D>();
-    public ItemRenderer()
-    {
-    }
-    public void LoadContent(TextureManager manager)
+    private static readonly Dictionary<Item, Texture2D> itemToTexture = new Dictionary<Item, Texture2D>();
+    public static void LoadContent()
     {
         foreach (var itemId in AllItems.itemRegister)
         {
             if (itemId.Key != "air")
             {
-                itemToTexture.Add(itemId.Value, manager.LoadTexture2D("Textures/Items/" + itemId.Key));
+                itemToTexture.Add(itemId.Value, TextureManager.LoadTexture2D("Textures/Items/" + itemId.Key));
             }
         }
     }
-    public void RenderInWorld(IntegrationRenderer renderer, ItemPile itemPile, float worldX, float worldY, Color color)
+    public static void RenderInWorld(IntegrationRenderer renderer, ItemPile itemPile, float worldX, float worldY, Color color)
     {
         if (itemPile != null)
         {
@@ -36,7 +33,7 @@ public class ItemRenderer
         }
     }
 
-    public void RenderInGui(IntegrationRenderer renderer, ItemPile itemPile, float x, float y, Color color)
+    public static void RenderInGui(IntegrationRenderer renderer, ItemPile itemPile, float x, float y, Color color)
     {
         if (itemPile != null && !itemPile.isEmpty())
         {

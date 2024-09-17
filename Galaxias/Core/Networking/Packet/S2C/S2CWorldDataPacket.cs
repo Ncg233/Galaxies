@@ -1,13 +1,6 @@
-﻿using Galaxias.Core.World.Tiles;
-using Galaxias.Server;
+﻿using Galaxias.Core.World;
 using Galaxias.Util;
 using LiteNetLib.Utils;
-using SharpDX.Direct3D9;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Galaxias.Core.Networking.Packet.S2C;
 public class S2CWorldDataPacket : S2CPacket
@@ -19,7 +12,7 @@ public class S2CWorldDataPacket : S2CPacket
     {
 
     }
-    public S2CWorldDataPacket(ServerWorld world)
+    public S2CWorldDataPacket(AbstractWorld world)
     {
         world.WriteTileData(out tileData, out skyLight, out tileLight); 
     }

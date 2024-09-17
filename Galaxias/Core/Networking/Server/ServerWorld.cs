@@ -1,6 +1,10 @@
-﻿using Galaxias.Core.World;
+﻿using Galaxias.Client;
+using Galaxias.Core.World;
+using Galaxias.Core.World.Entities;
+using Galaxias.Core.World.Gen;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
+using LiteNetLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,18 +12,21 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
-namespace Galaxias.Server;
+namespace Galaxias.Core.Networking.Server;
 public class ServerWorld : AbstractWorld
 {
     private DirectoryInfo worldDirectory;
     public ServerWorld(DirectoryInfo directoryInfo) : base(false)
     {
         worldDirectory = directoryInfo;
+        LoadData();
     }
-    
-    public void SaveData()
+
+    public override void SaveData()
     {
+        Log.Info("Save worlds at:" + worldDirectory);
         if (!worldDirectory.Exists)
         {
             worldDirectory.Create();
@@ -38,12 +45,15 @@ public class ServerWorld : AbstractWorld
         }
         binaryWriter.Close();
     }
-    public bool LoadData() {
-        Log.Info("Load world");
-        if (!File.Exists(worldDirectory + "world.dat")) { 
-            return false;
-        }else
+    public bool LoadData()
+    {
+        if (!File.Exists(worldDirectory + "world.dat"))
         {
+            return false;
+        }
+        else
+        {
+            Log.Info("Load world");
             BinaryReader binaryReader = new BinaryReader(new FileStream(worldDirectory + "world.dat", FileMode.OpenOrCreate, FileAccess.Read));
             try
             {
@@ -59,16 +69,29 @@ public class ServerWorld : AbstractWorld
                         SetTileLight(x, y, binaryReader.ReadByte());
                     }
                 }
-                binaryReader.Close();   
+                binaryReader.Close();
                 isGenerated = false;
                 return true;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Log.Error("Can't Load World data", ex);
                 binaryReader.Close();
                 return false;
             }
-            
+
+        }
+    }
+
+    public override AbstractPlayerEntity CreatePlayer(NetPeer peer)
+    {
+        if (peer == null)
+        {
+            return new PlayerEntity(this);
+        }
+        else
+        {
+            return new ConnectPlayer(this, peer);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Galaxias.Client.Main;
+﻿using Galaxias.Client.Resource;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -39,6 +39,6 @@ public class BackgroundRenderer
 
     internal void LoadContents()
     {
-        layer5 = Main.GalaxiasClient.GetInstance().GetTextureManager().LoadTexture2D("Textures/Skys/layer5");
+        layer5 = TextureManager.LoadTexture2D("Textures/Skys/layer5");
     }
 }

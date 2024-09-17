@@ -33,6 +33,12 @@
 /processorParam:Quality=Best
 /build:Assets/Musics/galaxias.mp3
 
+#begin Assets/Sounds/button_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Assets/Sounds/button_click.wav
+
 #begin Assets/Textures/Blocks/dirt.png
 /importer:TextureImporter
 /processor:TextureProcessor

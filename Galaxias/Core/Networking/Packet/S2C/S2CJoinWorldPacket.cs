@@ -1,4 +1,4 @@
-﻿using Galaxias.Client.Main;
+﻿using Galaxias.Client;
 using Galaxias.Util;
 using LiteNetLib;
 using LiteNetLib.Utils;

@@ -7,6 +7,20 @@ namespace Galaxias.Util;
 public class Utils
 {
     private static readonly TileLayer[] tileLayers = [TileLayer.Main, TileLayer.Background];
+    public static readonly Random Random = new Random();
+    public static double Rand(double u, double d)
+    {
+        double u1, u2, z, x;
+        if (d <= 0)
+        {
+            return u;
+        }
+        u1 = Random.NextDouble();
+        u2 = Random.NextDouble();
+        z = Math.Sqrt(-2 * Math.Log(u1)) * Math.Sin(2 * Math.PI * u2);
+        x = u + d * z;
+        return x;
+    }
     public static int ToGridPos(int worldPos)
     {
         return Floor(worldPos / (double)GameConstants.ChunkWidth);
@@ -19,6 +33,10 @@ public class Utils
     public static Color MultiplyNoA(Color value, float scale)
     {
         return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), value.A);
+    }
+    public static Color Multiply(Color value, Color scale)
+    {
+        return new Color(value.R * scale.R, value.G * scale.G, value.B * scale.B, value.A);
     }
     public static int Ceil(double value)
     {

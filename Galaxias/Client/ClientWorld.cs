@@ -1,9 +1,10 @@
-﻿using Galaxias.Client.Main;
+﻿using Galaxias.Client;
 using Galaxias.Client.Render;
+using Galaxias.Core.Networking;
 using Galaxias.Core.World;
-using Galaxias.Core.World.Particle;
+using Galaxias.Core.World.Entities;
+using LiteNetLib;
 using System;
-using System.Collections.Generic;
 
 namespace Galaxias.Client;
 public class ClientWorld : AbstractWorld
@@ -15,5 +16,15 @@ public class ClientWorld : AbstractWorld
         this.renderer = renderer;
     }
 
-    
+    public override AbstractPlayerEntity CreatePlayer(NetPeer peer)
+    {
+        if (peer != null)
+        {
+            throw new Exception("Cannot create a connected player in a client world");
+        }
+        else
+        {
+            return new ClientPlayer(this);
+        }
+    }
 }

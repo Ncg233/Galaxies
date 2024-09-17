@@ -1,5 +1,5 @@
-﻿using Galaxias.Client.Main;
-using Galaxias.Core.World;
+﻿using Galaxias.Core.World;
+using Galaxias.Core.World.Particles;
 using Galaxias.Core.World.Tiles;
 using Galaxias.Util;
 using Microsoft.Xna.Framework;
@@ -12,18 +12,18 @@ public class WorldRenderer
     private readonly Color startColor = new Color(90, 150, 255);
     private readonly Color endColor = new Color(15, 15, 16);
     private readonly Color hitColor = new Color(0, 1, 0, 0.2f);
-    private Main.GalaxiasClient _galaxias;
+    private Main _galaxias;
     private AbstractWorld _world;
     private Camera camera;
-    private TileRenderer tileRenderer;
     private ItemRenderer itemRenderer;
     private BackgroundRenderer backgroundRenderer = new();
+    private ParticleManager particleManager;
     private float sunRadius;
     private float scaleHeight;
-    public WorldRenderer(Main.GalaxiasClient galaxias, Camera camera, TileRenderer tileRenderer)
+    public WorldRenderer(Main galaxias, Camera camera, ParticleManager particleManager)
     {
         this.camera = camera;
-        this.tileRenderer = tileRenderer;
+        this.particleManager = particleManager;
         float step = 1.2F / GameConstants.MaxLight;
         for (int i = 0; i < ShadowColor.Length; i++)
         {
@@ -41,7 +41,7 @@ public class WorldRenderer
     {
         backgroundRenderer.LoadContents();
     }
-    public void Render(GameTime gameTime, IntegrationRenderer renderer)
+    public void Render(IntegrationRenderer renderer)
     {
 
         RenderSky(renderer);
@@ -63,18 +63,21 @@ public class WorldRenderer
                     int[] lights = _world.GetInterpolateLight(x, y);
                     Color[] colors = InterpolateWorldColor(lights, TileLayer.Background);
 
-                    tileRenderer.Render(renderer, background, x, y, colors: colors);
+                    TileRenderer.Render(renderer, background, x, y, colors: colors);
                 }
                 if (!tileState.IsAir())
                 {
                     int[] lights = _world.GetInterpolateLight(x, y);
                     Color[] colors = InterpolateWorldColor(lights, TileLayer.Main);
 
-                    tileRenderer.Render(renderer, tileState, x, y, colors: colors);
+                    TileRenderer.Render(renderer, tileState, x, y, colors: colors);
                 }
             }
         }
-
+        particleManager._particles.ForEach(p =>
+        {
+            p.Render(renderer, ShadowColor[_world.GetCombinedLight((int)p.x, (int)p.y)]);
+        });
         //render entity
         _world.GetAllEntities().ForEach(e =>
         {
@@ -83,8 +86,9 @@ public class WorldRenderer
             //renderer.Draw("Assets/Textures/Misc/blank", (float)box.minX * scale, (float)-(box.minY + box.GetHeight()) * scale, (float)box.GetWidth(), (float)box.GetHeight(), hitColor);
 
             byte Brightness = _world.GetCombinedLight(Utils.Floor(e.x), Utils.Floor(e.y));
-            var eRenderer = EntityRendererHandler.GetRenderer(e.Type);
-            eRenderer.Render(renderer, e, scale, ShadowColor[Brightness]);
+            //var eRenderer = EntityRendererHandler.GetRenderer(e.Type);
+            //eRenderer.Render(renderer, e, scale, ShadowColor[Brightness]);
+            e.Render(renderer, ShadowColor[Brightness]);
 
         });
 
