@@ -18,7 +18,7 @@ internal class SmoothStateInfo : IStateInfo
     public static byte Right = 1;
     public static byte Down = 2;
     public static byte Left = 3;
-    public static byte Any = 4;
+    //public static byte Any = 4;
 
 
     private List<Rectangle> sourceRect;
@@ -63,7 +63,7 @@ internal class SmoothStateInfo : IStateInfo
         }
         else if (IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
         {
-            return WithRotation(SideII, Right);
+            return WithRotation(SideII, Left);
         }
         //(corner)
         else if (IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))

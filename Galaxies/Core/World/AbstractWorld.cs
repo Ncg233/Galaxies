@@ -67,7 +67,11 @@ public abstract class AbstractWorld
         sunRotation = (float)(currnetTime / tutolTime * 2 * Math.PI - Math.PI / 2);
         skyLight = (float)(Math.Sin(sunRotation) + 1) / 2;
 
-        entities.ForEach(e => e.Update(dTime));
+        for (int i = entities.Count - 1; i >= 0; i--)
+        {
+            entities[i].Update(dTime);
+        }
+        //entities.ForEach(e => e.Update(dTime));
 
     }
     public void AddEntity(Entity entity)

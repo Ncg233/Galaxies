@@ -20,11 +20,11 @@ public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
         var item = player.GetItemOnHand();
         if (isTurn)
         {
-            ItemRenderer.RenderInWorld(renderer, item, x - 0.75f, y + 2, colors);
+            ItemRenderer.RenderInWorld(renderer, item, x - 0.75f, y - 4, colors);
         }
         else
         {
-            ItemRenderer.RenderInWorld(renderer, item, x, y + 2, colors);
+            ItemRenderer.RenderInWorld(renderer, item, x, y - 4, colors);
 
         }
     }

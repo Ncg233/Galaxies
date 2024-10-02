@@ -22,14 +22,14 @@ public class ItemRenderer
     }
     public static void RenderInWorld(IntegrationRenderer renderer, ItemPile itemPile, float worldX, float worldY, Color color)
     {
-        if (itemPile != null)
+        if (itemPile != null && !itemPile.isEmpty())
         {
             Item item = itemPile.GetItem();
             Texture2D tex = itemToTexture.GetValueOrDefault(item);
 
             float width = 8;
             float height = 8;
-            renderer.Draw(tex, worldX * GameConstants.TileSize, -worldY * GameConstants.TileSize, color, width / tex.Width, height / tex.Height);
+            renderer.Draw(tex, worldX, worldY - height, color, width / tex.Width, height / tex.Height);
         }
     }
 

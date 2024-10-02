@@ -1,4 +1,6 @@
-﻿using Galaxies.Util;
+﻿using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Items;
+using Galaxies.Util;
 using System;
 using System.Collections.Generic;
 
@@ -87,9 +89,16 @@ public class Tile
         return stateHandler.GetAllState();
     }
 
-    public void OnDestoryed(TileState state, AbstractWorld world, int x, int y)
+    public virtual void OnDestoryed(TileState state, AbstractWorld world, int x, int y)
     {
         //drop item
+        var pile = GetDropItem();
+        world.AddEntity(new ItemEntity(null, world, pile, x, y));
+
+    }
+    public virtual ItemPile GetDropItem()
+    {
+        return ItemPile.Empty; 
     }
 
     public class TileSettings
