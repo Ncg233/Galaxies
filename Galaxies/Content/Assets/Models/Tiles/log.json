@@ -1,0 +1,9 @@
+{
+    "texture": "Textures/Tiles/log",
+    "size": [1, 1],
+    "state": {
+        "default": {
+            "renderRect": [ 0, 0 ]
+        }
+    }
+}
