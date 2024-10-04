@@ -16,10 +16,7 @@ public class TextureManager
     public static Texture2D LoadTexture2D(string path)
     {
         var texture = textureDic.GetValueOrDefault(path, null);
-        if (texture == null)
-        {
-            texture = Main.GetInstance().Content.Load<Texture2D>("Assets/" + path);
-        }
+        texture ??= Main.GetInstance().Content.Load<Texture2D>("Assets/" + path);
         return texture;
     }
 }

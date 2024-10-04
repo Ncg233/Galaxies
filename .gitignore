@@ -364,3 +364,7 @@ FodyWeavers.xsd
 
 .vscode/
 .idea/
+
+
+*.mp3
+Content.npl

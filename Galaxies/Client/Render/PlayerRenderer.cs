@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Galaxies.Client.Render;
 public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
 {
+    public override void LoadContent()
+    {
+        
+    }
+
     public override void Render(IntegrationRenderer renderer, AbstractPlayerEntity player, int scale, Color colors)
     {
         var x = player.GetRenderX();
@@ -13,7 +18,13 @@ public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
         var height = 32;
         bool isTurn = player.direction == Direction.Left;
         //BODY
-        renderer.Draw(GetSpriteName(), x, y,
+        renderer.Draw("Textures/Entities/Player/player_leg", x, y,
+            width / 2f, height, width, height, colors,
+            effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+        renderer.Draw("Textures/Entities/Player/player_body", x, y,
+            width / 2f, height, width, height, colors,
+            effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+        renderer.Draw("Textures/Entities/Player/player_head", x, y,
             width / 2f, height, width, height, colors,
             effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
         //HELD ITEM
@@ -27,10 +38,6 @@ public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
             ItemRenderer.RenderInWorld(renderer, item, x, y - 4, colors);
 
         }
-    }
-    protected override string GetSpriteName()
-    {
-        return "Textures/Entities/player";
     }
 
 }

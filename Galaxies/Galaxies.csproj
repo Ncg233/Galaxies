@@ -16,11 +16,17 @@
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Nopipeline.Task" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\bin\Windows\Content\Assets\Textures\Blocks\" />
     <Folder Include="Content\obj\Windows\net8.0-windows\Content\Assets\Textures\Blocks\" />
     <EmbeddedResource Include="Content\Assets\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Content\Assets\Textures\Entities\Player\player_body.png" />
+    <None Remove="Content\Assets\Textures\Entities\Player\player_head.png" />
+    <None Remove="Content\Assets\Textures\Entities\Player\player_leg.png" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
