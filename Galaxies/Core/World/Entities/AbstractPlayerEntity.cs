@@ -6,6 +6,7 @@ using Galaxies.Core.World.Inventory;
 using Galaxies.Core.World.Items;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Galaxies.Core.World.Entities;
 // server: PlayerEntity ConnectPlayer
@@ -15,6 +16,8 @@ public abstract class AbstractPlayerEntity : LivingEntity
     private static readonly PlayerRenderer s_playerRender = new PlayerRenderer();
     private InteractionManager InteractionManager;
     public PlayerInventory Inventory { get; private set; } = new();
+    public bool IsWalking { get; protected set; }
+
     public int HitX = 0;
     public int HitY = 0;
     protected float homeX = 0;
@@ -51,6 +54,10 @@ public abstract class AbstractPlayerEntity : LivingEntity
             {
                 jumpTicks++;
             }
+        }
+        if(Math.Abs(vx) < 0.001f)
+        {
+            IsWalking = false;
         }
         InteractionManager.Update(dTime);
     }
@@ -111,6 +118,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
         if (moveDir == Direction.Left)
         {
             direction = Direction.Left;
+            IsWalking = true;
             if (vx > -speed)
             {
                 vx -= speed * deltaTime;
@@ -119,6 +127,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
         if (moveDir == Direction.Right)
         {
             direction = Direction.Right;
+            IsWalking = true;
             if (vx < speed)
             {
                 vx += speed * deltaTime;

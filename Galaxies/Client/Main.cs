@@ -56,6 +56,7 @@ public class Main : Game
 
         _graphics.PreferredBackBufferWidth = 1920;
         _graphics.PreferredBackBufferHeight = 1080;
+        OnResize();
         Window.ClientSizeChanged += Window_ClientSizeChanged;
 
         camera.OnResize(GetWindowWidth(), GetWindowHeight());
@@ -107,10 +108,6 @@ public class Main : Game
         //{
         //    QuitGame();
         //}//please quit game with esc key, or the thread will not stop 
-        if (width != GetWindowWidth() || height != GetWindowHeight())
-        {
-            OnResize();
-        }
         if (IsActive || NetPlayManager.IsInit())
         {
             if (MediaPlayer.State == MediaState.Paused)
@@ -223,11 +220,11 @@ public class Main : Game
     }
     public int GetWindowWidth()
     {
-        return _graphics.PreferredBackBufferWidth;
+        return _graphics.PreferredBackBufferWidth == 0 ? 1 : _graphics.PreferredBackBufferWidth;
     }
     public int GetWindowHeight()
     {
-        return _graphics.PreferredBackBufferHeight;
+        return _graphics.PreferredBackBufferHeight == 0 ? 1 : _graphics.PreferredBackBufferHeight;
     }
     public AbstractPlayerEntity GetPlayer()
     {
