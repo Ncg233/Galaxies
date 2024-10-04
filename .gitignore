@@ -366,5 +366,5 @@ FodyWeavers.xsd
 .idea/
 
 
-*.mp3
-Content.npl
+**/*.mp3
+**/Content.npl
