@@ -367,4 +367,5 @@ FodyWeavers.xsd
 
 
 **/*.mp3
-**/Content.npl
+Galaxies/Content/Content.npl
+Galaxies/Content/Assets/Musics/*.mp3
