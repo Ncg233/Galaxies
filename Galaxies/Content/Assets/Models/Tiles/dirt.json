@@ -1,0 +1,16 @@
+{
+    "texture": "Textures/Tiles/dirt",
+    "size": [2, 3],
+    "state": {
+        "default": {
+            "smoothTile": true,
+            "full": [ 0, 0 ],
+            "sideIII": [ 0, 1 ],
+            "sideII": [ 0, 2 ],
+            "sideI": [ 1, 0 ],
+            "corner": [ 1, 1 ],
+            "single": [ 1, 2 ],
+            "renderRect": [ 0, 0]
+        }
+    }
+}

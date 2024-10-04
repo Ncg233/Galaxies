@@ -1,0 +1,10 @@
+{
+    "texture": "Textures/Tiles/torch",
+    "size": [1, 6],
+    "state": {
+        "default": {
+            "animation": true,
+            "renderRect": [ 0, 0, 0, 5]
+        }
+    }
+}
