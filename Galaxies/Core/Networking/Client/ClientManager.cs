@@ -13,15 +13,15 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Galaxies.Core.Networking;
-public class Client : NetWorkingInterface
+namespace Galaxies.Core.Networking.Client;
+public class ClientManager : NetWorkingInterface
 {
 
     public int RemoteId { get; private set; }
     public NetPeer Server { get; private set; }
     private Main gClient;
     private ClientWorld world;
-    public Client(Main gClient) : base()
+    public ClientManager(Main gClient) : base()
     {
         this.gClient = gClient;
         Listener.PeerConnectedEvent += PeerConnected;

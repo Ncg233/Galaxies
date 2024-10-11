@@ -158,7 +158,7 @@ public abstract class Entity
         onGround = collidedVert && vy < 0;
         SetPos(x + motionX, y + motionY);
     }
-    public virtual void Render(IntegrationRenderer renderer, Color light)
+    public virtual void Render(IntegrationRenderer renderer, Color color)
     {
 
     }

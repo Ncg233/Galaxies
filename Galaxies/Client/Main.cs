@@ -17,6 +17,7 @@ using Galaxies.Client.Key;
 using Galaxies.Util;
 using Galaxies.Core.Audio;
 using Galaxies.Core.Networking.Server;
+using Galaxies.Core.Networking.Client;
 
 namespace Galaxies.Client;
 public class Main : Game

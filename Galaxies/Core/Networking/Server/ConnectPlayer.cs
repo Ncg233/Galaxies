@@ -13,6 +13,7 @@ public class ConnectPlayer : AbstractPlayerEntity
     public ConnectPlayer(AbstractWorld serverWorld, NetPeer peer) : base(serverWorld)
     {
         this.peer = peer;
+        InteractionManager = new InteractionManagerConnection(world, this);
     }
 
     public override void SendToClient(S2CPacket packet)

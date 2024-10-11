@@ -1,14 +1,17 @@
-﻿using Galaxies.Client.Key;
+﻿using Galaxies.Client;
+using Galaxies.Client.Key;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
 using Microsoft.Xna.Framework.Input;
-namespace Galaxies.Client;
+namespace Galaxies.Core.Networking.Server;
+//single player
 public class PlayerEntity : AbstractPlayerEntity
 {
+    private int lastOffset = 0;
     public PlayerEntity(AbstractWorld world) : base(world)
     {
-
+        InteractionManager = new InteractionManager(world, this);
     }
     public override void Update(float dTime)
     {
@@ -24,12 +27,20 @@ public class PlayerEntity : AbstractPlayerEntity
         if (KeyBind.D9.IsKeyDown()) GetInventory().onHand = 8;
         //Log.Info((Mouse.GetState().ScrollWheelValue % 9).ToString());
 
-        int Offset = -Mouse.GetState().ScrollWheelValue / 12;
-        while (Offset > 8)
-            Offset -= 9;
-        while (Offset < 0)
-            Offset += 9;
-        GetInventory().onHand = Offset;
+        int Offset = Mouse.GetState().ScrollWheelValue;
+        if (lastOffset != Offset)
+        {
+            var inv = GetInventory();
+            var a = lastOffset - Offset;
+            lastOffset = Offset;
+            inv.onHand = inv.onHand + (a > 0 ? 1 : -1);
+            if (inv.onHand > 8)
+            {
+                inv.onHand -= 9;
+            }
+            else if (inv.onHand < 0) { inv.onHand += 9; }
+
+        }
     }
     public override void SendToClient(S2CPacket packet)
     {

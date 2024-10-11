@@ -1,4 +1,5 @@
-﻿using LiteNetLib.Utils;
+﻿using Galaxies.Core.Networking.Client;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ public class S2CTimeSyncPacket : S2CPacket
         CurrentTime = reader.GetFloat();
     }
 
-    public override void Process(Client client)
+    public override void Process(ClientManager client)
     {
         client.ProcessTimeSync(this);
     }

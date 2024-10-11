@@ -26,7 +26,6 @@ public class WorldSelectionScreen : AbstractScreen
                 //galaxias.SetupServer(false, out GalaxiasServer server);
                 //NetPlayManager.InitLocalServer(server);
                 galaxias.StartWorld(new DirectoryInfo(rootPath + "1\\"));
-
             });
             if (isSingle)
             {

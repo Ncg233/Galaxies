@@ -19,6 +19,7 @@ public class Camera
     private float scale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
+    public float worldWidth, worldHeight;
     public void Update(AbstractPlayerEntity player, float dTime)
     {
         if (false)
@@ -68,9 +69,13 @@ public class Camera
         viewHeight = height;
 
         displayRadio = Math.Max(viewWidth / 1920f, viewHeight / 1080f);
+        scale = _zoom * displayRadio;
         guiScale = getScaleFactor(3);
         guiWidth = Utils.Ceil(width / guiScale);
         guiHeight = Utils.Ceil(height / guiScale);
+
+        worldWidth = width / scale;
+        worldHeight = height / scale;
 
     }
     public int getScaleFactor(int guiScale)

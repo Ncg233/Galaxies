@@ -82,7 +82,7 @@ public abstract class AbstractWorld
     {
         return entities;
     }
-    private int GetTileIndex(int x, int y)
+    public int GetTileIndex(int x, int y)
     {
         while (x > Width - 1)
         {

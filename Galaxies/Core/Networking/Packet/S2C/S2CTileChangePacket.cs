@@ -1,4 +1,5 @@
-﻿using Galaxies.Core.World.Tiles;
+﻿using Galaxies.Core.Networking.Client;
+using Galaxies.Core.World.Tiles;
 using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ public class S2CTileChangePacket : S2CPacket
         state = Tile.TileStateId.Get(reader.GetInt());
     }
 
-    public override void Process(Client client)
+    public override void Process(ClientManager client)
     {
         client.ProcessTileChange(this);
     }

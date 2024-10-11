@@ -1,10 +1,12 @@
 ﻿using Galaxies.Client;
+using Galaxies.Client.Resource;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Particles;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Galaxies.Client.Render;
 public class WorldRenderer
@@ -19,9 +21,7 @@ public class WorldRenderer
     private ItemRenderer itemRenderer;
     private BackgroundRenderer backgroundRenderer = new();
     private ParticleManager particleManager;
-    private float sunRadius;
-    private float scaleHeight;
-    //private readonly Dictionary<TileLayer, byte[]> renderState = [];
+    //private readonly Dictionary<TileLayer, byte[]> appearanceState = [];
     public WorldRenderer(Main galaxias, Camera camera, ParticleManager particleManager)
     {
         this.camera = camera;
@@ -30,7 +30,7 @@ public class WorldRenderer
         for (int i = 0; i < ShadowColor.Length; i++)
         {
             float modifier = i * step;
-            ShadowColor[i] = new Color(modifier, modifier, modifier, 1f);
+            ShadowColor[i] = Color.Black * (1 - modifier);
         }
         _galaxias = galaxias;
 
@@ -38,15 +38,13 @@ public class WorldRenderer
     public void SetRenderWorld(AbstractWorld world)
     {
         _world = world;
-        //renderState.Clear();
+        //appearanceState.Clear();
         //foreach (var layer in Utils.GetAllLayers())
         //{
         //    byte[] states = new byte[world.Width * world.Height];
         //    Array.Fill(states, Byte.MaxValue);
-        //    renderState.Add(layer, states);
+        //    appearanceState.Add(layer, states);
         //}
-
-
     }
     public void LoadContents()
     {
@@ -67,19 +65,15 @@ public class WorldRenderer
         {
             for (int y = minY; y < maxY; y++)
             {
-                int[] lights = _world.GetInterpolateLight(x, y);
-                Color[] colors = InterpolateWorldColor(lights);
                 foreach (var layer in Utils.GetAllLayers())
                 {
-
                     var tileState = _world.GetTileState(layer, x, y);
                     if (!tileState.IsAir())
                     {
                         var appearance = GetRenderApperance(layer, x, y, tileState);
-                        TileRenderer.Render(renderer, tileState, layer, x, y, appearance, colors: colors);
+                        TileRenderer.Render(renderer, tileState, layer, x, y, appearance, colors: Color.White);
                     }
                 }
-
                 //TileState tileState = _world.GetTileState(TileLayer.Main, x, y);
                 //TileState background = _world.GetTileState(TileLayer.Background, x, y);
                 //
@@ -99,9 +93,19 @@ public class WorldRenderer
                 //}
             }
         }
+        //render light
+        for (int x = minX; x < maxX; x++)
+        {
+            for (int y = minY; y < maxY; y++)
+            {
+                int[] lights = _world.GetInterpolateLight(x, y);
+                Color[] colors = InterpolateWorldColor(lights);
+                renderer.Draw(TextureManager.BlankTexture, x * GameConstants.TileSize, -y * GameConstants.TileSize, colors[0]);
+            }
+        }
         particleManager._particles.ForEach(p =>
         {
-            p.Render(renderer, ShadowColor[_world.GetCombinedLight((int)p.x, (int)p.y)]);
+            p.Render(renderer, Color.White);
         });
         //render entity
         _world.GetAllEntities().ForEach(e =>
@@ -109,35 +113,34 @@ public class WorldRenderer
             //render hitbox will move to another place
             //HitBox box = e.hitbox;
             //renderer.Draw("Assets/Textures/Misc/blank", (float)box.minX * scale, (float)-(box.minY + box.GetHeight()) * scale, (float)box.GetWidth(), (float)box.GetHeight(), hitColor);
-
-            byte Brightness = _world.GetCombinedLight(Utils.Floor(e.x), Utils.Floor(e.y));
             //var eRenderer = EntityRendererHandler.GetRenderer(e.Type);
             //eRenderer.Render(renderer, e, scale, ShadowColor[Brightness]);
-            e.Render(renderer, ShadowColor[Brightness]);
+            e.Render(renderer, Color.White);
 
         });
-
+        
+        
     }
     private byte GetRenderApperance(TileLayer layer, int x, int y, TileState tileState)
     {
         return TileSpriteManager.GetStateInfo(tileState).UpdateAdjacencies(_world, layer, x, y);
-
     }
     private void RenderSky(IntegrationRenderer renderer)
     {
 
         float skylightMod = _world.GetSkyLightModify(false);
-        backgroundRenderer.Render(renderer, -camera.GetX(), -camera.GetY(), Utils.Ceil(_galaxias.GetWindowWidth() / camera.GetScale()), Utils.Ceil(_galaxias.GetWindowHeight() / camera.GetScale()), GetBackgroundColor(skylightMod));
-        float w = _galaxias.GetWindowWidth() / camera.GetScale() / 2;
-        scaleHeight = _galaxias.GetWindowHeight() / camera.GetScale() / 2;
-        sunRadius = (w * w + scaleHeight * scaleHeight) / (2 * scaleHeight);
+        backgroundRenderer.Render(renderer, -camera.GetX(), -camera.GetY(), Utils.Ceil(camera.worldWidth), Utils.Ceil(camera.worldHeight), Color.White * skylightMod);
+
+        float w = camera.worldWidth / 2;
+        float h = camera.worldHeight / 2;
+        float sunRadius = (w * w + h * h) / (2 * h);
         float x = -camera.GetX() - (float)(sunRadius * Math.Cos(_world.GetSunRotation()) + 24);
-        float y = -camera.GetY() + (sunRadius - scaleHeight) - (float)(sunRadius * Math.Sin(_world.GetSunRotation()));
+        float y = -camera.GetY() + (sunRadius - h) - (float)(sunRadius * Math.Sin(_world.GetSunRotation()));
         renderer.Draw("Textures/Skys/sun", x, y, Color.White);
     }
     private Color GetBackgroundColor(float skyLightMod)
     {
-        return ShadowColor[(int)(GameConstants.MaxLight * skyLightMod)];
+        return ShadowColor[(int)(GameConstants.MaxLight * (1 - skyLightMod))];
     }
 
     internal void OnResize(int width, int height)

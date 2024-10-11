@@ -1,4 +1,5 @@
-﻿using Galaxies.Core.World;
+﻿using Galaxies.Core.Networking.Client;
+using Galaxies.Core.World;
 using Galaxies.Util;
 using LiteNetLib.Utils;
 
@@ -23,7 +24,7 @@ public class S2CWorldDataPacket : S2CPacket
         Utils.GetByteArray(reader, out tileLight);
     }
 
-    public override void Process(Client client)
+    public override void Process(ClientManager client)
     {
         client.ProcessWorldData(this);
     }

@@ -79,10 +79,6 @@ public class Tile
     {
         return stateHandler.GetState(prop);
     }
-    public virtual void AddProp(StateHandler stateHandler)
-    {
-
-    }
 
     public List<TileState> GetAllState()
     {
@@ -93,7 +89,7 @@ public class Tile
     {
         //drop item
         var pile = GetDropItem();
-        world.AddEntity(new ItemEntity(null, world, pile, x, y));
+        world.AddEntity(new ItemEntity(world, pile, x, y));
 
     }
     public virtual ItemPile GetDropItem()

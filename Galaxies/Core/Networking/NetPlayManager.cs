@@ -1,4 +1,5 @@
 ﻿using Galaxies.Client;
+using Galaxies.Core.Networking.Client;
 using Galaxies.Core.Networking.Packet.C2S;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.Networking.Server;
@@ -8,12 +9,12 @@ using System;
 namespace Galaxies.Core.Networking;
 public class NetPlayManager
 {
-    public static Client RomateClient { get; private set; }
+    public static ClientManager RomateClient { get; private set; }
     public static ServerManager RomateServer { get; private set; }
     public static void InitClient(string ip, int port)
     {
 
-        RomateClient = new Client(Main.GetInstance());
+        RomateClient = new ClientManager(Main.GetInstance());
         RomateClient.Connect(ip, port);
     }
     public static void InitServer(string ip, int port)

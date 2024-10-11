@@ -41,7 +41,8 @@ public class GameRenderer
             //render world
             camera.Update(_galaxias.GetPlayer(), dTime);
             renderer.Begin(sortMode: SpriteSortMode.Immediate,
-                samplerState: SamplerState.PointClamp,
+                blendState: BlendState.AlphaBlend,
+                samplerState: SamplerState.PointWrap,
                 depthStencilState: DepthStencilState.None,
                 transformMatrix: camera.TransfromMatrix);
 
@@ -52,7 +53,7 @@ public class GameRenderer
             if (renderHud)
             {
                 renderer.Begin(sortMode: SpriteSortMode.Immediate,
-                BlendState.AlphaBlend,
+                blendState:BlendState.AlphaBlend,
                 samplerState: SamplerState.PointClamp,
                 depthStencilState: DepthStencilState.Default,
                 transformMatrix: camera.GuiMatrix);

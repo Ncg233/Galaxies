@@ -1,4 +1,4 @@
-﻿namespace Galaxies.Core.World.Entities;
+﻿namespace Galaxies.Util;
 public class HitBox
 {
     public float minX { get; private set; }

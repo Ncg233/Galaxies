@@ -20,10 +20,10 @@ public class TileParticle : Particle
 
     }
 
-    public override void Render(IntegrationRenderer renderer, Color light)
+    public override void Render(IntegrationRenderer renderer, Color color)
     {
-        var color = light * (life / maxLife);
-        renderer.Draw(texture, GetRenderX(), GetRenderY() - height * GameConstants.TileSize, color, width * GameConstants.TileSize, height * GameConstants.TileSize, source: sourceRect);
+        var renderColor = color * (life / maxLife);
+        renderer.Draw(texture, GetRenderX(), GetRenderY() - height * GameConstants.TileSize, renderColor, width * GameConstants.TileSize, height * GameConstants.TileSize, source: sourceRect);
     }
     public override float GetWidth()
     {

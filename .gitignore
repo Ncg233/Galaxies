@@ -369,4 +369,3 @@ FodyWeavers.xsd
 **/*.mp3
 **/Content.npl
 Galaxies/Content/Assets
-!Galaxies/Content/Assets/Models

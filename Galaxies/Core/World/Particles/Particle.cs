@@ -35,5 +35,5 @@ public abstract class Particle : Entity
         vx *= onGround ? 0.8f : 0.98f;
         vy *= 0.99f;
     }
-    public abstract void Render(IntegrationRenderer renderer, Color light);
+    public abstract void Render(IntegrationRenderer renderer, Color color);
 }

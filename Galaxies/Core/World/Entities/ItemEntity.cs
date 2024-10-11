@@ -12,7 +12,7 @@ public class ItemEntity : Entity
 {
     private static ItemEntityRenderer EntityRenderer = new ItemEntityRenderer();
     public ItemPile pile;
-    public ItemEntity(EntityType entity, AbstractWorld world, ItemPile pile, float x, float y) : base(entity, world)
+    public ItemEntity(AbstractWorld world, ItemPile pile, float x, float y) : base(AllEntityTypes.ItemEntity, world)
     {
         this.pile = pile;
         SetPos(x, y);
@@ -21,5 +21,16 @@ public class ItemEntity : Entity
     {
         EntityRenderer.Render(renderer,this, 1, light);
     }
+    public class ItemEntityRenderer : EntityRenderer<ItemEntity>
+    {
+        public override void LoadContent()
+        {
 
+        }
+
+        public override void Render(IntegrationRenderer renderer, ItemEntity entity, int scale, Color colors)
+        {
+            ItemRenderer.RenderInWorld(renderer, entity.pile, entity.GetRenderX(), entity.GetRenderY(), colors);
+        }
+    }
 }

@@ -1,15 +1,15 @@
-﻿using Galaxies.Client.Key;
+﻿using Galaxies.Client;
+using Galaxies.Client.Key;
 using Galaxies.Client.Render;
 using Galaxies.Core.Networking;
 using Galaxies.Core.Networking.Packet.C2S;
 using Galaxies.Core.World;
-using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Galaxies.Client;
+namespace Galaxies.Core.World.Entities;
 public class InteractionManager
 {
     private AbstractWorld world;
@@ -21,7 +21,7 @@ public class InteractionManager
         this.player = player;
     }
 
-    public void Update(float dTime)
+    public virtual void Update(float dTime)
     {
         var state = Mouse.GetState();
         if (state.LeftButton == ButtonState.Pressed)

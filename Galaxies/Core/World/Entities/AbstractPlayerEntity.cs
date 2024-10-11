@@ -1,4 +1,3 @@
-using Galaxies.Client;
 using Galaxies.Client.Render;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
@@ -6,6 +5,7 @@ using Galaxies.Core.World.Inventory;
 using Galaxies.Core.World.Items;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Galaxies.Core.World.Entities;
@@ -13,8 +13,8 @@ namespace Galaxies.Core.World.Entities;
 // client: ClientPlayer
 public abstract class AbstractPlayerEntity : LivingEntity
 {
-    private static readonly PlayerRenderer s_playerRender = new PlayerRenderer();
-    private InteractionManager InteractionManager;
+    private static readonly PlayerRenderer s_playerRender = new();
+    public InteractionManager InteractionManager;
     public PlayerInventory Inventory { get; private set; } = new();
     public bool IsWalking { get; protected set; }
 
@@ -32,7 +32,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
         speed = 10f;
         maxHealth = 100;
         health = 100;
-        InteractionManager = new InteractionManager(world, this);
+        
     }
     public override void Update(float dTime)
     {
@@ -55,15 +55,15 @@ public abstract class AbstractPlayerEntity : LivingEntity
                 jumpTicks++;
             }
         }
-        if(Math.Abs(vx) < 0.001f)
+        if(Math.Abs(vx) > 0.001f)
         {
-            IsWalking = false;
-        }
-        InteractionManager.Update(dTime);
+            IsWalking = true;
+        }else IsWalking = false;
+        InteractionManager?.Update(dTime);
     }
-    public override void Render(IntegrationRenderer renderer, Color light)
+    public override void Render(IntegrationRenderer renderer, Color color)
     {
-        s_playerRender.Render(renderer, this, 1, light);
+        s_playerRender.Render(renderer, this, 1, color);
     }
     protected override void HandleMovement(float dTime)
     {
@@ -118,7 +118,6 @@ public abstract class AbstractPlayerEntity : LivingEntity
         if (moveDir == Direction.Left)
         {
             direction = Direction.Left;
-            IsWalking = true;
             if (vx > -speed)
             {
                 vx -= speed * deltaTime;
@@ -127,7 +126,6 @@ public abstract class AbstractPlayerEntity : LivingEntity
         if (moveDir == Direction.Right)
         {
             direction = Direction.Right;
-            IsWalking = true;
             if (vx < speed)
             {
                 vx += speed * deltaTime;
@@ -138,5 +136,72 @@ public abstract class AbstractPlayerEntity : LivingEntity
             Jump(GetJumpHeight(), deltaTime);
         }
 
+    }
+    public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
+    {
+        private static Color ClothesColor = Color.Blue;
+        private static Color FaceColor = new Color(220, 179, 125);
+        public override void LoadContent()
+        {
+
+        }
+
+        public override void Render(IntegrationRenderer renderer, AbstractPlayerEntity player, int scale, Color colors)
+        {
+            var x = player.GetRenderX();
+            var y = player.GetRenderY();
+            var width = 16;
+            var height = 32;
+            bool isTurn = player.direction == Direction.Left;
+            //BODY
+            renderer.Draw("Textures/Entities/Player/player_leg", x, y,
+                width / 2f, height, colors,
+                source: GetSource(player),
+                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+
+            renderer.Draw("Textures/Entities/Player/player_body", x, y,
+                width / 2f, height, colors,
+                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+
+            renderer.Draw("Textures/Entities/Player/player_head", x, y,
+                width / 2f, height, colors,
+                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+            //HELD ITEM
+            var item = player.GetItemOnHand();
+            if (isTurn)
+            {
+                ItemRenderer.RenderInWorld(renderer, item, x - 0.75f, y - 4, colors);
+            }
+            else
+            {
+                ItemRenderer.RenderInWorld(renderer, item, x, y - 4, colors);
+
+            }
+        }
+
+        private Rectangle? GetSource(AbstractPlayerEntity player)
+        {
+            if (player.IsWalking)
+            {
+                int count = 5;
+                long runningTime = DateTime.UtcNow.Ticks / 1000 % (count * 1200);
+
+                long accum = 0;
+                for (int i = 0; i < count; i++)
+                {
+                    accum += 1200;
+                    if (accum >= runningTime)
+                    {
+                        return new Rectangle(16 + 16 * i, 0, 16, 32);
+                    }
+                }
+            }
+            else
+            {
+                return new Rectangle(0, 0, 16, 32);
+            }
+            return null;
+
+        }
     }
 }

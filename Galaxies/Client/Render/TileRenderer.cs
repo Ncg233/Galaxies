@@ -11,14 +11,14 @@ public class TileRenderer
     {
         TileSpriteManager.LoadContent();
     }
-    public static void Render(IntegrationRenderer renderer, TileState state, TileLayer layer, float x, float y, byte apperaance, Color[] colors)
+    public static void Render(IntegrationRenderer renderer, TileState state, TileLayer layer, float x, float y, byte apperaance, Color colors)
     {
         TileSpriteMap tileTexture = TileSpriteManager.GetSpriteMap(state);
         int width = tileTexture.Width;
         int height = tileTexture.Height;
         int hw = width / 2;
         int hh = height / 2;
-        Color color = Utils.MultiplyNoA(colors[0], layer == TileLayer.Main ? 1 : 0.45f);
+        Color color = Utils.MultiplyNoA(colors, layer == TileLayer.Main ? 1 : 0.45f);
         if (state.GetTile().GetRenderType() == TileRenderType.Center)
         {
             //for (int i = 0; i < 2; i++)

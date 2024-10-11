@@ -3,18 +3,13 @@ using Galaxies.Core.Networking.Packet.C2S;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Galaxies.Core.Networking;
+namespace Galaxies.Core.Networking.Client;
 public class ClientPlayer : AbstractPlayerEntity
 {
     public ClientPlayer(AbstractWorld world) : base(world)
     {
-
+        InteractionManager = new InteractionManager(world, this);
     }
     public override void Update(float dTime)
     {
