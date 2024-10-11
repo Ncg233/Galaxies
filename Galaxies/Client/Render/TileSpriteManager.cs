@@ -20,7 +20,7 @@ internal class TileSpriteManager
         {
             if (tile.Key != "air")
             {
-                string sourceName = "Galaxies.Content.Assets.Models.Tiles." + tile.Key + ".json";
+                string sourceName = "Galaxies.Content.Infos.Models.Tiles." + tile.Key + ".json";
                 Stream stream = assembly.GetManifestResourceStream(sourceName);
                 if (stream == null)
                 {
