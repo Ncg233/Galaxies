@@ -9,6 +9,8 @@ public class AllItems
     public readonly static Item Dirt = FromTile("dirt", AllTiles.Dirt);
     public readonly static Item GoldIngot = Register("gold_ingot", new Item());
     public readonly static Item Torch = FromTile("torch", AllTiles.Torch);
+    public readonly static Item ChairTile = FromTile("chair_tile", AllTiles.ChairTile);
+    public readonly static Item Table = FromTile("table", AllTiles.Table);
     private static Item Register(string name, Item item)
     {
         itemRegister.Add(name, item);

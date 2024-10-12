@@ -3,6 +3,7 @@ using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct3D9;
 using System;
 
 namespace Galaxies.Client.Render;
@@ -15,7 +16,8 @@ public class Camera
     public Matrix GuiMatrix => Matrix.CreateScale(guiScale);
 
     public Vector3 _pos = new();
-    private float _zoom = 3f, displayRadio, guiScale;
+    private float _zoom = 3f;
+    private float displayRadio, guiScale;
     private float scale;
     private int viewWidth, viewHeight;
     public int guiWidth, guiHeight;
@@ -33,13 +35,19 @@ public class Camera
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+        {
             _zoom += dTime;
+        }     
         else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+        {
             _zoom -= dTime;
+        }
         _zoom = MathHelper.Clamp(_zoom, 2.6f, 4);
         scale = _zoom * displayRadio;
 
-
+        worldWidth = viewWidth / scale;
+        worldHeight = viewHeight / scale;
+        
     }
     public float GetX()
     {
@@ -69,13 +77,12 @@ public class Camera
         viewHeight = height;
 
         displayRadio = Math.Max(viewWidth / 1920f, viewHeight / 1080f);
-        scale = _zoom * displayRadio;
+        
         guiScale = getScaleFactor(3);
         guiWidth = Utils.Ceil(width / guiScale);
         guiHeight = Utils.Ceil(height / guiScale);
 
-        worldWidth = width / scale;
-        worldHeight = height / scale;
+
 
     }
     public int getScaleFactor(int guiScale)

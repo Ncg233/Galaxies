@@ -96,7 +96,7 @@ public class InteractionManager
         var pile = player.GetItemOnHand();
         if (pile != null && !pile.isEmpty())
         {
-            if (pile.UseOnTile(world, player, x, y))
+            if (pile.Use(world, player, x, y))
             {
                 pile.SetCount(pile.GetCount() - 1);
             }

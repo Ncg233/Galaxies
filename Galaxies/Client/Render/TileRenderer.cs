@@ -37,9 +37,14 @@ public class TileRenderer
                 width / 2f, height / 2f,
                 width, height, apperaance, color);
         }
-        else
+        else if(state.GetTile().GetRenderType() == TileRenderType.BottomCenter)
         {
             DrawTileSpriteMap(renderer, tileTexture, state, (x + 0.5f) * GameConstants.TileSize, -y * GameConstants.TileSize, width / 2f, height, width, height,
+                apperaance, color);
+        }
+        else if (state.GetTile().GetRenderType() == TileRenderType.BottomCorner)
+        {
+            DrawTileSpriteMap(renderer, tileTexture, state, x * GameConstants.TileSize, -y * GameConstants.TileSize, 0, height, width, height,
                 apperaance, color);
         }
 
@@ -50,6 +55,7 @@ public class TileRenderer
         int rotation = appearance / 10 * 90;
         Texture2D tex = map.SourceTexture;
         var info = map.GetStateInfo(state);
-        renderer.Draw(tex, new Vector2(x, y), info.GetRenderRect(appearance), color, (float)Math.PI / 180 * rotation, new Vector2(originX, originY), new Vector2(width / map.Width, height / map.Height), SpriteEffects.None, 0);
+        Facing facing = state.Facing;
+        renderer.Draw(tex, new Vector2(x, y), info.GetRenderRect(appearance), color, (float)Math.PI / 180 * rotation, new Vector2(originX, originY), new Vector2(width / map.Width, height / map.Height), facing.Effect, 0);
     }
 }

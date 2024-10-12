@@ -8,7 +8,7 @@ namespace Galaxies.Core.World.Tiles;
 public class Tile
 {
     public static readonly IntIdentityDictionary<TileState> TileStateId = [];
-    private readonly StateHandler stateHandler;
+    public readonly StateHandler stateHandler;
     private readonly TileSettings settings;
     public Tile(TileSettings settings)
     {
@@ -19,9 +19,8 @@ public class Tile
     {
         return stateHandler.GetDefaultState();
     }
-    public void AddProp(string property)
+    public virtual void AddProp(StateHandler handler)
     {
-        stateHandler.AddProp(property);
     }
     internal float GetTranslucentModifier(AbstractWorld chunk, int x, int y, TileLayer layer, bool isSky)
     {
@@ -31,7 +30,7 @@ public class Tile
         }
         else
         {
-            return layer == TileLayer.Background ? 0.9F : 0.75F;
+            return layer == TileLayer.Background ? 0.8F : 0.75F;
         }
     }
     public virtual TileRenderType GetRenderType()
@@ -75,10 +74,10 @@ public class Tile
             world.DestoryTile(x, y);
         }
     }
-    public TileState GetState(string prop)
-    {
-        return stateHandler.GetState(prop);
-    }
+    //public TileState GetState(string prop)
+    //{
+    //    return stateHandler.GetState(prop);
+    //}
 
     public List<TileState> GetAllState()
     {
@@ -95,6 +94,11 @@ public class Tile
     public virtual ItemPile GetDropItem()
     {
         return ItemPile.Empty; 
+    }
+
+    public virtual TileState GetPlaceState(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
+    {
+        return GetDefaultState();
     }
 
     public class TileSettings

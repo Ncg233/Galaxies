@@ -7,6 +7,7 @@ using Galaxies.Core.World.Gen;
 namespace Galaxies.Core.World.Chunks;
 public class Chunk
 {
+    /*
     private readonly AbstractWorld world;
     private readonly Random rand;
     private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = new();
@@ -125,7 +126,7 @@ public class Chunk
         {
             for (int y = GameConstants.ChunkHeight - 1; y >= 0; y--)
             {
-                byte light = world.CalcLight(chunkX * GameConstants.ChunkWidth + x, y, true);
+                byte light = CalcLight(chunkX * GameConstants.ChunkWidth + x, y, true);
                 SetSkyLight(x, y, light);
             }
         }
@@ -138,4 +139,5 @@ public class Chunk
             }
         }
     }
+    */
 }

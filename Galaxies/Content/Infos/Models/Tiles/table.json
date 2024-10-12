@@ -1,0 +1,9 @@
+{
+    "texture": "Textures/Tiles/table",
+    "size": [1, 1],
+    "state": {
+        "default": {
+            "renderRect": [ 1, 1]
+        }
+    }
+}

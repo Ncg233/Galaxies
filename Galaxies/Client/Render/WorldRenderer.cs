@@ -5,6 +5,7 @@ using Galaxies.Core.World.Particles;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct2D1.Effects;
 using System;
 using System.Collections.Generic;
 
@@ -12,6 +13,7 @@ namespace Galaxies.Client.Render;
 public class WorldRenderer
 {
     private readonly Color[] ShadowColor = new Color[GameConstants.MaxLight + 1];
+    private readonly Color[] LightColor = new Color[GameConstants.MaxLight + 1];
     private readonly Color startColor = new Color(90, 150, 255);
     private readonly Color endColor = new Color(15, 15, 16);
     private readonly Color hitColor = new Color(0, 1, 0, 0.2f);
@@ -31,6 +33,7 @@ public class WorldRenderer
         {
             float modifier = i * step;
             ShadowColor[i] = Color.Black * (1 - modifier);
+            LightColor[i] = new Color(modifier, modifier, modifier, 1f);
         }
         _galaxias = galaxias;
 
@@ -93,6 +96,10 @@ public class WorldRenderer
                 //}
             }
         }
+        particleManager._particles.ForEach(p =>
+        {
+            p.Render(renderer, Color.White);
+        });
         //render light
         for (int x = minX; x < maxX; x++)
         {
@@ -103,10 +110,7 @@ public class WorldRenderer
                 renderer.Draw(TextureManager.BlankTexture, x * GameConstants.TileSize, -y * GameConstants.TileSize, colors[0]);
             }
         }
-        particleManager._particles.ForEach(p =>
-        {
-            p.Render(renderer, Color.White);
-        });
+        
         //render entity
         _world.GetAllEntities().ForEach(e =>
         {
@@ -115,7 +119,7 @@ public class WorldRenderer
             //renderer.Draw("Assets/Textures/Misc/blank", (float)box.minX * scale, (float)-(box.minY + box.GetHeight()) * scale, (float)box.GetWidth(), (float)box.GetHeight(), hitColor);
             //var eRenderer = EntityRendererHandler.GetRenderer(e.Type);
             //eRenderer.Render(renderer, e, scale, ShadowColor[Brightness]);
-            e.Render(renderer, Color.White);
+            e.Render(renderer, LightColor[_world.GetCombinedLight((int)e.x, (int)e.y)]);
 
         });
         

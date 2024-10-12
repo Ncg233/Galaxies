@@ -7,7 +7,7 @@ public class LeavesTile : Tile
 
     public override TileRenderType GetRenderType()
     {
-        return TileRenderType.Bottom;
+        return TileRenderType.BottomCenter;
     }
     public override bool CanCollide()
     {

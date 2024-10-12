@@ -1,45 +1,54 @@
 ﻿using Galaxies.Core.World;
+using Galaxies.Util;
 
 namespace Galaxies.Core.World.Tiles;
 public class TileState
 {
-    private readonly Tile tile;
-    public string state;
-    public TileState(Tile tile, string state)
+    private readonly Tile Tile;
+    public string State { get; private set; }
+    public Facing Facing { get; private set; }
+    public TileState(Tile tile, string state, Facing facing)
     {
-        this.tile = tile;
-        this.state = state;
+        Tile = tile;
+        State = state;
+        Facing = facing;
     }
     public Tile GetTile()
     {
-        return tile;
+        return Tile;
     }
     public int GetLight()
     {
-        return tile.GetLight(this);
+        return Tile.GetLight(this);
     }
 
     public bool IsFullTile()
     {
-        return tile.IsFullTile();
+        return Tile.IsFullTile();
     }
     public bool IsAir()
     {
-        return tile.IsAir();
+        return Tile.IsAir();
     }
 
     public void OnNeighborChanged(AbstractWorld abstractWorld, int x, int y, Tile changedTile)
     {
-        tile.OnNeighborChanged(this, abstractWorld, x, y, changedTile);
+        Tile.OnNeighborChanged(this, abstractWorld, x, y, changedTile);
     }
 
     public string GetState()
     {
-        return state;
+        return State;
     }
-
+    public TileState ChangeState(string state) {
+        return Tile.stateHandler.GetState(state, Facing);
+    }
+    public TileState ChangeFacing(Facing facing)
+    {
+        return Tile.stateHandler.GetState(State, facing);
+    }
     public void OnDestroyed(AbstractWorld world, int x, int y)
     {
-        tile.OnDestoryed(this, world, x, y);
+        Tile.OnDestoryed(this, world, x, y);
     }
 }

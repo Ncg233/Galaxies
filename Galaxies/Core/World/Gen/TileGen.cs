@@ -18,7 +18,7 @@ public class TileGen : AbstractChunkGen
     #endregion
     public override void Generate(AbstractWorld world)
     {
-        for (int x = 0; x < world.GetWidth(); x++)
+        for (int x = 0; x < world.Width; x++)
         {
             double height = world.GetGenSuerfaceHeight(TileLayer.Main, x);
             for (int y = 0; y < world.Height; y++)

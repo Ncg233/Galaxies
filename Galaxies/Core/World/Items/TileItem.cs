@@ -18,7 +18,8 @@ public class TileItem : Item
             return false;
 
         }
-        world.SetTileState(TileLayer.Main, x, y, tile.GetDefaultState());
+        var state = tile.GetPlaceState(world, player, x, y);
+        world.SetTileState(TileLayer.Main, x, y, state);
         return true;
 
     }

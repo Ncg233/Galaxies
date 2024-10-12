@@ -27,8 +27,16 @@
     <None Remove="Content\Assets\Textures\Entities\Player\player_body.png" />
     <None Remove="Content\Assets\Textures\Entities\Player\player_head.png" />
     <None Remove="Content\Assets\Textures\Entities\Player\player_leg.png" />
+    <None Remove="Content\Assets\Textures\Items\chair_tile.png" />
+    <None Remove="Content\Assets\Textures\Items\table.png" />
+    <None Remove="Content\Assets\Textures\Tiles\chair_tile.png" />
+    <None Remove="Content\Assets\Textures\Tiles\table.png" />
+    <None Remove="Content\Infos\Models\Tiles\chair_tile.json" />
+    <None Remove="Content\Infos\Models\Tiles\table.json" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Content\Infos\Models\Tiles\table.json" />
+    <EmbeddedResource Include="Content\Infos\Models\Tiles\chair_tile.json" />
     <EmbeddedResource Include="Content\Infos\Models\Tiles\dirt.json" />
     <EmbeddedResource Include="Content\Infos\Models\Tiles\grass.json" />
     <EmbeddedResource Include="Content\Infos\Models\Tiles\grass_tile.json" />

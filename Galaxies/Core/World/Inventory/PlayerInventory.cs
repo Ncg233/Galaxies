@@ -10,6 +10,8 @@ public class PlayerInventory
         Hotbar[0] = new ItemPile(AllItems.Dirt, 99);
         Hotbar[1] = new ItemPile(AllItems.GoldIngot, 99);
         Hotbar[2] = new ItemPile(AllItems.Torch, 99);
+        Hotbar[3] = new ItemPile(AllItems.ChairTile, 99);
+        Hotbar[4] = new ItemPile(AllItems.Table, 99);
     }
 
 }

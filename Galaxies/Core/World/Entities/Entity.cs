@@ -196,11 +196,11 @@ public abstract class Entity
     {
         if (x >= world.Width)
         {
-            SetPos(x - world.GetWidth(), y);
+            SetPos(x - world.Width, y);
         }
         else if (x < 0)
         {
-            SetPos(x + world.GetWidth(), y);
+            SetPos(x + world.Width, y);
         }
     }
     //client use

@@ -1,28 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using Galaxies.Util;
+using System.Collections.Generic;
 
 namespace Galaxies.Core.World.Tiles;
 public class StateHandler
 {
     private readonly Tile tile;
     private readonly List<string> tileProps = [];
+    private readonly List<Facing> facings = [];
 
     private readonly TileState defaultState;
-    private readonly Dictionary<string, TileState> subState = [];
+    private readonly Table<string, Facing, TileState> subState = new Table<string, Facing, TileState>();
     private readonly List<TileState> allState = [];
     public StateHandler(Tile tile)
     {
         this.tile = tile;
+        
+        tileProps.Add("default");
+        tile.AddProp(this);
+        if (facings.Count == 0)
+        {
+            facings.Add(Facing.None);
+        }
+        //defaultState = new TileState(this.tile, "default");
+        //
+        //subState.Add("default", defaultState);
+        //allState.Add(defaultState);
 
-        defaultState = new TileState(this.tile, "default");
-
-        subState.Add("default", defaultState);
-        allState.Add(defaultState);
         foreach (var prop in tileProps)
         {
-            TileState s = new(tile, prop);
-            subState.Add(prop, s);
-            allState.Add(s);
+            foreach (var facing in facings)
+            {
+                TileState s = new(tile, prop, facing);
+                subState.Put(prop, facing, s);
+                allState.Add(s);
+            }
+            
         }
+        defaultState = allState[0];
 
     }
 
@@ -34,9 +48,13 @@ public class StateHandler
     {
         tileProps.Add(prop);
     }
-    public TileState GetState(string prop)
+    public void AddFacing(Facing facing)
     {
-        return subState.GetValueOrDefault(prop, defaultState);
+        facings.Add(facing);
+    }
+    public TileState GetState(string prop, Facing facing)
+    {
+        return subState.Get(prop, facing);
     }
 
     public List<TileState> GetAllState()

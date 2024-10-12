@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace Galaxies.Core.World.Tiles;
 public enum TileRenderType
 {
-    Bottom, Center
+    BottomCenter, Center,BottomCorner
 }

@@ -13,8 +13,8 @@ public class IntIdentityDictionary<T> : IEnumerable<T>
     private readonly List<T> list;
     public IntIdentityDictionary()
     {
-        list = new List<T>(256);
-        map = new Dictionary<T, int>(256);
+        list = [];
+        map = [];
     }
     public void Put(T key, int value)
     {
