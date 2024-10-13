@@ -5,7 +5,7 @@ namespace Galaxies.Core.World.Items;
 public class ItemPile
 {
     private Item item;
-    private int count = 0;
+    private int count = Item.DefaultPileMaxCount;
     public static ItemPile Empty = new ItemPile(AllItems.Air);
 
     public ItemPile(Item item, int count)
