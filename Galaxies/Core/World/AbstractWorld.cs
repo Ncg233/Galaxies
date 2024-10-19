@@ -16,6 +16,7 @@ public abstract class AbstractWorld
     public int Width { get; private set; } = 400;
     public int Height { get; private set; } = 300;
     private readonly List<Entity> entities = [];
+    private readonly List<AbstractPlayerEntity> players = [];
     private readonly LightManager lightManager;
     private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = [];
     //private readonly Dictionary<LightType, byte[]> lightGrid = [];
@@ -77,11 +78,16 @@ public abstract class AbstractWorld
     }
     public void AddEntity(Entity entity)
     {
+        if(entity is AbstractPlayerEntity player)
+        	players.Add(player);
         entities.Add(entity);
     }
     public List<Entity> GetAllEntities()
     {
         return entities;
+    }
+    public List<AbstractPlayerEntity> GetAllPlayers(){
+        return players;
     }
     public int GetTileIndex(int x, int y)
     {
