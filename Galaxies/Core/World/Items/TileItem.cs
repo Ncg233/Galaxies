@@ -18,11 +18,9 @@ public class TileItem : Item
         if (!tileState.GetTile().IsAir())
         {
             return false;
-
         }
         var state = tile.GetPlaceState(world, player, x, y);
         world.SetTileState(layer, x, y, state);
         return true;
-
     }
 }
