@@ -11,7 +11,7 @@ public class TileRenderer
     {
         TileSpriteManager.LoadContent();
     }
-    public static void Render(IntegrationRenderer renderer, TileState state, TileLayer layer, float x, float y, byte apperaance, Color colors)
+    public static void Render(IntegrationRenderer renderer, TileState state, TileLayer layer, float x, float y, TileRenderInfo apperaance, Color colors)
     {
         TileSpriteMap tileTexture = TileSpriteManager.GetSpriteMap(state);
         int width = tileTexture.Width;
@@ -50,12 +50,12 @@ public class TileRenderer
 
     }
     private static void DrawTileSpriteMap(IntegrationRenderer renderer, TileSpriteMap map, TileState state, float x, float y, float originX, float originY, float width, float height,
-         byte appearance, Color color)
+         TileRenderInfo appearance, Color color)
     {
-        int rotation = appearance / 10 * 90;
+        int rotation = appearance.RotationD;
         Texture2D tex = map.SourceTexture;
         var info = map.GetStateInfo(state);
         Facing facing = state.Facing;
-        renderer.Draw(tex, new Vector2(x, y), info.GetRenderRect(appearance), color, (float)Math.PI / 180 * rotation, new Vector2(originX, originY), new Vector2(width / map.Width, height / map.Height), facing.Effect, 0);
+        renderer.Draw(tex, new Vector2(x, y), info.GetRenderRect(appearance.TextureId), color, (float)Math.PI / 180 * rotation, new Vector2(originX, originY), new Vector2(width / map.Width, height / map.Height), facing.Effect, 0);
     }
 }

@@ -31,9 +31,9 @@ public class TileState
         return Tile.IsAir();
     }
 
-    public void OnNeighborChanged(AbstractWorld abstractWorld, int x, int y, Tile changedTile)
+    public void OnNeighborChanged(AbstractWorld abstractWorld, TileLayer layer, int x, int y, TileState changedTile)
     {
-        Tile.OnNeighborChanged(this, abstractWorld, x, y, changedTile);
+        Tile.OnNeighborChanged(this,abstractWorld, layer, x, y, changedTile);
     }
 
     public string GetState()

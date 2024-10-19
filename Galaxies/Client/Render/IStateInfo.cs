@@ -11,5 +11,5 @@ namespace Galaxies.Client.Render;
 public interface IStateInfo
 {
     public Rectangle GetRenderRect(byte id);
-    byte UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y);
+    TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y);
 }

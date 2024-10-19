@@ -185,7 +185,7 @@ public class Main : Game
     //this method is used for server start
     internal void StartWorld(DirectoryInfo info)
     {
-        world = new ServerWorld(info);
+        world = new ServerWorld(info, WorldRenderer);
         player = world.CreatePlayer(null);// PlayerEntity
         world.AddEntity(player);
         WorldRenderer.SetRenderWorld(world);

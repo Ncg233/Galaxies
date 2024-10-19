@@ -9,7 +9,7 @@ public class ClientWorld : AbstractWorld
 {
     private WorldRenderer renderer;
     //private readonly List<ParticleType> particles = [];
-    public ClientWorld(WorldRenderer renderer) : base(true)
+    public ClientWorld(WorldRenderer renderer, IWorldListener listener) : base(true, listener)
     {
         this.renderer = renderer;
     }

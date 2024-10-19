@@ -7,11 +7,14 @@ public class Item
 {
     public readonly Properties properties;
     public static readonly int DefaultPileMaxCount = 64;
-    public readonly PileMaxCount = properties.PileMaxCount;
-    public readonly MaxDamage = properties.MaxDamage;
-    public readonly CantBreak = properties.CantBreak;
+    public readonly int PileMaxCount;
+    public readonly int MaxDamage;
+    public readonly bool CantBreak;
     public Item(){
-        this.properties = new Properties();
+        properties = new Properties();
+        PileMaxCount = properties.PileMaxCount;
+        MaxDamage = properties.MaxDamage;
+        CantBreak = properties.CantBreak;
     }
     public Item(Properties properties){
         this.properties = properties;
@@ -36,24 +39,25 @@ public class Item
     {
         return true;
     }
-    public static class Properties{
+    public class Properties{
         public int PileMaxCount = DefaultPileMaxCount;
         public int MaxDamage = 1;
-        public CantBreak = false;
+        public bool CantBreak = false;
         public Properties(){
         }
-        public Properties MaxCount(int i){
+        public Properties SetMaxCount(int i){
             if(MaxDamage != 1)return this;
-            this.PileMaxCount = i;
+            PileMaxCount = i;
             return this;
         }
-        public Properties MaxDamage(int i){
-            this.MaxDamage = i;
-            this.PileMaxCount = 1;
+        public Properties SetMaxDamage(int i){
+            MaxDamage = i;
+            PileMaxCount = 1;
             return this;
         }
-        public Properties CantBreak(){
-            this.CantBreak = true;
+        public Properties SetCantBreak(){
+            CantBreak = true;
+            return this;
         }
     }
 }

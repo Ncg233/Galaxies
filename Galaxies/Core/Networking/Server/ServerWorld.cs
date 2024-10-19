@@ -12,7 +12,7 @@ namespace Galaxies.Core.Networking.Server;
 public class ServerWorld : AbstractWorld
 {
     private DirectoryInfo worldDirectory;
-    public ServerWorld(DirectoryInfo directoryInfo) : base(false)
+    public ServerWorld(DirectoryInfo directoryInfo, IWorldListener listener) : base(false, listener)
     {
         worldDirectory = directoryInfo;
         if (!LoadData())

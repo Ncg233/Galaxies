@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Util;
 
 namespace Galaxies.Client.Render;
 internal class SmoothStateInfo : IStateInfo
@@ -14,10 +15,10 @@ internal class SmoothStateInfo : IStateInfo
     public static byte Corner = 4;
     public static byte Single = 5;
 
-    public static byte None = 0;
-    public static byte Right = 1;
-    public static byte Down = 2;
-    public static byte Left = 3;
+    public static short None = 0;
+    public static short Right = 90;
+    public static short Down = 180;
+    public static short Left = 270;
     //public static byte Any = 4;
 
 
@@ -28,81 +29,86 @@ internal class SmoothStateInfo : IStateInfo
     }
     public Rectangle GetRenderRect(byte id)
     {
-        return sourceRect[id % 10];
+        return sourceRect[id];
     }
 
-    public byte UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
+    public TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
     {
+        var renderInfo = new TileRenderInfo();
+        bool isSameDown = IsSameDown(world, layer, x, y);
+        bool isSameUp = IsSameUp(world, layer, x, y);
+        bool isSameRight = IsSameRight(world, layer, x, y);
+        bool isSameLeft = IsSameLeft(world, layer, x, y);
         // the all sides are same
-        if (IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y) && IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y))
+        if (isSameDown && isSameUp && isSameRight && isSameLeft)
         {
-            return WithRotation(Full, (byte)((x + y) % 4));
+            return renderInfo.WithRotation(Full, (short)(Utils.Random.Next(0, 3) * 90));
             //return Full;
         }
         // the three sides are same
-        else if (IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (isSameRight && isSameLeft && isSameDown && !isSameUp)
         {
-            return WithRotation(SideIII, None);
+            return renderInfo.WithRotation(SideIII, None);
         }
-        else if (!IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (!isSameRight && isSameLeft && isSameDown && isSameUp)
         {
-            return WithRotation(SideIII, Right);
+            return renderInfo.WithRotation(SideIII, Right);
         }
-        else if (IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (isSameRight && isSameLeft && !isSameDown && isSameUp)
         {
-            return WithRotation(SideIII, Down);
+            return renderInfo.WithRotation(SideIII, Down);
         }
-        else if (IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (isSameRight && !isSameLeft && isSameDown && isSameUp)
         {
-            return WithRotation(SideIII, Left);
+            return renderInfo.WithRotation(SideIII, Left);
         }
         // the two sides are same （side）
-        else if (!IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (!isSameRight && !isSameLeft && isSameDown && isSameUp)
         {
-            return WithRotation(SideII, None);
+            return renderInfo.WithRotation(SideII, None);
         }
-        else if (IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (isSameRight && isSameLeft && !isSameDown && !isSameUp)
         {
-            return WithRotation(SideII, Left);
+            return renderInfo.WithRotation(SideII, Left);
         }
         //(corner)
-        else if (IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (isSameRight && !isSameLeft && isSameDown && !isSameUp)
         {
-            return WithRotation(Corner, None);
+            return renderInfo.WithRotation(Corner, None);
         }
-        else if (!IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (!isSameRight && isSameLeft && isSameDown && !isSameUp)
         {
-            return WithRotation(Corner, Right);
+            return renderInfo.WithRotation(Corner, Right);
         }
-        else if (!IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (!isSameRight && isSameLeft && !isSameDown && isSameUp)
         {
-            return WithRotation(Corner, Down);
+            return renderInfo.WithRotation(Corner, Down);
         }
-        else if (IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (isSameRight && !isSameLeft && !isSameDown && isSameUp)
         {
-            return WithRotation(Corner, Left);
+            return renderInfo.WithRotation(Corner, Left);
         }
         // the one side is same 
-        else if (!IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (!isSameRight && !isSameLeft && isSameDown && !isSameUp)
         {
-            return WithRotation(SideI, None);
+            return renderInfo.WithRotation(SideI, None);
         }
-        else if (!IsSameRight(world, layer, x, y) && IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (!isSameRight && isSameLeft && !isSameDown && !isSameUp)
         {
-            return WithRotation(SideI, Right);
+            return renderInfo.WithRotation(SideI, Right);
         }
-        else if (!IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && IsSameUp(world, layer, x, y))
+        else if (!isSameRight && !isSameLeft && !isSameDown && isSameUp)
         {
-            return WithRotation(SideI, Down);
+            return renderInfo.WithRotation(SideI, Down);
         }
-        else if (IsSameRight(world, layer, x, y) && !IsSameLeft(world, layer, x, y) && !IsSameDown(world, layer, x, y) && !IsSameUp(world, layer, x, y))
+        else if (isSameRight && !isSameLeft && !isSameDown && !isSameUp)
         {
-            return WithRotation(SideI, Left);
+            return renderInfo.WithRotation(SideI, Left);
         }
         // the single tile
         else
         {
-            return WithRotation(Single, (byte)((x + y) % 4));
+            return renderInfo.WithRotation(Single, (short)(Utils.Random.Next(0, 3) * 10));
         }
     }
     private byte WithRotation(byte id, byte rotation)

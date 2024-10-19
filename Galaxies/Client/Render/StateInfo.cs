@@ -18,8 +18,8 @@ public class StateInfo : IStateInfo
         return sourceRect;
     }
 
-    public byte UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
+    public TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
     {
-        return 0;
+        return new TileRenderInfo();
     }
 }

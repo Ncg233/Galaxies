@@ -6,11 +6,13 @@ using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using SharpDX.Direct2D1.Effects;
+using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Galaxies.Client.Render;
-public class WorldRenderer
+public class WorldRenderer : IWorldListener
 {
     private readonly Color[] ShadowColor = new Color[GameConstants.MaxLight + 1];
     private readonly Color[] LightColor = new Color[GameConstants.MaxLight + 1];
@@ -23,7 +25,7 @@ public class WorldRenderer
     private ItemRenderer itemRenderer;
     private BackgroundRenderer backgroundRenderer = new();
     private ParticleManager particleManager;
-    //private readonly Dictionary<TileLayer, byte[]> appearanceState = [];
+    private readonly Dictionary<TileLayer, TileRenderInfo[]> appearanceState = [];
     public WorldRenderer(Main galaxias, Camera camera, ParticleManager particleManager)
     {
         this.camera = camera;
@@ -41,13 +43,12 @@ public class WorldRenderer
     public void SetRenderWorld(AbstractWorld world)
     {
         _world = world;
-        //appearanceState.Clear();
-        //foreach (var layer in Utils.GetAllLayers())
-        //{
-        //    byte[] states = new byte[world.Width * world.Height];
-        //    Array.Fill(states, Byte.MaxValue);
-        //    appearanceState.Add(layer, states);
-        //}
+        appearanceState.Clear();
+        foreach (var layer in Utils.GetAllLayers())
+        {
+            TileRenderInfo[] states = new TileRenderInfo[world.Width * world.Height];
+            appearanceState.Add(layer, states);
+        }
     }
     public void LoadContents()
     {
@@ -73,8 +74,11 @@ public class WorldRenderer
                     var tileState = _world.GetTileState(layer, x, y);
                     if (!tileState.IsAir())
                     {
+                        int[] lights = _world.GetInterpolateLight(x, y);
+                        Color[] colors = InterpolateWorldColor(lights);
+
                         var appearance = GetRenderApperance(layer, x, y, tileState);
-                        TileRenderer.Render(renderer, tileState, layer, x, y, appearance, colors: Color.White);
+                        TileRenderer.Render(renderer, tileState, layer, x, y, appearance, colors[0]);
                     }
                     
                 }
@@ -83,18 +87,8 @@ public class WorldRenderer
             
         particleManager._particles.ForEach(p =>
         {
-            p.Render(renderer, Color.White);
+            p.Render(renderer, LightColor[_world.GetCombinedLight((int)p.x, (int)p.y)]);
         });
-        //render light
-        for (int x = minX; x < maxX; x++)
-        {
-            for (int y = minY; y < maxY; y++)
-            {
-                int[] lights = _world.GetInterpolateLight(x, y);
-                Color[] colors = InterpolateWorldColor(lights);
-                renderer.Draw(TextureManager.BlankTexture, x * GameConstants.TileSize, -y * GameConstants.TileSize, colors[0]);
-            }
-        }
         
         //render entity
         _world.GetAllEntities().ForEach(e =>
@@ -102,17 +96,30 @@ public class WorldRenderer
             //render hitbox will move to another place
             //HitBox box = e.hitbox;
             //renderer.Draw("Assets/Textures/Misc/blank", (float)box.minX * scale, (float)-(box.minY + box.GetHeight()) * scale, (float)box.GetWidth(), (float)box.GetHeight(), hitColor);
-            //var eRenderer = EntityRendererHandler.GetRenderer(e.Type);
-            //eRenderer.Render(renderer, e, scale, ShadowColor[Brightness]);
             e.Render(renderer, LightColor[_world.GetCombinedLight((int)e.x, (int)e.y)]);
 
         });
         
-        
     }
-    private byte GetRenderApperance(TileLayer layer, int x, int y, TileState tileState)
+    public void OnNotifyNeighbor(TileLayer layer, int x, int y, TileState state, TileState changeTile)
     {
-        return TileSpriteManager.GetStateInfo(tileState).UpdateAdjacencies(_world, layer, x, y);
+        if (!state.IsAir())
+        {
+            var apperaance = TileSpriteManager.GetStateInfo(state).UpdateAdjacencies(_world, layer, x, y);
+            appearanceState[layer][_world.GetTileIndex(x, y)] = apperaance;
+        }
+    }
+    private TileRenderInfo GetRenderApperance(TileLayer layer, int x, int y, TileState tileState)
+    {
+        
+        var apperaance = appearanceState[layer][_world.GetTileIndex(x, y)];
+        if(apperaance == null)
+        {
+            apperaance = TileSpriteManager.GetStateInfo(tileState).UpdateAdjacencies(_world, layer, x, y);
+            appearanceState[layer][_world.GetTileIndex(x, y)] = apperaance;
+        }
+        return apperaance;
+
     }
     private void RenderSky(IntegrationRenderer renderer)
     {
@@ -140,7 +147,7 @@ public class WorldRenderer
         Color[] colors = new Color[interpolatedLight.Length];
         for (int i = 0; i < colors.Length; i++)
         {
-            colors[i] = ShadowColor[interpolatedLight[i]];
+            colors[i] = LightColor[interpolatedLight[i]];
         }
         return colors;
     }

@@ -7,6 +7,7 @@ using Galaxies.Core.World.Particles;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using LiteNetLib;
+using SharpDX.X3DAudio;
 using System;
 using System.Collections.Generic;
 
@@ -19,6 +20,7 @@ public abstract class AbstractWorld
     private readonly List<AbstractPlayerEntity> players = [];
     private readonly LightManager lightManager;
     private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = [];
+    private readonly IWorldListener worldListener;
     //private readonly Dictionary<LightType, byte[]> lightGrid = [];
     #region SERVER_ONLY
 
@@ -34,9 +36,10 @@ public abstract class AbstractWorld
     protected Random rand;
     public bool IsClient { get; private set; }
     protected bool isGenerated = true;
-    public AbstractWorld(bool isClient)
+    public AbstractWorld(bool isClient, IWorldListener listener)
     {
         IsClient = isClient;
+        worldListener = listener;
         seed = new Random().Next(-10000, 10000);
         rand = new Random(seed);
         lightManager = new LightManager(this, Width, Height);
@@ -64,8 +67,8 @@ public abstract class AbstractWorld
     }
     public void Update(float dTime)
     {
-        //currnetTime = (currnetTime + dTime) % 1440;
-        currnetTime = 720;
+        currnetTime = (currnetTime + dTime) % 1440;
+        //currnetTime = 720;
         sunRotation = (float)(currnetTime / tutolTime * 2 * Math.PI - Math.PI / 2);
         skyLight = (float)(Math.Sin(sunRotation) + 1) / 2;
 
@@ -124,7 +127,7 @@ public abstract class AbstractWorld
             if (!isGenerated)
             {
                 lightManager.CauseLightUpdate(x, y);
-                NotifyNeighbors(x, y, id.GetTile());
+                NotifyNeighbors(layer, x, y, id);
                 if (!IsClient)
                 {
                     NetPlayManager.SendToAllClients(new S2CTileChangePacket(x, y, id));
@@ -148,20 +151,22 @@ public abstract class AbstractWorld
     //    }
     //    return Utils.ToGridPos(worldX);
     //}
-    public void NotifyNeighbors(int x, int y, Tile tile)
+    public void NotifyNeighbors(TileLayer layer, int x, int y, TileState changeTile)
     {
         foreach (var dir in Direction.Adjacent)
         {
-            NotifyNeighbor(x + dir.X, y + dir.Y, tile);
+            NotifyNeighbor(layer, x + dir.X, y + dir.Y, changeTile);
         }
 
     }
-    public void NotifyNeighbor(int x, int y, Tile changedTile)
+    public void NotifyNeighbor(TileLayer layer, int x, int y, TileState changedTile)
     {
+        var state = GetTileState(layer, x, y);
+        worldListener.OnNotifyNeighbor(layer, x, y, state, changedTile);
         if (!IsClient)
         {
-            var state = GetTileState(TileLayer.Main, x, y);
-            state.OnNeighborChanged(this, x, y, changedTile);
+            
+            state.OnNeighborChanged(this,layer, x, y, changedTile);
         }
     }
 

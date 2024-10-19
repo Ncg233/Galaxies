@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Tiles;
+using System.Windows.Forms;
 
 namespace Galaxies.Client.Render;
 internal class AnimationStateInfo : IStateInfo
@@ -31,8 +32,8 @@ internal class AnimationStateInfo : IStateInfo
         return sourceRect[0];
     }
 
-    public byte UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
+    public TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
     {
-        return 0;
+        return new TileRenderInfo();
     }
 }

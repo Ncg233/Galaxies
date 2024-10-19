@@ -56,7 +56,7 @@ public class ClientManager : NetWorkingInterface
     public void ProcessJoinWorld(S2CJoinWorldPacket packet)
     {
         Log.Info("Join Game!");
-        world = new ClientWorld(gClient.WorldRenderer);
+        world = new ClientWorld(gClient.WorldRenderer, Main.GetInstance().WorldRenderer);
         gClient.LoadWorld(world);
     }
 

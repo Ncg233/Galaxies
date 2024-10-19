@@ -55,11 +55,10 @@ public class Tile
         return settings.IsAir;
     }
 
-    public virtual void OnNeighborChanged(TileState tileState, AbstractWorld world, int x, int y, Tile changedTile)
+    public virtual void OnNeighborChanged(TileState tileState, AbstractWorld world, TileLayer layer, int x, int y, TileState changedTile)
     {
         if (!world.IsClient && !CanStay(world, x, y))
         {
-
             DestoryTile(world, x, y);
         }
     }
