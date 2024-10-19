@@ -7,6 +7,7 @@ public class AllItems
     public static readonly Dictionary<string, Item> itemRegister = new Dictionary<string, Item>();
     public readonly static Item Air = Register("air", new Item());
     public readonly static Item Dirt = FromTile("dirt", AllTiles.Dirt);
+    public readonly static Item DirtWall = FromTile("dirt_wall", AllTiles.Dirt, TileLayer.Background);
     public readonly static Item GoldIngot = Register("gold_ingot", new Item());
     public readonly static Item Torch = FromTile("torch", AllTiles.Torch);
     public readonly static Item ChairTile = FromTile("chair_tile", AllTiles.ChairTile);
@@ -16,9 +17,13 @@ public class AllItems
         itemRegister.Add(name, item);
         return item;
     }
+    private static Item FromTile(string name, Tile tile, TileLayer layer)
+    {
+        Item item = Register(name, new TileItem(tile, layer));
+        return item;
+    }
     private static Item FromTile(string name, Tile tile)
     {
-        Item item = Register(name, new TileItem(tile));
-        return item;
+        return FromTile(name, tile, TileLayer.Main);
     }
 }

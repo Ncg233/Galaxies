@@ -16,7 +16,14 @@ public class ItemRenderer
         {
             if (itemId.Key != "air")
             {
+                //if (itemId.Value is TileItem)
+                //{
+                //    itemToTexture.Add(itemId.Value, TextureManager.LoadTexture2D("Textures/Tiles/" + itemId.Key));
+                //}
+                //else {
                 itemToTexture.Add(itemId.Value, TextureManager.LoadTexture2D("Textures/Items/" + itemId.Key));
+                //}
+                
             }
         }
     }

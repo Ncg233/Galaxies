@@ -1,6 +1,6 @@
 {
     "texture": "Textures/Tiles/stone",
-    "size": [ 2, 3 ],
+    "size": [ 2, 3, 1],
     "state": {
         "default": {
             "smoothTile": true,

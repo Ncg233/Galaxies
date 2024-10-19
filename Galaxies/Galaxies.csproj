@@ -28,6 +28,7 @@
     <None Remove="Content\Assets\Textures\Entities\Player\player_head.png" />
     <None Remove="Content\Assets\Textures\Entities\Player\player_leg.png" />
     <None Remove="Content\Assets\Textures\Items\chair_tile.png" />
+    <None Remove="Content\Assets\Textures\Items\dirt_wall.png" />
     <None Remove="Content\Assets\Textures\Items\table.png" />
     <None Remove="Content\Assets\Textures\Tiles\chair_tile.png" />
     <None Remove="Content\Assets\Textures\Tiles\table.png" />

@@ -64,11 +64,11 @@ public class WorldRenderer
         int minY = (int)((camera._pos.Y - _galaxias.GetWindowHeight() / camera.GetScale() / 2 - 32) / 8);
         int maxX = (int)((-camera._pos.X + _galaxias.GetWindowWidth() / camera.GetScale() / 2 + 32) / 8);
         int maxY = (int)((camera._pos.Y + _galaxias.GetWindowHeight() / camera.GetScale() / 2 + 32) / 8);
-        for (int x = minX; x < maxX; x++)
+        foreach (var layer in Utils.GetAllLayers())
         {
-            for (int y = minY; y < maxY; y++)
+            for (int x = minX; x < maxX; x++)
             {
-                foreach (var layer in Utils.GetAllLayers())
+                for (int y = minY; y < maxY; y++)
                 {
                     var tileState = _world.GetTileState(layer, x, y);
                     if (!tileState.IsAir())
@@ -76,26 +76,11 @@ public class WorldRenderer
                         var appearance = GetRenderApperance(layer, x, y, tileState);
                         TileRenderer.Render(renderer, tileState, layer, x, y, appearance, colors: Color.White);
                     }
+                    
                 }
-                //TileState tileState = _world.GetTileState(TileLayer.Main, x, y);
-                //TileState background = _world.GetTileState(TileLayer.Background, x, y);
-                //
-                //if (!tileState.IsFullTile() && background != AllTiles.Air.GetDefaultState())//todo
-                //{
-                //    int[] lights = _world.GetInterpolateLight(x, y);
-                //    Color[] colors = InterpolateWorldColor(lights, TileLayer.Background);
-                //
-                //    TileRenderer.Render(renderer, background, x, y, colors: colors);
-                //}
-                //if (!tileState.IsAir())
-                //{
-                //    int[] lights = _world.GetInterpolateLight(x, y);
-                //    Color[] colors = InterpolateWorldColor(lights, TileLayer.Main);
-                //
-                //    TileRenderer.Render(renderer, tileState, x, y, colors: colors);
-                //}
             }
         }
+            
         particleManager._particles.ForEach(p =>
         {
             p.Render(renderer, Color.White);

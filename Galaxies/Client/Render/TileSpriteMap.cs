@@ -33,8 +33,8 @@ public class TileSpriteMap
 
         //state part
         Rectangle[,] sourceRect = new Rectangle[row, col];
-        int width = source.Width / col - interval;
-        int height = source.Height / row - interval;
+        int width = (source.Width - interval) / col - interval;
+        int height = (source.Height - interval) / row - interval;
         for (int y = 0; y < row; y++)
         {
             for (int x = 0; x < col; x++)
