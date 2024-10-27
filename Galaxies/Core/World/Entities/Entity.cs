@@ -2,8 +2,10 @@ using Galaxies.Client;
 using Galaxies.Client.Render;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 
@@ -14,8 +16,8 @@ public abstract class Entity
     public float nextSyncTime;
     public readonly EntityType Type;
     private float friction = 0.5f;
-    public float x { get; protected set; }
-    public float y { get; protected set; }
+    public float X { get; private set; }
+    public float Y { get; private set; }
     protected float lastY;
     protected float lastX;
     public float lastSyncX { get; protected set; }
@@ -24,7 +26,7 @@ public abstract class Entity
     public float vx;
     public float vy;
     public Direction direction { get; set; }
-    public HitBox hitbox { get; protected set; } = HitBox.Empty();
+    public HitBox hitbox { get; protected set; }
     public AbstractWorld world { get; protected set; }
     public float speed;
     protected float width;
@@ -34,18 +36,19 @@ public abstract class Entity
     public bool collidedHor;
     public bool collidedVert;
 
-    public bool IsDead;
+    public bool IsDead = false;
     public Entity(EntityType entity, AbstractWorld world)
     {
         Type = entity;
         this.world = world;
+        hitbox = HitBox.Empty();
         //renderer = new EntityRenderer();
     }
     public virtual void Update(float dTime)
     {
-        lastY = y;
+        lastY = Y;
         existedTime += dTime;
-        if (y < -20)
+        if (Y < -20)
         {
             Die();
         }
@@ -83,11 +86,11 @@ public abstract class Entity
     {
         float motionY = vy;
         float motionX = vx;
-        HitBox ownBoxMotion = hitbox.Copy().Add(motionX, motionY);
+        HitBox ownBoxMotion = hitbox.Add(motionX, motionY);
         HitBox ownBox = hitbox;
         if (true)
         {
-            List<HitBox> blockBoxes = new();
+            List<HitBox> blockBoxes = [];
             for (int x = Utils.Floor(ownBoxMotion.minX); x < Utils.Ceil(ownBoxMotion.maxX); x++)
             {
                 for (int y = Utils.Floor(ownBoxMotion.minY); y < Utils.Ceil(ownBoxMotion.maxY); y++)
@@ -96,59 +99,65 @@ public abstract class Entity
                     TileState id = world.GetTileState(TileLayer.Main, x, y);
                     if (id.GetTile().CanCollide())
                     {
-                        blockBoxes.Add(new HitBox(x, y, x + 1, y + 1));
+                        var boxes = id.GetHitBoxes();
+                        boxes.ForEach(b => {
+                            blockBoxes.Add(b.Add(x, y));
+                        });
+                        //blockBoxes.AddRange(id.GetHitBoxes());
                     }
                 }
             }
-
+            List<Entity> entities = world.GetEntitiesInArea<Entity>(ownBoxMotion, e => e != this);
+            foreach (Entity entity in entities)
+            {
+                OnCollideWithEntity(entity);
+            }
             if (motionY != 0 && blockBoxes.Count != 0)
             {
                 foreach (HitBox box in blockBoxes)
                 {
-                    if (!box.IsEmpty() && ownBox.intersectsX(box))
+                    if (!box.IsEmpty() && ownBox.IntersectsX(box))
                     {
                         if (motionY > 0 && ownBox.maxY <= box.minY)
                         {
                             float diff = box.minY - ownBox.maxY;
-                            if (diff < motionY)
-                            {
-                                motionY = diff;
-                            }
+                            motionY = Math.Min(diff, motionY);
                         }
                         else if (motionY < 0 && ownBox.minY >= box.maxY)
                         {
                             float diff = box.maxY - ownBox.minY;
-                            if (diff > motionY)
-                            {
-                                motionY = diff;
-                            }
+                            motionY = Math.Max(diff, motionY);
                         }
                     }
+                    if (motionY == 0)
+                    {
+                        break;
+                    }          
                 }
             }
             if (motionX != 0 && blockBoxes.Count != 0)
             {
                 foreach (HitBox box in blockBoxes)
                 {
-                    if (!box.IsEmpty() && ownBox.intersectsY(box))
+                    if (!box.IsEmpty() && ownBox.IntersectsY(box))
                     {
                         if (motionX > 0 && ownBox.maxX <= box.minX)
                         {
                             float diff = box.minX - ownBox.maxX;
-                            if (diff < motionX)
-                            {
-                                motionX = diff;
-                            }
+                            motionX = Math.Min(diff, motionX);
                         }
                         else if (motionX < 0 && ownBox.minX >= box.maxX)
                         {
                             float diff = box.maxX - ownBox.minX;
-                            if (diff > motionX)
-                            {
-                                motionX = diff;
-                            }
+                            motionX = Math.Max(diff, motionX);
                         }
                     }
+                    if(motionX == 0)
+                    {
+                        break;
+                    }
+                    
+                    
                 }
             }
         }
@@ -156,28 +165,34 @@ public abstract class Entity
         collidedVert = motionY != vy;
         collidedHor = motionX != vx;
         onGround = collidedVert && vy < 0;
-        SetPos(x + motionX, y + motionY);
+        SetPos(X + motionX, Y + motionY);
+
+        
     }
+
+    public virtual void OnCollideWithEntity(Entity otherEntity)
+    {
+        
+    }
+
     public virtual void Render(IntegrationRenderer renderer, Color color)
     {
 
     }
     public void SetPos(float x, float y)
     {
-        this.x = x;
-        this.y = y;
-        SetHitBox(MakeHitBox());
+        this.X = x;
+        this.Y = y;
+        float u = GetWidth() / 2;
+        float h = GetHeight();
+
+        hitbox.SetPos(x - u, y, x + u, y + h);
+        //SetHitBox(MakeHitBox());
     }
 
     private void SetHitBox(HitBox hit)
     {
         hitbox = hit;
-    }
-    private HitBox MakeHitBox()
-    {
-        float u = GetWidth() / 2;
-        float h = GetHeight();
-        return new HitBox(x - u, y, x + u, y + h);
     }
 
     public virtual float GetWidth()//1 -> 8Pixel
@@ -194,13 +209,13 @@ public abstract class Entity
     }
     public void TpToOtherSide()
     {
-        if (x >= world.Width)
+        if (X >= world.Width)
         {
-            SetPos(x - world.Width, y);
+            SetPos(X - world.Width, Y);
         }
-        else if (x < 0)
+        else if (X < 0)
         {
-            SetPos(x + world.Width, y);
+            SetPos(X + world.Width, Y);
         }
     }
     //client use
@@ -208,28 +223,28 @@ public abstract class Entity
     {
         if (Main.GetInstance().GetPlayer() != null)
         {
-            var playerX = Main.GetInstance().GetPlayer().x;
-            if (Math.Abs(playerX - x) > world.Width / 2)//the distance between player and entity
+            var playerX = Main.GetInstance().GetPlayer().X;
+            if (Math.Abs(playerX - X) > world.Width / 2)//the distance between player and entity
             {
                 if (playerX < world.Width / 2)
                 {
-                    return renderX = (x - world.Width) * GameConstants.TileSize;
+                    return renderX = (X - world.Width) * GameConstants.TileSize;
                 }
                 else
                 {
-                    return renderX = (x + world.Width) * GameConstants.TileSize;
+                    return renderX = (X + world.Width) * GameConstants.TileSize;
                 }
             }
             else
             {
-                return renderX = x * GameConstants.TileSize;
+                return renderX = X * GameConstants.TileSize;
             }
         }
         return renderX;
     }
     public float GetRenderY()
     {
-        return -y * GameConstants.TileSize;
+        return -Y * GameConstants.TileSize;
     }
 }
 

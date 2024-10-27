@@ -16,12 +16,12 @@ public class ClientPlayer : AbstractPlayerEntity
         base.Update(dTime);
         if (this == Main.GetInstance().GetPlayer() && world.IsClient && existedTime >= nextSyncTime)//sync player pos
         {
-            if (lastSyncX != x || lastSyncY != y)
+            if (lastSyncX != X || lastSyncY != Y)
             {
                 nextSyncTime += 1 / 60f;
-                NetPlayManager.SendToServer(new C2SPlayerMovePacket(x, y, vx, vy, direction == Util.Direction.Right));
-                lastSyncX = x;
-                lastSyncY = y;
+                NetPlayManager.SendToServer(new C2SPlayerMovePacket(X, Y, vx, vy, direction == Util.Direction.Right));
+                lastSyncX = X;
+                lastSyncY = Y;
             }
         }
     }

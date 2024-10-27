@@ -12,6 +12,9 @@ public class AllItems
     public readonly static Item Torch = FromTile("torch", AllTiles.Torch);
     public readonly static Item ChairTile = FromTile("chair_tile", AllTiles.ChairTile);
     public readonly static Item Table = FromTile("table", AllTiles.Table);
+    public readonly static Item Door = FromTile("door", AllTiles.Door);
+    public readonly static Item Wood = FromTile("wood", AllTiles.Wood);
+    public readonly static Item WoodWall = FromTile("wood_wall", AllTiles.Wood, TileLayer.Background);
     private static Item Register(string name, Item item)
     {
         itemRegister.Add(name, item);

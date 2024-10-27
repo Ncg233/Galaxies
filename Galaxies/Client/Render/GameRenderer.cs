@@ -21,6 +21,7 @@ public class GameRenderer
         this.camera = camera;
         _galaxias = galaxias;
         hud = inGameHud;
+
         _worldRenderer = worldRenderer;
     }
     public void LoadContents()
@@ -40,10 +41,11 @@ public class GameRenderer
         {
             //render world
             camera.Update(_galaxias.GetPlayer(), dTime);
-            renderer.Begin(sortMode: SpriteSortMode.Immediate,
+            renderer.Begin(sortMode: SpriteSortMode.Deferred,
                 blendState: BlendState.AlphaBlend,
                 samplerState: SamplerState.PointWrap,
-                depthStencilState: DepthStencilState.None,
+                depthStencilState: DepthStencilState.Default,
+                effect: null,
                 transformMatrix: camera.TransfromMatrix);
 
             _worldRenderer.Render(renderer);

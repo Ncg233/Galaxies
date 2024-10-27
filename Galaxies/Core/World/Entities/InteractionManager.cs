@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Galaxies.Core.World.Entities;
 public class InteractionManager
 {
+    private bool buttonRealased;
     private AbstractWorld world;
     AbstractPlayerEntity player;
     private int currentItem;
@@ -37,15 +38,18 @@ public class InteractionManager
         }
         else if (state.RightButton == ButtonState.Pressed)
         {
-            //SyncHeldItem();
             Main.GetMosueTilePos(out int x, out int y);
-            if (world.IsClient)
+            //SyncHeldItem();
+            if (buttonRealased)
             {
-                SyncHeldItem();
+                var tileState = world.GetTileState(TileLayer.Main, x, y);
+                tileState.OnUse(world, x, y);
             }
             PlayerUseItem(world, x, y);
+            buttonRealased = false;
 
         }
+        buttonRealased = state.RightButton == ButtonState.Released;
 
         if (KeyBind.Left.IsKeyDown())
         {

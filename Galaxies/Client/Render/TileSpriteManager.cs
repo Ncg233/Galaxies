@@ -1,5 +1,6 @@
 ﻿using Galaxies.Client;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,7 @@ internal class TileSpriteManager
     }
     public static IStateInfo GetStateInfo(TileState tile)
     {
+
         return stateToSprite.GetValueOrDefault(tile.GetTile()).GetStateInfo(tile);
     }
 }

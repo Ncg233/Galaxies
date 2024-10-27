@@ -12,6 +12,7 @@ public class Direction
     public static readonly Direction RightDown = new(1, -1);
     public static readonly Direction[] Surrounding = { LeftUp, Up, RightUp, Right, RightDown, Down, LeftDown, Left };
     public static readonly Direction[] Adjacent = { Up, Right, Down, Left };
+    public static readonly Direction[] AdjacentIncludeNone = { Up, Right, Down, Left, None};
     public static readonly Direction[] SurroundingIncludNone = { None, LeftUp, Up, RightUp, Right, RightDown, Down, LeftDown, Left };
     public int X { get; private set; }
     public int Y { get; private set; }

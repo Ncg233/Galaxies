@@ -1,4 +1,5 @@
 ﻿using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Galaxies.Core.World.Tiles;
-public class FurnitureTile : Tile
+public class FurnitureTile : MultiTile
 {
-    public FurnitureTile() : base(new TileSettings().SetCanCollide(false).SetFullTile(false))
+
+    public FurnitureTile(int width, int height) : base(width, height, new TileSettings().SetCanCollide(false).SetFullTile(false))
     {
         
     }

@@ -26,12 +26,12 @@ public class Camera
     {
         if (false)
         {
-            Utils.Lerp(ref _pos, new Vector3(-player.x * GameConstants.TileSize, (player.y + 2) * GameConstants.TileSize, 0), dTime);
+            Utils.Lerp(ref _pos, new Vector3(-player.X * GameConstants.TileSize, (player.Y + 2) * GameConstants.TileSize, 0), dTime);
 
         }
         else
         {
-            _pos.X = -player.x * GameConstants.TileSize; _pos.Y = (player.y + 1) * GameConstants.TileSize;
+            _pos.X = -player.X * GameConstants.TileSize; _pos.Y = (player.Y + 1) * GameConstants.TileSize;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))

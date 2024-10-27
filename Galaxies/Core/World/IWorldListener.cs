@@ -1,4 +1,5 @@
 ﻿using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;

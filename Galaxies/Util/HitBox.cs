@@ -1,4 +1,7 @@
-﻿namespace Galaxies.Util;
+﻿using SharpDX.Direct3D9;
+using System;
+
+namespace Galaxies.Util;
 public class HitBox
 {
     public float minX { get; private set; }
@@ -35,22 +38,40 @@ public class HitBox
     }
     public HitBox Add(float x, float y)
     {
-        minX += x;
-        maxX += x;
-        minY += y;
-        maxY += y;
-        return this;
+        return new HitBox(minX + x, minY + y, maxX + x,  maxY + y);
     }
-    public bool intersects(float minX, float minY, float maxX, float maxY)
+    public bool Intersects(HitBox box)
+    {
+        return Intersects(box.minX, box.minY, box.maxX, box.maxY);
+    }
+    public bool Intersects(float minX, float minY, float maxX, float maxY)
     {
         return this.minX < maxX && this.maxX > minX && this.minY < maxY && this.maxY > minY;
     }
-    public bool intersectsX(HitBox hitBox)
+    public bool IntersectsX(HitBox hitBox)
     {
         return maxX > hitBox.minX && minX < hitBox.maxX;
     }
-    public bool intersectsY(HitBox hitBox)
+    public bool IntersectsY(HitBox hitBox)
     {
         return maxY > hitBox.minY && minY < hitBox.maxY;
+    }
+
+    public void SetPos(float minX, float minY, float maxX, float maxY)
+    {
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
+
+    }
+    public HitBox Epxand(int x, int y)
+    {
+        return new HitBox(minX - x, minY - y, maxX + x, maxY + y);
+    }
+
+    public float GetBoundByDirection(Direction direction)
+    {
+        return direction == Direction.Left ? minX : maxX;
     }
 }

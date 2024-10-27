@@ -16,6 +16,12 @@ internal class AnimationStateInfo : IStateInfo
     {
         this.sourceRect = sourceRect;
     }
+
+    public TileRenderInfo DefaultInfo()
+    {
+        return new TileRenderInfo();
+    }
+
     public Rectangle GetRenderRect(byte id)
     {
         long runningTime = DateTime.UtcNow.Ticks / 1000 % (sourceRect.Count * 1000);

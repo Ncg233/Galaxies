@@ -12,4 +12,5 @@ public interface IStateInfo
 {
     public Rectangle GetRenderRect(byte id);
     TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y);
+    TileRenderInfo DefaultInfo();
 }

@@ -14,4 +14,8 @@ internal class AirTile : Tile
     {
         return false;
     }
+    public override TileRenderType GetRenderType()
+    {
+        return TileRenderType.Invisible;
+    }
 }

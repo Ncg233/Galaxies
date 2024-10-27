@@ -31,8 +31,8 @@ public class InGameHud
         }
         if (debug)
         {
-            RenderString(renderer, "X:" + Math.Round(player.x, 1), 0, 0);
-            RenderString(renderer, "Y:" + Math.Round(player.y, 1), 0, 6);
+            RenderString(renderer, "X:" + Math.Round(player.X, 1), 0, 0);
+            RenderString(renderer, "Y:" + Math.Round(player.Y, 1), 0, 6);
             RenderString(renderer, "FPS:" + Math.Round(_frameCounter.AverageFramesPerSecond, 1).ToString(), 0f, 12);
             RenderString(renderer, "Speed:" + Math.Round(Math.Sqrt(player.vx * player.vx + player.vy * player.vy) * 30, 0) + "tps", 0, 18);
             int currentTime = (int)_client.GetWorld().currnetTime;

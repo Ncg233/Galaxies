@@ -21,6 +21,19 @@ public class ItemEntity : Entity
     {
         EntityRenderer.Render(renderer,this, 1, light);
     }
+    public override void OnCollideWithEntity(Entity otherEntity)
+    {
+        
+        if (!world.IsClient)
+        {
+            if (otherEntity is AbstractPlayerEntity)
+            {
+
+                SetDead();
+            }
+        }
+        
+    }
     public class ItemEntityRenderer : EntityRenderer<ItemEntity>
     {
         public override void LoadContent()

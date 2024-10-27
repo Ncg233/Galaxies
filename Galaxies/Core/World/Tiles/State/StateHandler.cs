@@ -1,7 +1,7 @@
 ﻿using Galaxies.Util;
 using System.Collections.Generic;
 
-namespace Galaxies.Core.World.Tiles;
+namespace Galaxies.Core.World.Tiles.State;
 public class StateHandler
 {
     private readonly Tile tile;
@@ -14,9 +14,12 @@ public class StateHandler
     public StateHandler(Tile tile)
     {
         this.tile = tile;
-        
-        tileProps.Add("default");
         tile.AddProp(this);
+
+        if (tileProps.Count == 0)
+        {
+            tileProps.Add("default");
+        }
         if (facings.Count == 0)
         {
             facings.Add(Facing.None);
@@ -34,7 +37,7 @@ public class StateHandler
                 subState.Put(prop, facing, s);
                 allState.Add(s);
             }
-            
+
         }
         defaultState = allState[0];
 

@@ -5,6 +5,7 @@ using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Gen;
 using Galaxies.Core.World.Particles;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using LiteNetLib;
 using SharpDX.X3DAudio;
@@ -75,6 +76,9 @@ public abstract class AbstractWorld
         for (int i = entities.Count - 1; i >= 0; i--)
         {
             entities[i].Update(dTime);
+            if (entities[i].IsDead) {
+                entities.RemoveAt(i); 
+            }
         }
         //entities.ForEach(e => e.Update(dTime));
 
@@ -87,6 +91,25 @@ public abstract class AbstractWorld
     }
     public List<Entity> GetAllEntities()
     {
+        return entities;
+    }
+    public List<T> GetEntitiesInArea<T>(HitBox area, Predicate<T> test) where T : Entity
+    {
+        List<T> entities = [];
+        
+        foreach (Entity entity in this.entities)
+        {
+            if (!entity.IsDead && entity is T castEntity)
+            {
+                if (test == null || test.Invoke(castEntity))
+                {
+                    if (castEntity.hitbox.Intersects(area))
+                    {
+                        entities.Add(castEntity);
+                    }
+                }
+            }
+        }
         return entities;
     }
     public List<AbstractPlayerEntity> GetAllPlayers(){
@@ -120,10 +143,11 @@ public abstract class AbstractWorld
     }
     public void SetTileState(TileLayer layer, int x, int y, TileState id)
     {
-        if (IsInWorld(y))
+        if (IsInWorld(y) && id != null)
         {
             var grid = blockStateGrid.GetValueOrDefault(layer);
             grid[GetTileIndex(x, y)] = id;
+            id.OnTilePlaced(this, null, x, y);
             if (!isGenerated)
             {
                 lightManager.CauseLightUpdate(x, y);
@@ -153,7 +177,7 @@ public abstract class AbstractWorld
     //}
     public void NotifyNeighbors(TileLayer layer, int x, int y, TileState changeTile)
     {
-        foreach (var dir in Direction.Adjacent)
+        foreach (var dir in Direction.AdjacentIncludeNone)
         {
             NotifyNeighbor(layer, x + dir.X, y + dir.Y, changeTile);
         }
@@ -242,15 +266,20 @@ public abstract class AbstractWorld
     public void DestoryTile(int x, int y)
     {
         var tileState = GetTileState(TileLayer.Main, x, y);
-        tileState.OnDestroyed(this, x, y);
-        for (int i = 0; i < Utils.Random.Next(2) + 3; i++)
-        {
-            float motionX = (float)Utils.Rand(0, 0.1f);
-            float motionY = (float)Utils.Rand(0, 0.1f);
-            float maxLife = Utils.Random.NextSingle() + 0.5f;
-            AddParticle(new TileParticle(tileState, this, x + 0.5f, y + 0.5f, motionX, motionY, maxLife));
-        }
         SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
+
+        tileState.OnDestroyed(this, x, y);
+        if (tileState.ShouldRender())
+        {
+            for (int i = 0; i < Utils.Random.Next(2) + 3; i++)
+            {
+                float motionX = (float)Utils.Rand(0, 0.1f);
+                float motionY = (float)Utils.Rand(0, 0.1f);
+                float maxLife = Utils.Random.NextSingle() + 0.5f;
+                AddParticle(new TileParticle(tileState, this, x + 0.5f, y + 0.5f, motionX, motionY, maxLife));
+            }
+        }
+        
     }
     public void AddParticle(Particle particle)
     {

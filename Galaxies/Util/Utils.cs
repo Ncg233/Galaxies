@@ -36,7 +36,7 @@ public class Utils
     }
     public static Color Multiply(Color value, Color scale)
     {
-        return new Color(value.R * scale.R, value.G * scale.G, value.B * scale.B, value.A);
+        return new Color(value.R * scale.R / 255, value.G * scale.G / 255, value.B * scale.B / 255, value.A * value.B / 255);
     }
     public static int Ceil(double value)
     {

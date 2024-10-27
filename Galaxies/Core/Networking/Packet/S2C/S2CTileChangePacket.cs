@@ -1,5 +1,6 @@
 ﻿using Galaxies.Core.Networking.Client;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;

@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Tiles;
@@ -20,7 +21,21 @@ public class TileItem : Item
             return false;
         }
         var state = tile.GetPlaceState(world, player, x, y);
+        if (!state.CanPlaceThere(world, layer, x, y))
+        {
+            return false ;
+        }
         world.SetTileState(layer, x, y, state);
+        
         return true;
+    }
+    public Tile GetTile()
+    {
+        return tile;  
+    }
+
+    public TileLayer GetLayer()
+    {
+        return layer;
     }
 }

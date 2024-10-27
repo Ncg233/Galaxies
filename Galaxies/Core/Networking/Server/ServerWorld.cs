@@ -36,8 +36,8 @@ public class ServerWorld : AbstractWorld
         {
             for (int y = 0; y < Height; y++)
             {
-                binaryWriter.Write((byte)Tile.TileStateId.Get(GetTileState(TileLayer.Background, x, y)));
-                binaryWriter.Write((byte)Tile.TileStateId.Get(GetTileState(TileLayer.Main, x, y)));
+                binaryWriter.Write(Tile.TileStateId.Get(GetTileState(TileLayer.Background, x, y)));
+                binaryWriter.Write(Tile.TileStateId.Get(GetTileState(TileLayer.Main, x, y)));
                 binaryWriter.Write(GetSkyLight(x, y));
                 binaryWriter.Write(GetTileLight(x, y));
             }
@@ -64,8 +64,8 @@ public class ServerWorld : AbstractWorld
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        SetTileState(TileLayer.Background, x, y, Tile.TileStateId.Get(binaryReader.ReadByte()));
-                        SetTileState(TileLayer.Main, x, y, Tile.TileStateId.Get(binaryReader.ReadByte()));
+                        SetTileState(TileLayer.Background, x, y, Tile.TileStateId.Get(binaryReader.ReadInt32()));
+                        SetTileState(TileLayer.Main, x, y, Tile.TileStateId.Get(binaryReader.ReadInt32()));
                         SetSkyLight(x, y, binaryReader.ReadByte());
                         SetTileLight(x, y, binaryReader.ReadByte());
                     }

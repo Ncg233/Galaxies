@@ -13,6 +13,11 @@ public class StateInfo : IStateInfo
         this.sourceRect = sourceRect;
     }
 
+    public TileRenderInfo DefaultInfo()
+    {
+        return new TileRenderInfo();
+    }
+
     public Rectangle GetRenderRect(byte id)
     {
         return sourceRect;

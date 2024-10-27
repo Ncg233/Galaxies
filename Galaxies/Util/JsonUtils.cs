@@ -15,12 +15,16 @@ public class JsonUtils
     }
     public static bool TryGetValue<T>(JObject o, string key, out T value)
     {
+        return TryGetValue(o, key, out value, default);
+    }
+    public static bool TryGetValue<T>(JObject o, string key, out T value, T defaultValue)
+    {
         if(o.TryGetValue(key, out var v))
         {
             value = v.ToObject<T>();
             return true;
         }
-        value = default;
+        value = defaultValue;
         return false;
     }
 }

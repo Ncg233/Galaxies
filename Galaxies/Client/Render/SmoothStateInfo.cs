@@ -16,16 +16,18 @@ internal class SmoothStateInfo : IStateInfo
     public static byte Single = 5;
 
     public static short None = 0;
-    public static short Right = 90;
-    public static short Down = 180;
-    public static short Left = 270;
+    public static short r_90d = 90;
+    public static short r_180d = 180;
+    public static short r_270d = 270;
+    private bool shouldRandom;
     //public static byte Any = 4;
 
 
     private List<Rectangle> sourceRect;
-    public SmoothStateInfo(List<Rectangle> sourceRect)
+    public SmoothStateInfo(List<Rectangle> sourceRect, bool shouldRandom)
     {
         this.sourceRect = sourceRect;
+        this.shouldRandom = shouldRandom;
     }
     public Rectangle GetRenderRect(byte id)
     {
@@ -42,7 +44,7 @@ internal class SmoothStateInfo : IStateInfo
         // the all sides are same
         if (isSameDown && isSameUp && isSameRight && isSameLeft)
         {
-            return renderInfo.WithRotation(Full, (short)(Utils.Random.Next(0, 3) * 90));
+            return renderInfo.WithRotation(Full, shouldRandom ? (short)(Utils.Random.Next(0, 3) * 90) : (short)0);
             //return Full;
         }
         // the three sides are same
@@ -52,15 +54,15 @@ internal class SmoothStateInfo : IStateInfo
         }
         else if (!isSameRight && isSameLeft && isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, Right);
+            return renderInfo.WithRotation(SideIII, r_90d);
         }
         else if (isSameRight && isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, Down);
+            return renderInfo.WithRotation(SideIII, r_180d);
         }
         else if (isSameRight && !isSameLeft && isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, Left);
+            return renderInfo.WithRotation(SideIII, r_270d);
         }
         // the two sides are same （side）
         else if (!isSameRight && !isSameLeft && isSameDown && isSameUp)
@@ -69,7 +71,7 @@ internal class SmoothStateInfo : IStateInfo
         }
         else if (isSameRight && isSameLeft && !isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideII, Left);
+            return renderInfo.WithRotation(SideII, r_270d);
         }
         //(corner)
         else if (isSameRight && !isSameLeft && isSameDown && !isSameUp)
@@ -78,15 +80,15 @@ internal class SmoothStateInfo : IStateInfo
         }
         else if (!isSameRight && isSameLeft && isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(Corner, Right);
+            return renderInfo.WithRotation(Corner, r_90d);
         }
         else if (!isSameRight && isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(Corner, Down);
+            return renderInfo.WithRotation(Corner, r_180d);
         }
         else if (isSameRight && !isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(Corner, Left);
+            return renderInfo.WithRotation(Corner, r_270d);
         }
         // the one side is same 
         else if (!isSameRight && !isSameLeft && isSameDown && !isSameUp)
@@ -95,20 +97,20 @@ internal class SmoothStateInfo : IStateInfo
         }
         else if (!isSameRight && isSameLeft && !isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideI, Right);
+            return renderInfo.WithRotation(SideI, r_90d);
         }
         else if (!isSameRight && !isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideI, Down);
+            return renderInfo.WithRotation(SideI, r_180d);
         }
         else if (isSameRight && !isSameLeft && !isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideI, Left);
+            return renderInfo.WithRotation(SideI, r_270d);
         }
         // the single tile
         else
         {
-            return renderInfo.WithRotation(Single, (short)(Utils.Random.Next(0, 3) * 10));
+            return renderInfo.WithRotation(Single, shouldRandom ? (short)(Utils.Random.Next(0, 3) * 90) : (short)0);
         }
     }
     private byte WithRotation(byte id, byte rotation)
@@ -130,5 +132,11 @@ internal class SmoothStateInfo : IStateInfo
     private bool IsSameDown(AbstractWorld world, TileLayer layer, int x, int y)
     {
         return world.GetTileState(layer, x, y - 1).IsFullTile();
+    }
+
+    public TileRenderInfo DefaultInfo()
+    {
+        var renderInfo = new TileRenderInfo();
+        return renderInfo.WithRotation(Single, None);
     }
 }

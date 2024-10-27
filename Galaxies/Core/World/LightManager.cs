@@ -1,4 +1,5 @@
 ﻿using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using SharpDX.Direct3D9;
 using System;

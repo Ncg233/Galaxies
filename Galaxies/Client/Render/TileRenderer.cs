@@ -1,4 +1,5 @@
 ﻿using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,34 +20,43 @@ public class TileRenderer
         int hw = width / 2;
         int hh = height / 2;
         Color color = Utils.MultiplyNoA(colors, layer == TileLayer.Main ? 1 : 0.45f);
+        if(apperaance == null)
+        {
+            apperaance = new TileRenderInfo();
+        }
+        float renderX = 0, renderY = 0, originX = 0, originY = 0, renderWidth = 0, renderHeight = 0;
         if (state.GetTile().GetRenderType() == TileRenderType.Center)
         {
-            //for (int i = 0; i < 2; i++)
-            //{
-            //    for (int j = 0; j < 2; j++)
-            //    {
-            //
-            //        renderer.DrawSpriteMap(tileTexture, hw - 4 + x * 8 + hw * i, -2f -y * 8 - hh * (1 - j), hw / 2, hh / 2, width, height, 
-            //            i * hw, j * hh, hw, hh, 0, colors[i * 2 + j]);
-            //        //renderer.DrawSpriteMap(tileTexture, 2f + x * 8 + hw * i, -2f - y * 8 - hh * (1 - j), hw / 2, hh / 2, width, height,
-            //        //    i * hw, j * hh, hw, hh, 0, colors[i * 2 + j]);
-            //    }
-            //}
-
-            DrawTileSpriteMap(renderer, tileTexture, state, (x + 0.5f) * GameConstants.TileSize, -(y + 0.5f) * GameConstants.TileSize,
-                width / 2f, height / 2f,
-                width, height, apperaance, color);
+            renderX = (x + 0.5f) * GameConstants.TileSize;
+            renderY = -(y + 0.5f) * GameConstants.TileSize;
+            originX = width / 2f;
+            originY = height / 2f;
+            renderWidth = width;
+            renderHeight = height;
         }
         else if(state.GetTile().GetRenderType() == TileRenderType.BottomCenter)
         {
-            DrawTileSpriteMap(renderer, tileTexture, state, (x + 0.5f) * GameConstants.TileSize, -y * GameConstants.TileSize, width / 2f, height, width, height,
-                apperaance, color);
+            renderX = (x + 0.5f) * GameConstants.TileSize;
+            renderY = -y * GameConstants.TileSize;
+            originX = width / 2f;
+            originY = height;
+            renderWidth = width;
+            renderHeight = height;
         }
         else if (state.GetTile().GetRenderType() == TileRenderType.BottomCorner)
         {
-            DrawTileSpriteMap(renderer, tileTexture, state, x * GameConstants.TileSize, -y * GameConstants.TileSize, 0, height, width, height,
-                apperaance, color);
+            bool normal = state.GetFacing().Effect == SpriteEffects.None;
+            renderX = (normal ? x : x + 1) * GameConstants.TileSize;
+            renderY = -y * GameConstants.TileSize;
+            originX = normal ? 0 : width;
+            originY = height;
+            renderWidth = width;
+            renderHeight = height;
         }
+
+        DrawTileSpriteMap(renderer, tileTexture, state, renderX, renderY, originX, originY, renderWidth, renderHeight,
+                apperaance, color);
+
 
     }
     private static void DrawTileSpriteMap(IntegrationRenderer renderer, TileSpriteMap map, TileState state, float x, float y, float originX, float originY, float width, float height,
@@ -55,7 +65,10 @@ public class TileRenderer
         int rotation = appearance.RotationD;
         Texture2D tex = map.SourceTexture;
         var info = map.GetStateInfo(state);
-        Facing facing = state.Facing;
-        renderer.Draw(tex, new Vector2(x, y), info.GetRenderRect(appearance.TextureId), color, (float)Math.PI / 180 * rotation, new Vector2(originX, originY), new Vector2(width / map.Width, height / map.Height), facing.Effect, 0);
+        Facing facing = state.GetFacing();
+        renderer.Draw(tex, new Vector2(x, y), info.GetRenderRect(appearance.TextureId), color, 
+            (float)Math.PI / 180 * rotation, 
+            new Vector2(originX, originY), 
+            new Vector2(width / map.Width, height / map.Height), facing.Effect, 0);
     }
 }

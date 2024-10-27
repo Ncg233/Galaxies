@@ -1,6 +1,7 @@
 ﻿using Galaxies.Client.Render;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

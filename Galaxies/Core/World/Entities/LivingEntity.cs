@@ -48,10 +48,10 @@ public class LivingEntity : Entity
             Hurt(EvalFallDamage());
         }
         lastOnGround = onGround;
-        if (lastY > y && !onGround)
+        if (lastY > Y && !onGround)
         {
             isFalling = true;
-            fallDistance += lastY - y;
+            fallDistance += lastY - Y;
         }
         else
         {

@@ -1,5 +1,6 @@
 ﻿using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Items;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ namespace Galaxies.Core.World.Tiles;
 public class Tile
 {
     public static readonly IntIdentityDictionary<TileState> TileStateId = [];
+    public static readonly HitBox defaultHitbox = new HitBox(0, 0, 1, 1);
+    public static readonly List<HitBox> defaultHitboxes = [defaultHitbox];
     public readonly StateHandler stateHandler;
     private readonly TileSettings settings;
     public Tile(TileSettings settings)
@@ -22,7 +25,7 @@ public class Tile
     public virtual void AddProp(StateHandler handler)
     {
     }
-    internal float GetTranslucentModifier(AbstractWorld chunk, int x, int y, TileLayer layer, bool isSky)
+    internal float GetTranslucentModifier(AbstractWorld world, int x, int y, TileLayer layer, bool isSky)
     {
         if (!IsFullTile() && isSky)
         {
@@ -57,14 +60,34 @@ public class Tile
 
     public virtual void OnNeighborChanged(TileState tileState, AbstractWorld world, TileLayer layer, int x, int y, TileState changedTile)
     {
-        if (!world.IsClient && !CanStay(world, x, y))
+        if (!world.IsClient && !CanStay(world, layer, x, y))
         {
             DestoryTile(world, x, y);
         }
     }
-    public virtual bool CanStay(AbstractWorld world, int x, int y)
+    public virtual bool CanStay(AbstractWorld world, TileLayer layer, int x, int y)
     {
         return true;
+    }
+    public virtual bool CanPlaceThere(AbstractWorld world, TileLayer placeLayer, int x, int y)
+    {
+        if (placeLayer == TileLayer.Main)
+        {
+            foreach (var d in Direction.Adjacent)
+            {
+                if (world.GetTileState(TileLayer.Main, x + d.X, y + d.Y).IsFullTile()) return true;
+            }
+            if (world.GetTileState(TileLayer.Background, x, y).IsFullTile()) return true;
+        }else
+        {
+            foreach (var d in Direction.Adjacent)
+            {
+                if (world.GetTileState(TileLayer.Background, x + d.X, y + d.Y).IsFullTile()) return true;
+            }
+            if (world.GetTileState(TileLayer.Main, x, y).IsFullTile()) return true;
+        }
+        
+        return false;    
     }
     public virtual void DestoryTile(AbstractWorld world, int x, int y)
     {
@@ -82,12 +105,18 @@ public class Tile
     {
         return stateHandler.GetAllState();
     }
+    public virtual void OnTilePlaced(TileState tileState, AbstractWorld world, AbstractPlayerEntity player, int x, int y)
+    {
 
+    }
     public virtual void OnDestoryed(TileState state, AbstractWorld world, int x, int y)
     {
         //drop item
         var pile = GetDropItem();
         world.AddEntity(new ItemEntity(world, pile, x, y));
+    }
+    public virtual void OnUse(TileState tileState, AbstractWorld world, int x, int y)
+    {
 
     }
     public virtual ItemPile GetDropItem()
@@ -99,6 +128,12 @@ public class Tile
     {
         return GetDefaultState();
     }
+
+    public virtual List<HitBox> GetHitBoxes(TileState tileState)
+    {
+        return defaultHitboxes;
+    }
+    
 
     public class TileSettings
     {

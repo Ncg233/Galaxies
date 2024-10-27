@@ -1,5 +1,6 @@
 ﻿using Galaxies.Client.Resource;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -68,6 +69,7 @@ public class TileSpriteMap
             }
             else if (smoothTile)
             {
+                JsonUtils.TryGetValue(prop, "random", out bool random, true);
                 var rectList = new List<Rectangle>();
                 var rect = JsonUtils.GetValue<int[]>(prop, "full");
                 rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
@@ -87,7 +89,7 @@ public class TileSpriteMap
                 rect = JsonUtils.GetValue<int[]>(prop, "single");
                 rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
 
-                var info = new SmoothStateInfo(rectList);
+                var info = new SmoothStateInfo(rectList, random);
                 infos.Add(s, info);
             }
             else//default state info

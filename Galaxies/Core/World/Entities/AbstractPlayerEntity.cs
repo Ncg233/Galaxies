@@ -3,6 +3,7 @@ using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Inventory;
 using Galaxies.Core.World.Items;
+using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -28,7 +29,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
     public int jumpTimeout;
     public AbstractPlayerEntity(AbstractWorld world) : base(AllEntityTypes.PlayerEntity, world)
     {
-        y = 140;
+        SetPos(0, 140);
         speed = 10f;
         maxHealth = 100;
         health = 100;
@@ -59,6 +60,14 @@ public abstract class AbstractPlayerEntity : LivingEntity
         {
             IsWalking = true;
         }else IsWalking = false;
+        if (collidedHor)
+        {
+            var ontoBox = hitbox.Add(direction.X + 0.01f, Y + 1);
+            if (onGround)
+            {
+                vy += 0.3f;
+            }
+        }
         InteractionManager?.Update(dTime);
     }
     public override void Render(IntegrationRenderer renderer, Color color)
@@ -75,7 +84,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
     }
     protected float GetJumpHeight()
     {
-        return 45f;
+        return 40f;
     }
     public void Jump(float value, float deltTime)
     {

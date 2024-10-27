@@ -21,6 +21,6 @@ public class ColoredParticle : Particle
     }
     public override void Render(IntegrationRenderer renderer, Color color)
     {
-        renderer.Draw(TextureManager.BlankTexture, x * GameConstants.TileSize, -y * GameConstants.TileSize, color);
+        renderer.Draw(TextureManager.BlankTexture, X * GameConstants.TileSize, -Y * GameConstants.TileSize, color);
     }
 }
