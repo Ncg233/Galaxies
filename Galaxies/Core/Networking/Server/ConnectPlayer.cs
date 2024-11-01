@@ -3,6 +3,7 @@ using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
 using LiteNetLib;
+using System;
 
 namespace Galaxies.Core.Networking.Server;
 //the connect player only used for server
@@ -10,7 +11,7 @@ public class ConnectPlayer : AbstractPlayerEntity
 {
     private NetPeer peer;
 
-    public ConnectPlayer(AbstractWorld serverWorld, NetPeer peer) : base(serverWorld)
+    public ConnectPlayer(AbstractWorld serverWorld, NetPeer peer, Guid guid) : base(serverWorld, guid)
     {
         this.peer = peer;
         InteractionManager = new InteractionManagerConnection(world, this);

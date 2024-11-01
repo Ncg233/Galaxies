@@ -2,7 +2,7 @@
 using System;
 
 namespace Galaxies.Core.World.Gen;
-public class TileGen : AbstractChunkGen
+public class TileGen : AbstractWorldGen
 {
     #region GENERATED
 

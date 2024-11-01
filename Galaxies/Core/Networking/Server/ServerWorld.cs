@@ -1,4 +1,5 @@
 ﻿using Galaxies.Client;
+using Galaxies.Core.Data;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Tiles;
@@ -12,9 +13,11 @@ namespace Galaxies.Core.Networking.Server;
 public class ServerWorld : AbstractWorld
 {
     private DirectoryInfo worldDirectory;
+    private DirectoryInfo playerDirectory;
     public ServerWorld(DirectoryInfo directoryInfo, IWorldListener listener) : base(false, listener)
     {
         worldDirectory = directoryInfo;
+        playerDirectory = new DirectoryInfo(directoryInfo + "players\\");
         if (!LoadData())
         {
             Generate();
@@ -27,6 +30,10 @@ public class ServerWorld : AbstractWorld
         if (!worldDirectory.Exists)
         {
             worldDirectory.Create();
+        }
+        if (!playerDirectory.Exists)
+        {
+            playerDirectory.Create();
         }
         var fileStream = new FileStream(worldDirectory + "world.dat", FileMode.OpenOrCreate, FileAccess.Write);
         using var compressor = new GZipStream(fileStream, CompressionMode.Compress);
@@ -43,6 +50,13 @@ public class ServerWorld : AbstractWorld
             }
         }
         binaryWriter.Close();
+        foreach (var player in players)
+        {
+            var dataSet = new DataSet();
+            dataSet.PutFloat("x", player.X);
+            dataSet.PutFloat("y", player.Y);
+            DataUtils.WriteDataSet(dataSet, playerDirectory.FullName + player.Id + ".dat");
+        }
     }
     public bool LoadData()
     {
@@ -84,15 +98,40 @@ public class ServerWorld : AbstractWorld
         }
     }
 
-    public override AbstractPlayerEntity CreatePlayer(NetPeer peer)
+    public override AbstractPlayerEntity CreatePlayer(NetPeer peer, Guid id)
     {
-        if (peer == null)
+        AbstractPlayerEntity player = null;
+        FileInfo playerFile = new FileInfo(playerDirectory.FullName + id + ".dat");
+        if (playerFile.Exists)
         {
-            return new PlayerEntity(this);
+            player = LoadPlayer(playerFile, id, peer);
+            Log.Info("Loading player " + " with unique id " + id + '!');
         }
         else
         {
-            return new ConnectPlayer(this, peer);
+            player = MakePlayer(peer, id);
+        }
+        return player;
+    }
+
+    private AbstractPlayerEntity LoadPlayer(FileInfo file, Guid id, NetPeer peer)
+    {
+        DataUtils.ReadDataSet(out var dataSet, file.FullName);
+        float x = dataSet.GetFloat("x");
+        float y = dataSet.GetFloat("y");
+        var player = MakePlayer(peer, id);
+        player.SetPos(x, y);
+        return player;
+    }
+    private AbstractPlayerEntity MakePlayer(NetPeer peer, Guid id)
+    {
+        if (peer == null)
+        {
+            return new PlayerEntity(this, id);
+        }
+        else
+        {
+            return new ConnectPlayer(this, peer, id);
         }
     }
 }

@@ -9,5 +9,6 @@ using System.Threading.Tasks;
 namespace Galaxies.Core.World;
 public interface IWorldListener
 {
+    void AddParticle(TileState state,TileLayer layer, int x, int y);
     public void OnNotifyNeighbor(TileLayer layer, int x , int y, TileState state, TileState changeTile);
 }

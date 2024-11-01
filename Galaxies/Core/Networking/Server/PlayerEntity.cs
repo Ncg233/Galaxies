@@ -4,12 +4,13 @@ using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
 using Microsoft.Xna.Framework.Input;
+using System;
 namespace Galaxies.Core.Networking.Server;
 //single player
 public class PlayerEntity : AbstractPlayerEntity
 {
     private int lastOffset = 0;
-    public PlayerEntity(AbstractWorld world) : base(world)
+    public PlayerEntity(AbstractWorld world, Guid id) : base(world, id)
     {
         InteractionManager = new InteractionManager(world, this);
     }

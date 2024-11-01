@@ -1,6 +1,6 @@
 ﻿
 namespace Galaxies.Core.World.Gen;
-public interface IChunkGenerator
+public interface IWorldGenerator
 {
 
     public void Generate(AbstractWorld world);

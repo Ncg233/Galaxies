@@ -27,9 +27,10 @@ public abstract class AbstractPlayerEntity : LivingEntity
     protected bool isJumping;
     public int jumpTicks;
     public int jumpTimeout;
-    public AbstractPlayerEntity(AbstractWorld world) : base(AllEntityTypes.PlayerEntity, world)
+    public AbstractPlayerEntity(AbstractWorld world, Guid id) : base(AllEntityTypes.PlayerEntity, world)
     {
         SetPos(0, 140);
+        Id = id;
         speed = 10f;
         maxHealth = 100;
         health = 100;

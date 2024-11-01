@@ -64,7 +64,7 @@ public class ServerManager : NetWorkingInterface
     {
         var peer = connetionClient[packet._id];
         var world = mainServer.GetWorld();
-        var player = world.CreatePlayer(peer);
+        var player = world.CreatePlayer(peer, default);
         world.AddEntity(player);
         connetionPlayers[packet._id] = player;
         SendPacket(new S2CJoinWorldPacket(), peer);

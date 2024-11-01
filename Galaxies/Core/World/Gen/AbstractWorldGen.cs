@@ -1,11 +1,11 @@
 ﻿using System;
 
 namespace Galaxies.Core.World.Gen;
-public abstract class AbstractChunkGen : IChunkGenerator
+public abstract class AbstractWorldGen : IWorldGenerator
 {
     protected readonly int seed;
     protected readonly Random random;
-    public AbstractChunkGen(int seed, Random random)
+    public AbstractWorldGen(int seed, Random random)
     {
         this.seed = seed;
         this.random = random;

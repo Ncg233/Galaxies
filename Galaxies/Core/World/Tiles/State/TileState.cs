@@ -32,6 +32,14 @@ public class TileState
     {
         return Tile.IsAir();
     }
+    public int GetRenderWidth()
+    {
+        return Tile.GetRenderWidth(this);
+    }
+    public int GetRenderHeight()
+    {
+        return Tile.GetRenderHeight(this);
+    }
     public List<HitBox> GetHitBoxes()
     {
         return Tile.GetHitBoxes(this);
@@ -89,6 +97,11 @@ public class TileState
     public virtual bool IsMulti()
     {
         return false;
+    }
+
+    internal TileRenderType GetRenderType()
+    {
+        return Tile.GetRenderType();
     }
 }
 

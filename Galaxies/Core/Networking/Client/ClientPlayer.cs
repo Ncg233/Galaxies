@@ -3,11 +3,12 @@ using Galaxies.Core.Networking.Packet.C2S;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
+using System;
 
 namespace Galaxies.Core.Networking.Client;
 public class ClientPlayer : AbstractPlayerEntity
 {
-    public ClientPlayer(AbstractWorld world) : base(world)
+    public ClientPlayer(AbstractWorld world, Guid id) : base(world, id)
     {
         InteractionManager = new InteractionManager(world, this);
     }

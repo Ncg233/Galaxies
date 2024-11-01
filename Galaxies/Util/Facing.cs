@@ -22,4 +22,8 @@ public class Facing
         Effect = effect;
         Rotation = rotation;
     }
+    public bool IsHorTurn()
+    {
+        return Effect == SpriteEffects.FlipHorizontally;
+    }
 }

@@ -22,6 +22,7 @@ using Galaxies.Core.Networking.Client;
 namespace Galaxies.Client;
 public class Main : Game
 {
+    private static readonly Guid DefaultId = Guid.Empty;
     public static readonly string Version = "0.3.0";
     public static float DeltaTime;
     private static Main instance;
@@ -186,19 +187,19 @@ public class Main : Game
     internal void StartWorld(DirectoryInfo info)
     {
         world = new ServerWorld(info, WorldRenderer);
-        player = world.CreatePlayer(null);// PlayerEntity
+        player = world.CreatePlayer(null, DefaultId);// PlayerEntity
         world.AddEntity(player);
         WorldRenderer.SetRenderWorld(world);
         SetCurrentScreen(null);
         AllSounds.EarthForest.PlayMusic(0.5f);
     }
     //this method is used for client join
-    internal void LoadWorld(ClientWorld world)
+    internal void JoinWorld(ClientWorld world)
     {
         this.world = world;
         if (world != null)
         {
-            player = world.CreatePlayer(null);//ClientPlayer
+            player = world.CreatePlayer(null, DefaultId);//ClientPlayer
             world.AddEntity(player);
             SetCurrentScreen(null);
             WorldRenderer.SetRenderWorld(world);

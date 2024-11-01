@@ -7,22 +7,18 @@ using Galaxies.Core.World.Tiles;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
-using SharpDX.Direct2D1;
-using SharpDX.Direct2D1.Effects;
-using SharpDX.Direct3D11;
+using SharpDX;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
-using System.Windows.Forms;
 
 namespace Galaxies.Client.Render;
 public class WorldRenderer : IWorldListener
 {
-    private readonly Color[] ShadowColor = new Color[GameConstants.MaxLight + 1];
-    private readonly Color[] LightColor = new Color[GameConstants.MaxLight + 1];
-    private readonly Color startColor = new Color(90, 150, 255);
-    private readonly Color endColor = new Color(15, 15, 16);
-    private readonly Color hitColor = new Color(0, 1, 0, 0.2f);
+    private readonly Microsoft.Xna.Framework.Color[] ShadowColor = new Microsoft.Xna.Framework.Color[GameConstants.MaxLight + 1];
+    private readonly Microsoft.Xna.Framework.Color[] LightColor = new Microsoft.Xna.Framework.Color[GameConstants.MaxLight + 1];
+    private readonly Microsoft.Xna.Framework.Color startColor = new Microsoft.Xna.Framework.Color(90, 150, 255);
+    private readonly Microsoft.Xna.Framework.Color endColor = new Microsoft.Xna.Framework.Color(15, 15, 16);
+    private readonly Microsoft.Xna.Framework.Color hitColor = new Microsoft.Xna.Framework.Color(0, 1, 0, 0.2f);
     private Main _galaxias;
     private AbstractWorld _world;
     private Camera camera;
@@ -38,8 +34,8 @@ public class WorldRenderer : IWorldListener
         for (int i = 0; i < ShadowColor.Length; i++)
         {
             float modifier = i * step;
-            ShadowColor[i] = Color.Black * (1 - modifier);
-            LightColor[i] = new Color(modifier, modifier, modifier, 1f);
+            ShadowColor[i] = Microsoft.Xna.Framework.Color.Black * (1 - modifier);
+            LightColor[i] = new Microsoft.Xna.Framework.Color(modifier, modifier, modifier, 1f);
         }
         _galaxias = galaxias;
 
@@ -79,7 +75,7 @@ public class WorldRenderer : IWorldListener
                     if (tileState.ShouldRender())
                     {
                         int[] lights = _world.GetInterpolateLight(x, y);
-                        Color[] colors = InterpolateWorldColor(lights);
+                        Microsoft.Xna.Framework.Color[] colors = InterpolateWorldColor(lights);
 
                         var appearance = GetRenderApperance(layer, x, y, tileState);
                         TileRenderer.Render(renderer, tileState, layer, x, y, appearance, colors[0]);
@@ -108,9 +104,9 @@ public class WorldRenderer : IWorldListener
         {
             Main.GetMosueTilePos(out int x, out int y);
             int[] lights = _world.GetInterpolateLight(x, y);
-            Color[] colors = InterpolateWorldColor(lights);
+            Microsoft.Xna.Framework.Color[] colors = InterpolateWorldColor(lights);
             var state = tileItem.GetTile().GetPlaceState(_world, player, x, y);
-            TileRenderer.Render(renderer, state, tileItem.GetLayer(), x, y, TileSpriteManager.GetStateInfo(state).DefaultInfo(), Utils.Multiply(colors[0], Color.White) * 0.75f);
+            TileRenderer.Render(renderer, state, tileItem.GetLayer(), x, y, TileSpriteManager.GetStateInfo(state).DefaultInfo(), Utils.Multiply(colors[0], Microsoft.Xna.Framework.Color.White) * 0.75f);
         }
         
 
@@ -140,16 +136,16 @@ public class WorldRenderer : IWorldListener
     {
 
         float skylightMod = _world.GetSkyLightModify(false);
-        backgroundRenderer.Render(renderer, -camera.GetX(), -camera.GetY(), Utils.Ceil(camera.worldWidth), Utils.Ceil(camera.worldHeight), Color.White * skylightMod);
+        backgroundRenderer.Render(renderer, -camera.GetX(), -camera.GetY(), Utils.Ceil(camera.worldWidth), Utils.Ceil(camera.worldHeight), Microsoft.Xna.Framework.Color.White * skylightMod);
 
         float w = camera.worldWidth / 2;
         float h = camera.worldHeight / 2;
         float sunRadius = (w * w + h * h) / (2 * h);
         float x = -camera.GetX() - (float)(sunRadius * Math.Cos(_world.GetSunRotation()) + 24);
         float y = -camera.GetY() + (sunRadius - h) - (float)(sunRadius * Math.Sin(_world.GetSunRotation()));
-        renderer.Draw("Textures/Skys/sun", x, y, Color.White);
+        renderer.Draw("Textures/Skys/sun", x, y, Microsoft.Xna.Framework.Color.White);
     }
-    private Color GetBackgroundColor(float skyLightMod)
+    private Microsoft.Xna.Framework.Color GetBackgroundColor(float skyLightMod)
     {
         return ShadowColor[(int)(GameConstants.MaxLight * (1 - skyLightMod))];
     }
@@ -157,14 +153,49 @@ public class WorldRenderer : IWorldListener
     internal void OnResize(int width, int height)
     {
     }
-    public Color[] InterpolateWorldColor(int[] interpolatedLight)
+    public Microsoft.Xna.Framework.Color[] InterpolateWorldColor(int[] interpolatedLight)
     {
-        Color[] colors = new Color[interpolatedLight.Length];
+        Microsoft.Xna.Framework.Color[] colors = new Microsoft.Xna.Framework.Color[interpolatedLight.Length];
         for (int i = 0; i < colors.Length; i++)
         {
             colors[i] = LightColor[interpolatedLight[i]];
         }
         return colors;
+    }
+
+    public void AddParticle(TileState tileState, TileLayer layer, int x, int y)
+    {
+        if (tileState.ShouldRender())
+        {
+            float width = tileState.GetRenderWidth() / 8;
+            float height = tileState.GetRenderWidth() / 8;
+            float startX = 0, startY = 0, endX = 0, endY = 0;
+            if (tileState.GetRenderType() == TileRenderType.Center)
+            {
+                startX = 0; startY = 0; endX = width; endY = height;
+            }else if(tileState.GetRenderType() == TileRenderType.BottomCenter)
+            {
+                startX = -width / 2; startY = 0; endX = width / 2; endY = height;
+            }else if(tileState.GetRenderType() == TileRenderType.BottomCorner)
+            {
+                startX = tileState.GetFacing().IsHorTurn() ? -width : 0;
+                startY = 0;
+                endX = tileState.GetFacing().IsHorTurn() ? 0 : width; 
+                endY = height;
+            }
+
+            for (int i = 0; i < Utils.Random.Next((int)(width * height)) + 3; i++)
+            {
+                float motionX = (float)Utils.Rand(0, 0.1f);
+                float motionY = (float)Utils.Rand(0, 0.1f);
+                float maxLife = Utils.Random.NextSingle() + 0.5f;
+                AddParticle(new TileParticle(tileState, _world, x + Utils.Random.NextFloat(startX, endX), y + Utils.Random.NextFloat(startY, endY), motionX, motionY, maxLife));
+            }
+        }
+    }
+    public void AddParticle(Particle particle)
+    {
+        Main.GetInstance().GetParticleManager().AddParticle(particle);
     }
 
 }

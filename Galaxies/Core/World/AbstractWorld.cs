@@ -8,6 +8,7 @@ using Galaxies.Core.World.Tiles;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using LiteNetLib;
+using SharpDX;
 using SharpDX.X3DAudio;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ public abstract class AbstractWorld
     public int Width { get; private set; } = 400;
     public int Height { get; private set; } = 300;
     private readonly List<Entity> entities = [];
-    private readonly List<AbstractPlayerEntity> players = [];
+    public readonly List<AbstractPlayerEntity> players = [];
     private readonly LightManager lightManager;
     private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = [];
     private readonly IWorldListener worldListener;
@@ -26,7 +27,7 @@ public abstract class AbstractWorld
     #region SERVER_ONLY
 
     protected HeightGen heightGen;
-    protected readonly List<IChunkGenerator> generators;
+    protected readonly List<IWorldGenerator> generators;
 
     #endregion
     private int tutolTime = 1440;
@@ -269,23 +270,16 @@ public abstract class AbstractWorld
         SetTileState(TileLayer.Main, x, y, AllTiles.Air.GetDefaultState());
 
         tileState.OnDestroyed(this, x, y);
-        if (tileState.ShouldRender())
-        {
-            for (int i = 0; i < Utils.Random.Next(2) + 3; i++)
-            {
-                float motionX = (float)Utils.Rand(0, 0.1f);
-                float motionY = (float)Utils.Rand(0, 0.1f);
-                float maxLife = Utils.Random.NextSingle() + 0.5f;
-                AddParticle(new TileParticle(tileState, this, x + 0.5f, y + 0.5f, motionX, motionY, maxLife));
-            }
-        }
+        worldListener.AddParticle(tileState, TileLayer.Main, x, y);
+
+        
         
     }
     public void AddParticle(Particle particle)
     {
         Main.GetInstance().GetParticleManager().AddParticle(particle);
     }
-    public abstract AbstractPlayerEntity CreatePlayer(NetPeer peer);
+    public abstract AbstractPlayerEntity CreatePlayer(NetPeer peer, Guid id);
 
     public virtual void SaveData()
     {

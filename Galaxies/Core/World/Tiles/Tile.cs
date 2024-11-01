@@ -2,6 +2,7 @@
 using Galaxies.Core.World.Items;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
+using SharpDX;
 using System;
 using System.Collections.Generic;
 
@@ -113,7 +114,7 @@ public class Tile
     {
         //drop item
         var pile = GetDropItem();
-        world.AddEntity(new ItemEntity(world, pile, x, y));
+        world.AddEntity(new ItemEntity(world, pile, x + Utils.Random.NextFloat(0, 0.5f), y + Utils.Random.NextFloat(0, 0.5f)));
     }
     public virtual void OnUse(TileState tileState, AbstractWorld world, int x, int y)
     {
@@ -133,7 +134,15 @@ public class Tile
     {
         return defaultHitboxes;
     }
-    
+
+    public virtual int GetRenderWidth(TileState tileState)
+    {
+        return 8;
+    }
+    public virtual int GetRenderHeight(TileState tileState)
+    {
+        return 8;
+    }
 
     public class TileSettings
     {

@@ -1,4 +1,6 @@
-﻿namespace Galaxies.Core.World.Tiles;
+﻿using Galaxies.Core.World.Tiles.State;
+
+namespace Galaxies.Core.World.Tiles;
 public class LeavesTile : Tile
 {
     public LeavesTile(TileSettings settings) : base(settings)
@@ -16,5 +18,13 @@ public class LeavesTile : Tile
     public override bool IsFullTile()
     {
         return false;
+    }
+    public override int GetRenderWidth(TileState tileState)
+    {
+        return 5 * 8;
+    }
+    public override int GetRenderHeight(TileState tileState)
+    {
+        return 5 * 8;
     }
 }

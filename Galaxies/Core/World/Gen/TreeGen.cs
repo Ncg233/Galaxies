@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 namespace Galaxies.Core.World.Gen;
-public class TreeGen(int seed, Random random) : AbstractChunkGen(seed, random)
+public class TreeGen(int seed, Random random) : AbstractWorldGen(seed, random)
 {
     private readonly Dictionary<int, bool> treePos = [];
 

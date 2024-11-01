@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Galaxies.Core.World.Gen;
 public class NoiseGen
@@ -18,13 +19,14 @@ public class NoiseGen
     private static readonly int[] perm = new int[512];
     private static readonly int[] perm12 = new int[512];
 
-    static NoiseGen()
+    public NoiseGen(int seed)
     {
         List<int> permutations = new();
         for (int i = 0; i < 256; i++)
         {
             permutations.Add(i);
         }
+        permutations.OrderBy(c => new Random(seed));
 
         for (int i = 0; i < 512; i++)
         {
@@ -104,6 +106,22 @@ public class NoiseGen
         }
 
         return (70 * (n0 + n1 + n2) + 1) / 2;
+    }
+
+    internal static void SetSeed(int seed)
+    {
+        List<int> permutations = new();
+        for (int i = 0; i < 256; i++)
+        {
+            permutations.Add(i);
+        }
+        permutations.OrderBy(c => new Random(seed));
+
+        for (int i = 0; i < 512; i++)
+        {
+            perm[i] = permutations.ElementAt(i & 255);
+            perm12[i] = perm[i] % 12;
+        }
     }
 }
 class Grad

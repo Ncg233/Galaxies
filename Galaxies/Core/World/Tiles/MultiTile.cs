@@ -1,12 +1,5 @@
 ﻿using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Tiles.State;
-using Galaxies.Util;
-using SharpDX.Direct3D11;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Galaxies.Core.World.Tiles;
 public abstract class MultiTile : Tile
@@ -39,17 +32,42 @@ public abstract class MultiTile : Tile
         if(!tileState.IsMulti())
         {
             var multiState = new MultiState(tileState, x, y);
-            for (int i = x; i < x + width; i++)
-            {
-                for (int j = y; j < y + height; j++)
+            bool isTurn = tileState.GetFacing().Effect == Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipHorizontally;
+            if (isTurn) {
+                for (int i = x; i > x - width; i--)
                 {
-                    if (i != x || j != y)
+                    for (int j = y; j < y + height; j++)
                     {
-                        world.SetTileState(TileLayer.Main, i, j, multiState);
+                        if (i != x || j != y)
+                        {
+                            world.SetTileState(TileLayer.Main, i, j, multiState);
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                for (int i = x; i < x + width; i++)
+                {
+                    for (int j = y; j < y + height; j++)
+                    {
+                        if (i != x || j != y)
+                        {
+                            world.SetTileState(TileLayer.Main, i, j, multiState);
+                        }
                     }
                 }
             }
         }
         
+    }
+    public override int GetRenderWidth(TileState tileState)
+    {
+        return width * 8;
+    }
+    public override int GetRenderHeight(TileState tileState)
+    {
+        return height * 8;
     }
 }

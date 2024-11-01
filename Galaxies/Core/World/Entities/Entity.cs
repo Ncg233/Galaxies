@@ -12,6 +12,7 @@ using System.Collections.Generic;
 namespace Galaxies.Core.World.Entities;
 public abstract class Entity
 {
+    public Guid Id = Guid.NewGuid();
     public float existedTime { get; private set; }
     public float nextSyncTime;
     public readonly EntityType Type;

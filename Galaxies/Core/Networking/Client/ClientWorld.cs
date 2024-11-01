@@ -7,14 +7,12 @@ using System;
 namespace Galaxies.Core.Networking.Client;
 public class ClientWorld : AbstractWorld
 {
-    private WorldRenderer renderer;
     //private readonly List<ParticleType> particles = [];
-    public ClientWorld(WorldRenderer renderer, IWorldListener listener) : base(true, listener)
+    public ClientWorld(IWorldListener listener) : base(true, listener)
     {
-        this.renderer = renderer;
     }
 
-    public override AbstractPlayerEntity CreatePlayer(NetPeer peer)
+    public override AbstractPlayerEntity CreatePlayer(NetPeer peer, Guid id)
     {
         if (peer != null)
         {
@@ -22,7 +20,7 @@ public class ClientWorld : AbstractWorld
         }
         else
         {
-            return new ClientPlayer(this);
+            return new ClientPlayer(this, id);
         }
     }
 }
