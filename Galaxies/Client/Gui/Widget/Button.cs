@@ -1,12 +1,9 @@
 ﻿using Galaxies.Client.Gui;
+using Galaxies.Client.Gui.Screen;
 using Galaxies.Client.Render;
 using Galaxies.Core.Audio;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Galaxies.Client.Gui.Widget;
 public class Button : IRenderable
@@ -40,13 +37,15 @@ public class Button : IRenderable
         //renderer.DrawString(GalaxiasClient.GetInstance().Font, _text, x, y, Color.White, Color.Black);
     }
 
-    public void MouseClicked(double mouseX, double mouseY)
+    public bool MouseClicked(double mouseX, double mouseY, MouseType type)
     {
-        if (IsMouseOver(mouseX, mouseY))
+        if (type == MouseType.Left && IsMouseOver(mouseX, mouseY))
         {
             OnClick();
             AllSounds.ButtonClick.PlayEffect(1f, 1f, 0.5f);
+            return true;
         }
+        return false;
     }
     public bool IsMouseOver(double mouseX, double mouseY)
     {

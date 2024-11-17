@@ -17,6 +17,7 @@ public class ScreenManager
     private Action afterAction;
     private float counter;
     private bool pressed;
+    private MouseType mouseType;
 
     private Main galaxias;
     //private InventoryScreen inventoryScreen = new();
@@ -37,16 +38,25 @@ public class ScreenManager
     }
     public void Update(float deltaTime)
     {
-        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+        var ms = Mouse.GetState();
+        if (ms.LeftButton == ButtonState.Pressed)
         {
             pressed = true;
-        }
-        if (CurrentScreen != null && pressed && Mouse.GetState().LeftButton == ButtonState.Released && !isFading)
+            mouseType = MouseType.Left;
+        } else if (ms.RightButton == ButtonState.Pressed)
         {
-            Point p = Mouse.GetState().Position;
-            double mouseX = p.X * CurrentScreen.Width / galaxias.GetWindowWidth();
-            double mouseY = p.Y * CurrentScreen.Height / galaxias.GetWindowHeight();
-            CurrentScreen.MouseClicked(mouseX, mouseY);
+            pressed = true;
+            mouseType = MouseType.Right;
+        }
+        else if(ms.MiddleButton == ButtonState.Pressed)
+        {
+            pressed = true;
+            mouseType = MouseType.Middle;
+        }
+        if (CurrentScreen != null && pressed && GetMouseState(ms) == ButtonState.Released && !isFading)
+        {
+            Main.GetScreenPos(out var mouseX, out var mouseY);
+            CurrentScreen.MouseClicked(mouseX, mouseY, mouseType);
             pressed = false;
         }
         CurrentScreen?.Update();
@@ -60,6 +70,18 @@ public class ScreenManager
             }
         }
     }
+
+    public ButtonState GetMouseState(MouseState s)
+    {
+        switch (mouseType)
+        {
+            case MouseType.Left: return s.LeftButton;
+            case MouseType.Right: return s.RightButton;
+            case MouseType.Middle: return s.MiddleButton;
+        }
+        return default;
+    }
+
     public void FadeIn(float totalSeconds)
     {
         isFading = true;

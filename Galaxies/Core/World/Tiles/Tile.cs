@@ -34,12 +34,16 @@ public class Tile
         }
         else
         {
-            return layer == TileLayer.Background ? 0.8F : 0.75F;
+            return layer == TileLayer.Background ? 0.8F : 0.65F;
         }
     }
     public virtual TileRenderType GetRenderType()
     {
         return TileRenderType.Center;
+    }
+    public virtual bool ShouleRender(TileState state)
+    {
+        return GetRenderType() != TileRenderType.Invisible;
     }
     public virtual bool IsFullTile()
     {
@@ -58,7 +62,10 @@ public class Tile
     {
         return settings.IsAir;
     }
+    public virtual void RandomTick(TileState state, AbstractWorld world, int x, int y, Random random)
+    {
 
+    }
     public virtual void OnNeighborChanged(TileState tileState, AbstractWorld world, TileLayer layer, int x, int y, TileState changedTile)
     {
         if (!world.IsClient && !CanStay(world, layer, x, y))

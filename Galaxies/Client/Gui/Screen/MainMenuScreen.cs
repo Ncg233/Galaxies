@@ -1,5 +1,6 @@
 ﻿using Galaxies.Client.Render;
 using Galaxies.Core.Audio;
+using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -14,7 +15,15 @@ public class MainMenuScreen : AbstractScreen
     public MainMenuScreen()
     {
         CanCloseWithEsc = false;
-        AllSounds.Galaxias.PlayMusic(1f);
+        var a = Utils.Random.Next(0, 2);
+        if(a == 0)
+        {
+            AllSounds.Galaxias.PlayMusic(1f);
+        }else
+        {
+            AllSounds.Galaxias2.PlayMusic(1f);
+        }
+        
     }
     public override void Update()
     {

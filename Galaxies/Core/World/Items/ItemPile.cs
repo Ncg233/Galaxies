@@ -18,7 +18,7 @@ public class ItemPile
         this.item = item;
         count = 1;
     }
-    public bool isEmpty()
+    public bool IsEmpty()
     {
         return item == null || item == AllItems.Air || count == 0;
     }
@@ -38,5 +38,9 @@ public class ItemPile
     public bool Use(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
         return item.Use(world, player, x, y);
+    }
+    public bool IsDiggingTool()
+    {
+        return item.IsDiggingTool;
     }
 }

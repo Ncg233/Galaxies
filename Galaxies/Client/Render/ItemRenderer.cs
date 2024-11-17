@@ -1,6 +1,7 @@
 ﻿using Galaxies.Client.Resource;
 using Galaxies.Core.World.Items;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,47 +10,36 @@ using System.Collections.Generic;
 namespace Galaxies.Client.Render;
 public class ItemRenderer
 {
+
     private static readonly Dictionary<Item, Texture2D> itemToTexture = new Dictionary<Item, Texture2D>();
     public static void LoadContent()
     {
-        foreach (var itemId in AllItems.itemRegister)
-        {
-            if (itemId.Key != "air")
-            {
-                //if (itemId.Value is TileItem)
-                //{
-                //    itemToTexture.Add(itemId.Value, TextureManager.LoadTexture2D("Textures/Tiles/" + itemId.Key));
-                //}
-                //else {
-                itemToTexture.Add(itemId.Value, TextureManager.LoadTexture2D("Textures/Items/" + itemId.Key));
-                //}
-                
-            }
-        }
     }
     public static void RenderInWorld(IntegrationRenderer renderer, ItemPile itemPile, float worldX, float worldY, Color color)
     {
-        if (itemPile != null && !itemPile.isEmpty())
+        if (itemPile != null && !itemPile.IsEmpty())
         {
             Item item = itemPile.GetItem();
-            Texture2D tex = itemToTexture.GetValueOrDefault(item);
+            var map = SpriteManager.GetSpriteMap(item);
+            Texture2D tex = map.Texture;
 
-            float width = 8;
-            float height = 8;
-            renderer.Draw(tex, worldX, worldY - height, color, width / tex.Width, height / tex.Height);
+            float width = map.RenderWidth;
+            float height = map.Renderheight;
+            renderer.Draw(tex, worldX, worldY - height, Utils.MultiplyNoA(color, map.ColorMod), width / tex.Width, height / tex.Height);
         }
     }
 
     public static void RenderInGui(IntegrationRenderer renderer, ItemPile itemPile, float x, float y, Color color)
     {
-        if (itemPile != null && !itemPile.isEmpty())
+        if (itemPile != null && !itemPile.IsEmpty())
         {
             Item item = itemPile.GetItem();
-            Texture2D itemTexture = itemToTexture.GetValueOrDefault(item);
+            var map = SpriteManager.GetSpriteMap(item);
+            Texture2D tex = map.Texture;
 
-            int width = item is TileItem ? 8 : 16;
-            int height = item is TileItem ? 8 : 16;
-            renderer.Draw(itemTexture, new Rectangle((int)x - width / 2, (int)y - height / 2, width, height), color);
+            int width = map.RenderWidth;
+            int height = map.Renderheight;
+            renderer.Draw(tex, new Rectangle((int)x - width / 2, (int)y - height / 2, width, height), Utils.MultiplyNoA(color, map.ColorMod));
             renderer.DrawString(itemPile.GetCount().ToString(), x, y, 0.5f);
         }
 

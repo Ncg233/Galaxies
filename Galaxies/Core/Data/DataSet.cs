@@ -1,4 +1,5 @@
 ﻿using Galaxies.Client.Resource;
+using Galaxies.Core.Data.Array;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,20 @@ public class DataSet
     {
         Datas.Add(key, new DataInt(value));
     }
-    public int GetInt(string key) { 
-        return ((DataInt)Datas[key]).GetData();
-    }
     public void PutFloat(string key, float value)
     {
         Datas.Add(key, new DataFloat(value));
     }
-    public float GetFloat(string key)
+    public void PutByteArray(string key, byte[] value)
     {
-        return ((DataFloat)Datas[key]).GetData();
+        Datas.Add(key, new DataByteArray(value));
+    }
+    public void PutIntArray(string key, int[] value)
+    {
+        Datas.Add(key, new DataIntArray(value));
+    }
+    public T GetData<T>(string key)
+    {
+        return ((BasicDataPart<T>)Datas[key]).GetData();
     }
 }

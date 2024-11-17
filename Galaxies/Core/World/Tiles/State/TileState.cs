@@ -92,7 +92,7 @@ public class TileState
 
     public virtual bool ShouldRender()
     {
-        return Tile.GetRenderType() != TileRenderType.Invisible;
+        return Tile.ShouleRender(this);
     }
     public virtual bool IsMulti()
     {
@@ -102,6 +102,11 @@ public class TileState
     internal TileRenderType GetRenderType()
     {
         return Tile.GetRenderType();
+    }
+
+    public void RandomTick(AbstractWorld abstractWorld, int x, int y, Random rand)
+    {
+        Tile.RandomTick(this, abstractWorld, x, y, rand);
     }
 }
 

@@ -16,9 +16,9 @@ public class TileParticle : Particle
     private float renderSize = 1.2f;
     public TileParticle(TileState state, AbstractWorld world, float x, float y, float motionX, float motionY, float maxLife) : base(world, x, y, motionX, motionY, maxLife)
     {
-        texture = TileSpriteManager.GetSpriteMap(state).SourceTexture;
+        texture = SpriteManager.GetSpriteMap(state).SourceTexture;
         height = width = Utils.Random.NextFloat(0.15f, 0.2f);
-        var rect = TileSpriteManager.GetStateInfo(state).GetRenderRect(0);
+        var rect = SpriteManager.GetStateInfo(state).GetRenderRect(0);
         sourceRect = new(Utils.Random.Next(rect.X, rect.X + rect.Width - size), Utils.Random.Next(rect.Y, rect.Y + rect.Height - size), size, size);
 
     }

@@ -108,7 +108,7 @@ public abstract class Entity
                     }
                 }
             }
-            List<Entity> entities = world.GetEntitiesInArea<Entity>(ownBoxMotion, e => e != this);
+            List<Entity> entities = world.GetEntitiesInArea<Entity>(ownBoxMotion.Epxand(1, 2), e => e != this);
             foreach (Entity entity in entities)
             {
                 OnCollideWithEntity(entity);

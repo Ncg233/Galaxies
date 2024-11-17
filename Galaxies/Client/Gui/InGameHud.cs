@@ -14,7 +14,7 @@ public class InGameHud
     private int guiWidth, guiHeight;
     private Main _client;
     private FrameCounter _frameCounter = new();
-    private InventoryScreen inventoryScreen = new InventoryScreen();
+    public bool invOpen = false;
     public InGameHud(Main galaxias)
     {
         _client = galaxias;
@@ -60,21 +60,33 @@ public class InGameHud
                 break;
             }
         }
-
-        if (_client.GetWorld() != null)
+        if (!invOpen)
         {
-            inventoryScreen.Render(renderer, mouseX, mouseY);
+            var inv = _client.GetPlayer().Inventory;
+            for (int x = 0; x < 9; x++)
+            {
+                renderer.Draw("Textures/Gui/slot", guiWidth / 2 - 90 + x * 20, 0, Color.White);
+                ItemRenderer.RenderInGui(renderer, inv.Hotbar[x], guiWidth / 2 - 90 + x * 20 + 10, 10, Color.White);
+
+            }
+            renderer.Draw("Textures/Gui/slot_onHand", guiWidth / 2 - 90 + inv.onHand * 20, 0 * 20, Color.White);
         }
     }
     public void OnResize(int guiWidth, int guiHeight)
     {
+        this.guiWidth = guiWidth;
         this.guiHeight = guiHeight;
-        this.guiHeight = guiHeight;
-        inventoryScreen.OnResize(guiWidth, guiHeight);
+        //inventoryScreen.OnResize(guiWidth, guiHeight);
     }
     public void ToggleInventory()
     {
-        inventoryScreen.Toggle();
+        invOpen = !invOpen;
+        if (invOpen) {
+            _client.SetCurrentScreen(new InventoryScreen(_client.GetPlayer()));
+        }else
+        {
+            _client.SetCurrentScreen(null);
+        }
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
     {

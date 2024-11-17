@@ -8,7 +8,7 @@ public class AllItems
     public readonly static Item Air = Register("air", new Item());
     public readonly static Item Dirt = FromTile("dirt", AllTiles.Dirt);
     public readonly static Item DirtWall = FromTile("dirt_wall", AllTiles.Dirt, TileLayer.Background);
-    public readonly static Item GoldIngot = Register("gold_ingot", new Item());
+    public readonly static Item GoldIngot = Register("gold_ingot", new Item(new Item.Properties().SetDiggingTool()));
     public readonly static Item Torch = FromTile("torch", AllTiles.Torch);
     public readonly static Item ChairTile = FromTile("chair_tile", AllTiles.ChairTile);
     public readonly static Item Table = FromTile("table", AllTiles.Table);

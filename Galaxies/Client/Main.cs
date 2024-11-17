@@ -56,6 +56,7 @@ public class Main : Game
         GameRenderer = new GameRenderer(this, Renderer, WorldRenderer, camera, inGameHud);
         ScreenManager = new ScreenManager(this);
 
+        
         _graphics.PreferredBackBufferWidth = 1920;
         _graphics.PreferredBackBufferHeight = 1080;
         OnResize();
@@ -265,5 +266,11 @@ public class Main : Game
         Vector2 p = camera.ScreenToWorldSpace(Mouse.GetState().Position);
         x = Utils.Floor(p.X / 8);
         y = Utils.Floor(-p.Y / 8);
+    }
+    public static void GetScreenPos(out double x, out double y)
+    {
+        Point p = Mouse.GetState().Position;
+        x = p.X * GetInstance().ScreenManager.CurrentScreen.Width / GetInstance().GetWindowWidth();
+        y = p.Y * GetInstance().ScreenManager.CurrentScreen.Height / GetInstance().GetWindowHeight();
     }
 }

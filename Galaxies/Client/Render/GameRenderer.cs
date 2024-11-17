@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct2D1;
 
 namespace Galaxies.Client.Render;
 public class GameRenderer
@@ -58,6 +59,7 @@ public class GameRenderer
                 blendState:BlendState.AlphaBlend,
                 samplerState: SamplerState.PointClamp,
                 depthStencilState: DepthStencilState.Default,
+                effect: null,
                 transformMatrix: camera.GuiMatrix);
 
                 hud.Render(renderer, mouseX, mouseY, dTime);

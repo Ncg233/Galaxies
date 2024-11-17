@@ -6,31 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Galaxies.Core.Data;
-public class DataFloat : IDataPart
+public class DataFloat(float data) : BasicDataPart<float>(data)
 {
+    public override byte GetId()
+    {
+        return DataUtils.Float;
+    }
+    public override void Write(BinaryWriter writer)
+    {
+        writer.Write(Data);
+    }
 
-    private float _data;
-    public DataFloat(float data)
+    public override void Read(BinaryReader reader)
     {
-        _data = data;
-    }
-    public DataFloat()
-    {
-    }
-    public byte GetId()
-    {
-        return 2;
-    }
-    public float GetData()
-    {
-        return _data;
-    }
-    public void Write(BinaryWriter writer)
-    {
-        writer.Write(_data);
-    }
-    public void Read(BinaryReader reader)
-    {
-        _data = reader.ReadSingle();
+        Data = reader.ReadSingle();
     }
 }

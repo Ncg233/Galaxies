@@ -7,6 +7,7 @@ using Galaxies.Util;
 using LiteNetLib;
 using MonoGame.Framework.Utilities.Deflate;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Galaxies.Core.Networking.Server;
@@ -35,21 +36,16 @@ public class ServerWorld : AbstractWorld
         {
             playerDirectory.Create();
         }
-        var fileStream = new FileStream(worldDirectory + "world.dat", FileMode.OpenOrCreate, FileAccess.Write);
-        using var compressor = new GZipStream(fileStream, CompressionMode.Compress);
-        BinaryWriter binaryWriter = new BinaryWriter(compressor);
-        binaryWriter.Write(currnetTime);
-        for (int x = 0; x < Width; x++)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                binaryWriter.Write(Tile.TileStateId.Get(GetTileState(TileLayer.Background, x, y)));
-                binaryWriter.Write(Tile.TileStateId.Get(GetTileState(TileLayer.Main, x, y)));
-                binaryWriter.Write(GetSkyLight(x, y));
-                binaryWriter.Write(GetTileLight(x, y));
-            }
-        }
-        binaryWriter.Close();
+        Stopwatch stopwatch = Stopwatch.StartNew();
+
+        DataSet worldData = new();
+        worldData.PutFloat("time", currnetTime);
+        WriteTileData(out var tileData, out var skyLight, out var tileLight);
+        worldData.PutIntArray("tileData", tileData);
+        worldData.PutByteArray("skyLight", skyLight);
+        worldData.PutByteArray("tileLight", tileLight);
+        DataUtils.WriteDataSet(worldData, worldDirectory + "world.dat");
+
         foreach (var player in players)
         {
             var dataSet = new DataSet();
@@ -57,6 +53,9 @@ public class ServerWorld : AbstractWorld
             dataSet.PutFloat("y", player.Y);
             DataUtils.WriteDataSet(dataSet, playerDirectory.FullName + player.Id + ".dat");
         }
+
+        stopwatch.Stop();
+        Log.Info("Take " + stopwatch.ElapsedMilliseconds + "ms to save world");
     }
     public bool LoadData()
     {
@@ -67,31 +66,26 @@ public class ServerWorld : AbstractWorld
         else
         {
             Log.Info("Load world");
-            var fileStream = new FileStream(worldDirectory + "world.dat", FileMode.OpenOrCreate, FileAccess.Read);
-            using var decompressor = new GZipStream(fileStream, CompressionMode.Decompress);
-            BinaryReader binaryReader = new BinaryReader(decompressor);
+            Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
                 isGenerated = true;
-                currnetTime = binaryReader.ReadSingle();
-                for (int x = 0; x < Width; x++)
-                {
-                    for (int y = 0; y < Height; y++)
-                    {
-                        SetTileState(TileLayer.Background, x, y, Tile.TileStateId.Get(binaryReader.ReadInt32()));
-                        SetTileState(TileLayer.Main, x, y, Tile.TileStateId.Get(binaryReader.ReadInt32()));
-                        SetSkyLight(x, y, binaryReader.ReadByte());
-                        SetTileLight(x, y, binaryReader.ReadByte());
-                    }
-                }
-                binaryReader.Close();
+                
+                DataUtils.ReadDataSet(out var worldData, worldDirectory + "world.dat");
+                currnetTime = worldData.GetData<float>("time");
+                var tileData = worldData.GetData<int[]>("tileData");
+                var skyLight = worldData.GetData<byte[]>("skyLight");
+                var tileLight = worldData.GetData<byte[]>("tileLight");
+                ReadTileData(tileData, skyLight, tileLight);
+
                 isGenerated = false;
+                stopwatch.Stop();
+                Log.Info("Take " + stopwatch.ElapsedMilliseconds + "ms to load world");
                 return true;
             }
             catch (Exception ex)
             {
                 Log.Error("Can't Load World data", ex);
-                binaryReader.Close();
                 return false;
             }
 
@@ -117,8 +111,8 @@ public class ServerWorld : AbstractWorld
     private AbstractPlayerEntity LoadPlayer(FileInfo file, Guid id, NetPeer peer)
     {
         DataUtils.ReadDataSet(out var dataSet, file.FullName);
-        float x = dataSet.GetFloat("x");
-        float y = dataSet.GetFloat("y");
+        float x = dataSet.GetData<float>("x");
+        float y = dataSet.GetData<float>("y");
         var player = MakePlayer(peer, id);
         player.SetPos(x, y);
         return player;

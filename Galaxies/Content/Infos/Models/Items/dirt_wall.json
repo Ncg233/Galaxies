@@ -1,0 +1,5 @@
+{
+    "texture": "Textures/Items/dirt",
+    "renderSize": [ 8, 8 ],
+    "color": 0.45
+}

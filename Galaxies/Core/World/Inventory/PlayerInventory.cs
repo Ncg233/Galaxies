@@ -2,10 +2,11 @@ using Galaxies.Core.World.Items;
 using System;
 
 namespace Galaxies.Core.World.Inventory;
-public class PlayerInventory
+public class PlayerInventory : IInventory
 {
     public ItemPile[] Hotbar = new ItemPile[36];
     public int onHand = 0;
+    public ItemPile holdingItem = null;
     public PlayerInventory()
     {
         Array.Fill(Hotbar, ItemPile.Empty);
@@ -19,5 +20,12 @@ public class PlayerInventory
         Hotbar[7] = new ItemPile(AllItems.Wood, 99);
         Hotbar[8] = new ItemPile(AllItems.WoodWall, 99);
     }
-
+    public ItemPile GetItemPile(int index)
+    {
+        return Hotbar[index];
+    }
+    public int GetCount()
+    {
+        return Hotbar.Length;
+    }
 }

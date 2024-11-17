@@ -1,4 +1,5 @@
-﻿using Galaxies.Core.World.Tiles;
+﻿using Galaxies.Client;
+using Galaxies.Core.World.Tiles;
 using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 using System;
@@ -85,5 +86,13 @@ public class Utils
         {
             data[i] = reader.GetByte();
         }
+    }
+    public static float NextFloat(float min, float max)
+    {
+        return Lerp(min, max, (float)Random.NextDouble());
+    }
+    public static float Lerp(float from, float to, float amount)
+    {
+        return (1f - amount) * from + amount * to;
     }
 }

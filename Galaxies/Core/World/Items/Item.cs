@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
@@ -10,14 +11,20 @@ public class Item
     public readonly int PileMaxCount;
     public readonly int MaxDamage;
     public readonly bool CantBreak;
+    public readonly bool IsDiggingTool;
     public Item(){
         properties = new Properties();
         PileMaxCount = properties.PileMaxCount;
         MaxDamage = properties.MaxDamage;
         CantBreak = properties.CantBreak;
+        IsDiggingTool = properties.IsDiggingTool;   
     }
     public Item(Properties properties){
         this.properties = properties;
+        PileMaxCount = properties.PileMaxCount;
+        MaxDamage = properties.MaxDamage;
+        CantBreak = properties.CantBreak;
+        IsDiggingTool = properties.IsDiggingTool;
     }
     public virtual bool Use(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
@@ -39,10 +46,12 @@ public class Item
     {
         return true;
     }
+
     public class Properties{
         public int PileMaxCount = DefaultPileMaxCount;
         public int MaxDamage = 1;
         public bool CantBreak = false;
+        public bool IsDiggingTool = false;
         public Properties(){
         }
         public Properties SetMaxCount(int i){
@@ -57,6 +66,11 @@ public class Item
         }
         public Properties SetCantBreak(){
             CantBreak = true;
+            return this;
+        }
+        public Properties SetDiggingTool()
+        {
+            IsDiggingTool = true;
             return this;
         }
     }

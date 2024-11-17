@@ -1,5 +1,9 @@
 ﻿using Galaxies.Client.Render;
+using Galaxies.Core.World.Container;
+using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Inventory;
+using Galaxies.Core.World.Items;
+using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,40 +14,65 @@ using System.Threading.Tasks;
 namespace Galaxies.Client.Gui.Screen;
 public class InventoryScreen : AbstractScreen
 {
-    private bool isOpen;
-    private PlayerInventory playerInventory;
-    public InventoryScreen()
+    private PlayerContainer playerContainer;
+    private ItemPile pile;
+    public InventoryScreen(AbstractPlayerEntity player)
     {
-        galaxias = Main.GetInstance();
+        playerContainer = player.container;
+        xSize = 180;
+        
     }
     public override void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
         base.Render(renderer, mouseX, mouseY);
-        var i = galaxias.GetPlayer().Inventory;
-        int col = isOpen ? 4 : 1;
-        for (int y = 0; y < col; y++)
+        foreach (var slot in playerContainer)
         {
-            for (int x = 0; x < 9; x++)
+            RenderSlot(renderer, slot);
+            if(IsMouseOver(slot, mouseX, mouseY))
             {
-                renderer.Draw("Textures/Gui/slot", Width / 2 - 90 + x * 20, y * 20, Color.White);
-                ItemRenderer.RenderInGui(renderer, i.Hotbar[y * 9 + x], Width / 2 - 90 + x * 20 + 10, y * 20 + 10, Color.White);
-
+                renderer.Draw("Textures/Gui/slot_onHand", LeftPos + slot.X, slot.Y, Color.White);
             }
         }
-        if (!isOpen)
+        if(pile != null && !pile.IsEmpty())
         {
-            renderer.Draw("Textures/Gui/slot_onHand", Width / 2 - 90 + i.onHand * 20, 0 * 20, Color.White);
+            ItemRenderer.RenderInGui(renderer, pile, (float)mouseX, (float)mouseY, Color.White);
         }
-
+    }
+    public bool IsMouseOver(Slot slot, double mouseX, double mouseY)
+    {
+        return LeftPos + slot.X <= mouseX && mouseX <= LeftPos + slot.X + 18 && slot.Y <= mouseY && mouseY <= slot.Y + 18;
     }
 
-    public void Toggle()
+    private void RenderSlot(IntegrationRenderer renderer, Slot slot)
     {
-        isOpen = !isOpen;
+        renderer.Draw("Textures/Gui/slot", LeftPos + slot.X, slot.Y, Color.White);
+        ItemRenderer.RenderInGui(renderer, slot.GetItem(), LeftPos + slot.X + 10, slot.Y + 10, Color.White);
+    }
+
+    public override bool MouseClicked(double mouseX, double mouseY, MouseType pressedKey)
+    {
+        if( base.MouseClicked(mouseX, mouseY, pressedKey))
+        {
+            return true;
+        }
+        int x = Utils.Floor((mouseX - LeftPos) / 20);
+        int y = (int)(mouseY / 20);
+        if (x >= 0 && x < 9 && y >= 0 && y < 4)
+        {
+            int index = y * 9 + x;
+            pile = playerContainer.GetSlot(index).GetItem();
+            return true;
+        }
+        return false;//todo
+
     }
 
     protected override void OnInit()
     {
-
+        LeftPos = (Width - xSize) / 2;
+    }
+    public override void Hid()
+    {
+        galaxias.inGameHud.invOpen = false;
     }
 }

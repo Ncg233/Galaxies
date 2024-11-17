@@ -81,6 +81,11 @@ public abstract class AbstractWorld
                 entities.RemoveAt(i); 
             }
         }
+        for (int i = 0; i < 25; i++) {
+            int x = rand.Next(Width);
+            int y = rand.Next(Height);
+            GetTileState(TileLayer.Main, x, y).RandomTick(this, x, y, rand);
+        }
         //entities.ForEach(e => e.Update(dTime));
 
     }
@@ -233,27 +238,14 @@ public abstract class AbstractWorld
         byte skyLight = (byte)(GetSkyLight(x, y) * GetSkyLightModify(true));
         return (byte)Math.Min(GameConstants.MaxLight, skyLight + GetTileLight(x, y));
     }
-    public int[] GetInterpolateLight(int x, int y)
+    public byte GetCombinedLightSmooth(int x, int y)
     {
-        Direction[] dirs = Direction.SurroundingIncludNone;
-        byte[] lightAround = new byte[dirs.Length];
-        for (int i = 0; i < dirs.Length; i++)
+        short sum = 0;
+        foreach (var dir in Direction.AdjacentIncludeNone)
         {
-            Direction dir = dirs[i];
-            if (true)
-            {
-                lightAround[i] = GetCombinedLight(x + dir.X, y + dir.Y);
-            }
+            sum += GetCombinedLight(x + dir.X, y + dir.Y);
         }
-
-        int[] light =
-        [
-            (lightAround[0] + lightAround[8] + lightAround[1] + lightAround[2]) / 4,
-            (lightAround[0] + lightAround[6] + lightAround[7] + lightAround[8]) / 4,
-            (lightAround[0] + lightAround[2] + lightAround[3] + lightAround[4]) / 4,
-            (lightAround[0] + lightAround[4] + lightAround[5] + lightAround[6]) / 4,
-        ];
-        return light;
+        return (byte)(sum / 5f);
     }
     public bool IsInWorld(int y)
     {
@@ -295,10 +287,10 @@ public abstract class AbstractWorld
         {
             for (int y = 0; y < Height; y++)
             {
-                tileData[y * Width + x] = Tile.TileStateId.Get(GetTileState(TileLayer.Main, x, y));
-                tileData[y * Width + x + size] = Tile.TileStateId.Get(GetTileState(TileLayer.Background, x, y));
-                skyLight[y * Width + x] = GetSkyLight(x, y);
-                tileLight[y * Width + x] = GetTileLight(x, y);
+                tileData[GetTileIndex(x, y)] = Tile.TileStateId.Get(GetTileState(TileLayer.Main, x, y));
+                tileData[GetTileIndex(x, y) + size] = Tile.TileStateId.Get(GetTileState(TileLayer.Background, x, y));
+                skyLight[GetTileIndex(x, y)] = GetSkyLight(x, y);
+                tileLight[GetTileIndex(x, y)] = GetTileLight(x, y);
             }
         }
     }
@@ -310,10 +302,10 @@ public abstract class AbstractWorld
             for (int y = 0; y < Height; y++)
             {
 
-                SetTileState(TileLayer.Main, x, y, Tile.TileStateId.Get(tileData[y * Width + x]));
-                SetTileState(TileLayer.Background, x, y, Tile.TileStateId.Get(tileData[size + y * Width + x]));
-                SetSkyLight(x, y, skyLight[y * Width + x]);
-                SetTileLight(x, y, tileLight[y * Width + x]);
+                SetTileState(TileLayer.Main, x, y, Tile.TileStateId.Get(tileData[GetTileIndex(x,y)]));
+                SetTileState(TileLayer.Background, x, y, Tile.TileStateId.Get(tileData[size + GetTileIndex(x, y)]));
+                SetSkyLight(x, y, skyLight[GetTileIndex(x, y)]);
+                SetTileLight(x, y, tileLight[GetTileIndex(x, y)]);
 
             }
         }

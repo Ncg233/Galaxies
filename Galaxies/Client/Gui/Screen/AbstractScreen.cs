@@ -1,5 +1,6 @@
 ﻿using Galaxies.Client.Gui.Widget;
 using Galaxies.Client.Render;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +10,10 @@ public abstract class AbstractScreen
 {
     public int Width;
     public int Height;
+    public int xSize;
+    public int ySize;
+    public int LeftPos;
+    public int TopPos;
     protected Main galaxias;
     private List<Button> buttons = [];
     public bool CanCloseWithEsc = true;
@@ -44,11 +49,15 @@ public abstract class AbstractScreen
         buttons.Add(button);
         return button;
     }
-    public void MouseClicked(double mouseX, double mouseY)
+    public virtual bool MouseClicked(double mouseX, double mouseY, MouseType pressedKey)
     {
-        buttons.ForEach(button =>
-        {
-            button.MouseClicked(mouseX, mouseY);
-        });
+        foreach (Button button in buttons) {
+            if (button.MouseClicked(mouseX, mouseY, pressedKey))
+            {
+                return true;
+            }
+        }
+        return false;
+        
     }
 }

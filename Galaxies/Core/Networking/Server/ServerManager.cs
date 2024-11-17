@@ -81,7 +81,7 @@ public class ServerManager : NetWorkingInterface
     {
         var player = connetionPlayers[packet._id];
         ItemPile pile = player.GetItemOnHand();
-        if (!pile.isEmpty())
+        if (!pile.IsEmpty())
         {
             //InteractionManager.PlayerUseItem(mainServer.GetWorld(),player, packet.X, packet.Y);
         }

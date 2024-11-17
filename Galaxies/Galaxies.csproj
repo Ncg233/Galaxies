@@ -21,41 +21,16 @@
   <ItemGroup>
     <Folder Include="Content\bin\Windows\Content\Assets\Textures\Blocks\" />
     <Folder Include="Content\obj\Windows\net8.0-windows\Content\Assets\Textures\Blocks\" />
-    <EmbeddedResource Include="Content\Assets\**\*.*" />
+    <EmbeddedResource Include="Content\Infos\**\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Content\Assets\Textures\Entities\Player\player_body.png" />
-    <None Remove="Content\Assets\Textures\Entities\Player\player_head.png" />
-    <None Remove="Content\Assets\Textures\Entities\Player\player_leg.png" />
-    <None Remove="Content\Assets\Textures\Items\chair_tile.png" />
-    <None Remove="Content\Assets\Textures\Items\dirt_wall.png" />
-    <None Remove="Content\Assets\Textures\Items\door.png" />
-    <None Remove="Content\Assets\Textures\Items\table.png" />
-    <None Remove="Content\Assets\Textures\Items\wood.png" />
-    <None Remove="Content\Assets\Textures\Items\wood_wall.png" />
-    <None Remove="Content\Assets\Textures\Tiles\chair_tile.png" />
-    <None Remove="Content\Assets\Textures\Tiles\table.png" />
-    <None Remove="Content\Assets\Textures\Tiles\wood.png" />
-    <None Remove="Content\Infos\Models\Tiles\chair_tile.json" />
-    <None Remove="Content\Infos\Models\Tiles\door.json" />
-    <None Remove="Content\Infos\Models\Tiles\table.json" />
-    <None Remove="Content\Infos\Models\Tiles\wood.json" />
+    <None Remove="Content\Assets\Textures\Tiles\grass_tile.png" />
+    <None Remove="Content\Infos\Models\Tiles\grass_tile.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\wood.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\door.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\table.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\chair_tile.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\dirt.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\grass.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\grass_tile.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\iron_ore.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\leaves.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\log.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\stone.json" />
-    <EmbeddedResource Include="Content\Infos\Models\Tiles\torch.json" />
+    <EmbeddedResource Include="Content\Assets\Textures\Tiles\grass_tile.png" />
   </ItemGroup>
-  <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+    <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>

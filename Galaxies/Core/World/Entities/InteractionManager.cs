@@ -30,9 +30,16 @@ public class InteractionManager
 
             Main.GetMosueTilePos(out int x, out int y);
             var tileState = world.GetTileState(TileLayer.Main, x, y);
-            if (!tileState.IsAir())
+            var item = player.GetItemOnHand();
+            if (item.IsDiggingTool())
             {
-                PlayerDigging(world, x, y);
+                if (!tileState.IsAir())
+                {
+                    PlayerDigging(world, x, y);
+                }
+            }else
+            {
+                PlayerUseItem(world, x, y);
             }
 
         }
@@ -45,7 +52,7 @@ public class InteractionManager
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
                 tileState.OnUse(world, x, y);
             }
-            PlayerUseItem(world, x, y);
+            //PlayerUseItem(world, x, y);
             buttonRealased = false;
 
         }
@@ -98,7 +105,7 @@ public class InteractionManager
     {
         SyncHeldItem();
         var pile = player.GetItemOnHand();
-        if (pile != null && !pile.isEmpty())
+        if (pile != null && !pile.IsEmpty())
         {
             if (pile.Use(world, player, x, y))
             {

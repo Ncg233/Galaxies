@@ -1,15 +1,24 @@
-﻿using Galaxies.Util;
+﻿using Galaxies.Core.Data.Array;
+using Galaxies.Util;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Galaxies.Core.Data;
 public class DataUtils
 {
+    public const byte Byte = 0;
+    public const byte Short = 1;
+    public const byte Int = 2;
+    public const byte Long = 3;
+    public const byte Float = 4;
+    public const byte Double = 5;
+    public const byte String = 6;
+    public const byte ByteArray = 7;
+    public const byte IntArray = 8;
+    public const byte LongArray = 9;
+    public const byte List = 10;
+    public const byte DataSet = 11;
     public static void WriteDataSet(DataSet set, string writeFile)
     {
         try
@@ -54,8 +63,10 @@ public class DataUtils
     {
         switch (partId) { 
             case 0: return null;
-            case 1: return new DataInt();
-            case 2: return new DataFloat();
+            case Int: return new DataInt(0);
+            case Float: return new DataFloat(0);
+            case ByteArray: return new DataByteArray(null);
+            case IntArray: return new DataIntArray(null);
             default: return null;
         }
     }

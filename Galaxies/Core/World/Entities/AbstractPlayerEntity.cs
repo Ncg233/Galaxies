@@ -1,13 +1,16 @@
 using Galaxies.Client.Render;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
+using Galaxies.Core.World.Container;
 using Galaxies.Core.World.Inventory;
 using Galaxies.Core.World.Items;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace Galaxies.Core.World.Entities;
 // server: PlayerEntity ConnectPlayer
@@ -17,6 +20,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
     private static readonly PlayerRenderer s_playerRender = new();
     public InteractionManager InteractionManager;
     public PlayerInventory Inventory { get; private set; } = new();
+    public PlayerContainer container;
     public bool IsWalking { get; protected set; }
 
     public int HitX = 0;
@@ -34,6 +38,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
         speed = 10f;
         maxHealth = 100;
         health = 100;
+        container = new PlayerContainer(this);
         
     }
     public override void Update(float dTime)
@@ -57,18 +62,36 @@ public abstract class AbstractPlayerEntity : LivingEntity
                 jumpTicks++;
             }
         }
-        if(Math.Abs(vx) > 0.001f)
-        {
-            IsWalking = true;
-        }else IsWalking = false;
         if (collidedHor)
         {
-            var ontoBox = hitbox.Add(direction.X + 0.01f, Y + 1);
-            if (onGround)
+            var ontoBox = hitbox.Add(direction.X / 100f, 1);
+            bool canOnto = true;
+            for (int x = Utils.Floor(ontoBox.minX); x < Utils.Ceil(ontoBox.maxX); x++)
+            {
+                for (int y = Utils.Floor(ontoBox.minY); y < Utils.Ceil(ontoBox.maxY); y++)
+                {
+                    TileState id = world.GetTileState(TileLayer.Main, x, y);
+                    if (id.GetTile().CanCollide())
+                    {
+                        canOnto = false;
+                        break;
+                    }
+                }
+            }
+            if (canOnto && onGround)
             {
                 vy += 0.3f;
             }
+            else
+            {
+                vx = 0;
+            }
         }
+        if (Math.Abs(vx) > 0.001f)
+        {
+            IsWalking = true;
+        }
+        else IsWalking = false;
         InteractionManager?.Update(dTime);
     }
     public override void Render(IntegrationRenderer renderer, Color color)
@@ -85,18 +108,19 @@ public abstract class AbstractPlayerEntity : LivingEntity
     }
     protected float GetJumpHeight()
     {
-        return 40f;
+        return 6 / 8f;
     }
-    public void Jump(float value, float deltTime)
+    public void Jump(float value)
     {
         if (onGround && !isJumping)
         {
-            vy += value * deltTime;
+            vy += value;
             isJumping = true;
         }
     }
     public override void Die()
     {
+
     }
     public override void Hurt(float amout)
     {
@@ -143,7 +167,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
         }
         if (moveDir == Direction.Up)
         {
-            Jump(GetJumpHeight(), deltaTime);
+            Jump(GetJumpHeight());
         }
 
     }
