@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace Galaxies.Client.Gui.Widget;
-public class Button : IRenderable
+public class Button : IWidget
 {
     private string _text;
     private int x;

@@ -10,7 +10,7 @@ public class DirtTile : Tile
 {
     public DirtTile(TileSettings settings) : base(settings)
     {
-        //AddProp(TileProperties.Smooth);
+        
     }
     public override ItemPile GetDropItem()
     {

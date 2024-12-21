@@ -45,8 +45,6 @@ public abstract class AbstractWorld
         seed = new Random().Next(-10000, 10000);
         rand = new Random(seed);
         lightManager = new LightManager(this, Width, Height);
-        //lightGrid.Add(LightType.Sky, new byte[Width * Height]);
-        //lightGrid.Add(LightType.Tile, new byte[Width * Height]);
         blockStateGrid.Add(TileLayer.Background, new TileState[Width * Height]);
         blockStateGrid.Add(TileLayer.Main, new TileState[Width * Height]);
         if (!isClient)
@@ -70,7 +68,7 @@ public abstract class AbstractWorld
     public void Update(float dTime)
     {
         currnetTime = (currnetTime + dTime) % 1440;
-        //currnetTime = 720;
+        currnetTime = 720;
         sunRotation = (float)(currnetTime / tutolTime * 2 * Math.PI - Math.PI / 2);
         skyLight = (float)(Math.Sin(sunRotation) + 1) / 2;
 
@@ -263,9 +261,6 @@ public abstract class AbstractWorld
 
         tileState.OnDestroyed(this, x, y);
         worldListener.AddParticle(tileState, TileLayer.Main, x, y);
-
-        
-        
     }
     public void AddParticle(Particle particle)
     {

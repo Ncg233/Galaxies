@@ -20,10 +20,8 @@ public class StateHandler
         {
             tileProps.Add("default");
         }
-        if (facings.Count == 0)
-        {
-            facings.Add(Facing.None);
-        }
+        facings.Add(Facing.None);
+        
         //defaultState = new TileState(this.tile, "default");
         //
         //subState.Add("default", defaultState);

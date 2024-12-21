@@ -192,7 +192,7 @@ public class Main : Game
         world.AddEntity(player);
         WorldRenderer.SetRenderWorld(world);
         SetCurrentScreen(null);
-        AllSounds.EarthForest.PlayMusic(0.5f);
+        AllSounds.Forest.PlayMusic(0.5f);
     }
     //this method is used for client join
     internal void JoinWorld(ClientWorld world)

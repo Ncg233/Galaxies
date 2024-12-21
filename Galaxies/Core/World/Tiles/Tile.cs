@@ -68,16 +68,16 @@ public class Tile
     }
     public virtual void OnNeighborChanged(TileState tileState, AbstractWorld world, TileLayer layer, int x, int y, TileState changedTile)
     {
-        if (!world.IsClient && !CanStay(world, layer, x, y))
+        if (!world.IsClient && !tileState.CanStay(world, layer, x, y))
         {
             DestoryTile(world, x, y);
         }
     }
-    public virtual bool CanStay(AbstractWorld world, TileLayer layer, int x, int y)
+    public virtual bool CanStay(TileState state, AbstractWorld world, TileLayer layer, int x, int y)
     {
         return true;
     }
-    public virtual bool CanPlaceThere(AbstractWorld world, TileLayer placeLayer, int x, int y)
+    public virtual bool CanPlaceThere(TileState state, AbstractWorld world, TileLayer placeLayer, int x, int y)
     {
         if (placeLayer == TileLayer.Main)
         {
@@ -140,6 +140,10 @@ public class Tile
     public virtual List<HitBox> GetHitBoxes(TileState tileState)
     {
         return defaultHitboxes;
+    }
+    public virtual HitBox GetHitBox(TileState tileState)
+    {
+        return defaultHitbox;
     }
 
     public virtual int GetRenderWidth(TileState tileState)

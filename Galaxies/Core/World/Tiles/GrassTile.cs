@@ -20,9 +20,9 @@ public class GrassTile : Tile
             world.SetTileState(TileLayer.Main, x, y, AllTiles.Dirt.GetDefaultState());
         }
     }
-    public override bool CanPlaceThere(AbstractWorld world, TileLayer placeLayer, int x, int y)
+    public override bool CanPlaceThere(TileState state, AbstractWorld world, TileLayer placeLayer, int x, int y)
     {
-        return !world.GetTileState(TileLayer.Main, x, y + 1).IsFullTile() && base.CanPlaceThere(world, placeLayer, x, y);
+        return !world.GetTileState(TileLayer.Main, x, y + 1).IsFullTile() && base.CanPlaceThere(state, world, placeLayer, x, y);
     }
     public override void RandomTick(TileState state, AbstractWorld world, int x, int y, Random random)
     {

@@ -25,11 +25,11 @@ public class TorchTile : Tile
     {
         return false;
     }
-    public override bool CanStay(AbstractWorld world, TileLayer layer, int x, int y)
+    public override bool CanStay(TileState state, AbstractWorld world, TileLayer layer, int x, int y)
     {
-        return CanPlaceThere(world, layer, x, y);
+        return CanPlaceThere(state, world, layer, x, y);
     }
-    public override bool CanPlaceThere(AbstractWorld world, TileLayer layer, int x, int y)
+    public override bool CanPlaceThere(TileState state, AbstractWorld world, TileLayer layer, int x, int y)
     {
         if (world.GetTileState(TileLayer.Main, x, y - 1).IsFullTile())
         {

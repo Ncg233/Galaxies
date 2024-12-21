@@ -40,7 +40,7 @@ public class TileState
     {
         return Tile.GetRenderHeight(this);
     }
-    public List<HitBox> GetHitBoxes()
+    public virtual List<HitBox> GetHitBoxes()
     {
         return Tile.GetHitBoxes(this);
     }
@@ -79,15 +79,13 @@ public class TileState
     {
         Tile.OnTilePlaced(this, world, player, x, y);
     }
-
-    internal bool CanStay(AbstractWorld world, TileLayer layer, int x, int y)
+    public virtual bool CanStay(AbstractWorld world, TileLayer layer, int x, int y)
     {
-        return Tile.CanStay(world, layer, x, y);
+        return Tile.CanStay(this, world, layer, x, y);
     }
-
-    internal bool CanPlaceThere(AbstractWorld world, TileLayer placeLayer, int x, int y)
+    public bool CanPlaceThere(AbstractWorld world, TileLayer placeLayer, int x, int y)
     {
-        return Tile.CanPlaceThere(world, placeLayer,  x, y);
+        return Tile.CanPlaceThere(this, world, placeLayer,  x, y);
     }
 
     public virtual bool ShouldRender()
@@ -104,9 +102,10 @@ public class TileState
         return Tile.GetRenderType();
     }
 
-    public void RandomTick(AbstractWorld abstractWorld, int x, int y, Random rand)
+    public virtual void RandomTick(AbstractWorld abstractWorld, int x, int y, Random rand)
     {
         Tile.RandomTick(this, abstractWorld, x, y, rand);
     }
+    
 }
 

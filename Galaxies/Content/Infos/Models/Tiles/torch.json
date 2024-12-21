@@ -3,8 +3,8 @@
     "size": [1, 6],
     "state": {
         "default": {
-            "animation": true,
-            "renderRect": [ 1, 1, 1, 6]
+            "processor": "animation",
+            "renderRect": [ 1, 1, 1, 6 ]
         }
     }
 }

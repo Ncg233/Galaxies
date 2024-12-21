@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
+using Newtonsoft.Json.Linq;
 
-namespace Galaxies.Client.Render;
+namespace Galaxies.Client.Render.TileStateInfo;
 internal class SmoothStateInfo : IStateInfo
 {
     public static byte Full = 0;
@@ -21,19 +22,37 @@ internal class SmoothStateInfo : IStateInfo
     public static short r_270d = 270;
     private bool shouldRandom;
     //public static byte Any = 4;
-
-
-    private List<Rectangle> sourceRect;
-    public SmoothStateInfo(List<Rectangle> sourceRect, bool shouldRandom)
+    private List<Rectangle> rectList;
+    public SmoothStateInfo()
     {
-        this.sourceRect = sourceRect;
-        this.shouldRandom = shouldRandom;
     }
     public Rectangle GetRenderRect(byte id)
     {
-        return sourceRect[id];
+        return rectList[id];
     }
+    public void Deserialize(JObject prop, Rectangle[,] sourceRect)
+    {
+        JsonUtils.TryGetValue(prop, "random", out shouldRandom, true);
 
+        rectList = [];
+        var rect = JsonUtils.GetValue<int[]>(prop, "full");
+        rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
+
+        rect = JsonUtils.GetValue<int[]>(prop, "sideIII");
+        rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
+
+        rect = JsonUtils.GetValue<int[]>(prop, "sideII");
+        rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
+
+        rect = JsonUtils.GetValue<int[]>(prop, "sideI");
+        rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
+
+        rect = JsonUtils.GetValue<int[]>(prop, "corner");
+        rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
+
+        rect = JsonUtils.GetValue<int[]>(prop, "single");
+        rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
+    }
     public TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
     {
         var renderInfo = new TileRenderInfo();

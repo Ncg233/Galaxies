@@ -34,7 +34,10 @@ public class IntegrationRenderer
         var texture = TextureManager.LoadTexture2D(textureName);
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, new Vector2(originX, originY), new Vector2(1, 1), effects, 0);
     }
-
+    public void Draw(Texture2D texture, float x, float y, float originX, float originY, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
+    {
+        spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, new Vector2(originX, originY), new Vector2(1, 1), effects, 0);
+    }
     public void Draw(Texture2D texture, float x, float y, float originX, float originY, float width, float height, Color color, Rectangle? source = null, SpriteEffects effects = SpriteEffects.None)
     {
         spriteBatch.Draw(texture, new Vector2(x, y), source, color, 0, new Vector2(originX, originY), new Vector2(width, height), effects, 0);

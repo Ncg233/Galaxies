@@ -17,8 +17,7 @@ public class FurnitureTile : MultiTile
     }
     public override void AddProp(StateHandler handler)
     {
-        handler.AddFacing(Facing.Right);
-        handler.AddFacing(Facing.Left);
+        handler.AddFacing(Facing.Turned);
     }
     public override TileRenderType GetRenderType()
     {
@@ -26,6 +25,6 @@ public class FurnitureTile : MultiTile
     }
     public override TileState GetPlaceState(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
-        return GetDefaultState().ChangeFacing(player.direction == Direction.Right ? Facing.Right : Facing.Left);
+        return GetDefaultState().ChangeFacing(player.direction == Direction.Right ? Facing.None : Facing.Turned);
     }
 }

@@ -35,19 +35,19 @@ public class TileRenderer
         else if(state.GetTile().GetRenderType() == TileRenderType.BottomCenter)
         {
             renderX = (x + 0.5f) * GameConstants.TileSize;
-            renderY = -y * GameConstants.TileSize;
+            renderY = -y * GameConstants.TileSize - height / 2;
             originX = width / 2f;
-            originY = height;
+            originY = height / 2f;
             renderWidth = width;
             renderHeight = height;
         }
         else if (state.GetTile().GetRenderType() == TileRenderType.BottomCorner)
         {
             bool normal = state.GetFacing().Effect == SpriteEffects.None;
-            renderX = (normal ? x : x + 1) * GameConstants.TileSize;
-            renderY = -y * GameConstants.TileSize;
-            originX = normal ? 0 : width;
-            originY = height;
+            renderX = normal ? (x * GameConstants.TileSize + width / 2f) : ((x + 1) * GameConstants.TileSize - width / 2f);
+            renderY = -y * GameConstants.TileSize - height / 2;
+            originX = width / 2f;
+            originY = height / 2f;
             renderWidth = width;
             renderHeight = height;
         }

@@ -10,7 +10,7 @@ public class MenuScreen : AbstractScreen
 {
     protected override void OnInit()
     {
-        AddButton(new Widget.Button("Return To Main Menu", 0, 0, 200, 20, () =>
+        AddWidget(new Widget.Button("Return To Main Menu", 0, 0, 200, 20, () =>
         {
             galaxias.QuitWorld();
         }));

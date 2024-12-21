@@ -11,6 +11,7 @@ public class AllSounds
     public static readonly Sound Galaxias = Register("Assets/Musics/galaxias", false);
     public static readonly Sound Galaxias2 = Register("Assets/Musics/galaxias2", false);
     public static readonly Sound EarthForest = Register("Assets/Musics/earth_forest", false);
+    public static readonly Sound Forest = Register("Assets/Musics/forest", false);
     public static readonly Sound ButtonClick = Register("Assets/Sounds/button_click", true);
 
     private static Sound Register(string name, bool isEffect)

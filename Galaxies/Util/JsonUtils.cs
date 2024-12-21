@@ -23,9 +23,12 @@ public class JsonUtils
         {
             value = v.ToObject<T>();
             return true;
+        }else
+        {
+            value = defaultValue;
+            return false;
         }
-        value = defaultValue;
-        return false;
+        
     }
 }
 

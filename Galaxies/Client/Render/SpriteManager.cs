@@ -1,4 +1,5 @@
-﻿using Galaxies.Core.World.Items;
+﻿using Galaxies.Client.Render.TileStateInfo;
+using Galaxies.Core.World.Items;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
@@ -10,8 +11,15 @@ using System.IO;
 namespace Galaxies.Client.Render;
 internal class SpriteManager
 {
+    public static readonly Dictionary<string, Func<IStateInfo>> ProcessorsMap = [];
     public static readonly Dictionary<Tile, TileSpriteMap> stateToSprite = [];
     public static readonly Dictionary<Item, ItemSpriteMap> itemToSprite = [];
+    static SpriteManager()
+    {
+        ProcessorsMap.Add("default", () => new StateInfo());
+        ProcessorsMap.Add("animation", () => new AnimationStateInfo());
+        ProcessorsMap.Add("smooth", () => new SmoothStateInfo());
+    }
     public static void LoadContent()
     {
         var assembly = typeof(Main).Assembly;

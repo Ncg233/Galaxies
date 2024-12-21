@@ -143,7 +143,7 @@ public class WorldRenderer : IWorldListener
     {
 
         float skylightMod = _world.GetSkyLightModify(false);
-        backgroundRenderer.Render(renderer, -camera.GetX(), -camera.GetY(), Utils.Ceil(camera.worldWidth), Utils.Ceil(camera.worldHeight), Microsoft.Xna.Framework.Color.White * skylightMod);
+        backgroundRenderer.Render(renderer, Utils.Ceil(camera.worldWidth), Utils.Ceil(camera.worldHeight), Color.White * skylightMod);
 
         float w = camera.worldWidth / 2;
         float h = camera.worldHeight / 2;
@@ -161,8 +161,8 @@ public class WorldRenderer : IWorldListener
     {
         if (tileState.ShouldRender())
         {
-            float width = tileState.GetRenderWidth() / 8;
-            float height = tileState.GetRenderWidth() / 8;
+            float width = tileState.GetRenderWidth() / 8f;
+            float height = tileState.GetRenderWidth() / 8f;
             float startX = 0, startY = 0, endX = 0, endY = 0;
             if (tileState.GetRenderType() == TileRenderType.Center)
             {
@@ -178,7 +178,7 @@ public class WorldRenderer : IWorldListener
                 endY = height;
             }
 
-            for (int i = 0; i < Utils.Random.Next((int)(width * height)) + 3; i++)
+            for (int i = 0; i < Utils.Random.Next((int)(width * height)) + 5; i++)
             {
                 float motionX = (float)Utils.Rand(0, 0.1f);
                 float motionY = (float)Utils.Rand(0, 0.1f);

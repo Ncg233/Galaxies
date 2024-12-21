@@ -31,7 +31,7 @@ public class Camera
         }
         else
         {
-            _pos.X = -player.X * GameConstants.TileSize; _pos.Y = (player.Y + 1) * GameConstants.TileSize;
+            _pos.X = -player.X * GameConstants.TileSize; _pos.Y = (player.Y + 3) * GameConstants.TileSize;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))

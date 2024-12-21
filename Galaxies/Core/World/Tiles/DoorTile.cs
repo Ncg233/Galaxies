@@ -1,5 +1,6 @@
 ﻿using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
+using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 namespace Galaxies.Core.World.Tiles;
 public class DoorTile : FurnitureTile
 {
-    private static readonly List<HitBox> closeBox = [new HitBox(0, 0, 1, 4)];
-    private static readonly List<HitBox> openBox = [new HitBox(0, 0, 0, 0)];
-    public DoorTile() : base(2, 4)
+    private static readonly HitBox closeBox = new HitBox(0, 0, 0.5f, 4);
+    private static readonly HitBox openBox = new HitBox(0, 0, 0, 0);
+    public DoorTile() : base(1, 4)
     {
 
     }
@@ -36,9 +37,9 @@ public class DoorTile : FurnitureTile
     {
         return true;
     }
-    public override List<HitBox> GetHitBoxes(TileState tileState)
+    public override HitBox GetHitBox(TileState tileState)
     {
-        if(tileState.GetState() == "close")
+        if (tileState.GetState() == "close")
         {
             return closeBox;
         }else

@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 namespace Galaxies.Util;
 public class Facing
 {
-    public static readonly Facing None = new Facing("none", SpriteEffects.None, 0);
-    public static readonly Facing Right = new Facing("right",SpriteEffects.None, 0);
-    public static readonly Facing Left = new Facing("left", SpriteEffects.FlipHorizontally, 0);
-    public static readonly Facing Up = new Facing("up", SpriteEffects.None, 270);
-    public static readonly Facing Down = new Facing("down", SpriteEffects.None, 90);
+    public static readonly Facing None = new("none", SpriteEffects.None, 0);
+    public static readonly Facing Turned = new("left", SpriteEffects.FlipHorizontally, 0);
+    public static readonly Facing Up = new("up", SpriteEffects.None, 270);
+    public static readonly Facing Down = new("down", SpriteEffects.None, 90);
     public string Name { get; private set; }
     public SpriteEffects Effect { get; private set; }
     public int Rotation { get; private set; }

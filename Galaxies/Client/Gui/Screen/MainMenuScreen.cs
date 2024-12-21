@@ -35,11 +35,11 @@ public class MainMenuScreen : AbstractScreen
     }
     protected override void OnInit()
     {
-        AddButton(new Widget.Button("Single Player", Width / 2 - 100, Height / 4 + 48, 200, 20, () =>
+        AddWidget(new Widget.Button("Single Player", Width / 2 - 100, Height / 4 + 48, 200, 20, () =>
         {
             galaxias.SetCurrentScreen(new WorldSelectionScreen(true));
         }));
-        AddButton(new Widget.Button("Multiplayer", Width / 2 - 100, Height / 4 + 78, 200, 20, () =>
+        AddWidget(new Widget.Button("Multiplayer", Width / 2 - 100, Height / 4 + 78, 200, 20, () =>
         {
             //galaxias.SetupServer();
             //galaxias.StartWorld();
@@ -50,7 +50,7 @@ public class MainMenuScreen : AbstractScreen
             galaxias.SetCurrentScreen(new MultiplayerScreen());
 
         }));
-        AddButton(new Widget.Button("Quit", Width / 2 - 100, Height / 4 + 108, 200, 20, galaxias.QuitGame));
+        AddWidget(new Widget.Button("Quit", Width / 2 - 100, Height / 4 + 108, 200, 20, galaxias.QuitGame));
     }
     public override void Hid()
     {

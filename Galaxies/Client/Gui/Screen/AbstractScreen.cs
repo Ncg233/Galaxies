@@ -15,23 +15,23 @@ public abstract class AbstractScreen
     public int LeftPos;
     public int TopPos;
     protected Main galaxias;
-    private List<Button> buttons = [];
+    private readonly List<IWidget> widgets = [];
     public bool CanCloseWithEsc = true;
     public void OnResize(int guiWidth, int guiHeight)
     {
         galaxias = Main.GetInstance();
         Width = guiWidth;
         Height = guiHeight;
-        buttons.Clear();
+        widgets.Clear();
         OnInit();
     }
 
     protected abstract void OnInit();
     public virtual void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
-        buttons.ForEach(button =>
+        widgets.ForEach(widget =>
         {
-            button.Render(renderer, mouseX, mouseY);
+            widget.Render(renderer, mouseX, mouseY);
         });
     }
 
@@ -44,15 +44,15 @@ public abstract class AbstractScreen
     {
 
     }
-    protected Button AddButton(Button button)
+    protected IWidget AddWidget(IWidget widget)
     {
-        buttons.Add(button);
-        return button;
+        widgets.Add(widget);
+        return widget;
     }
     public virtual bool MouseClicked(double mouseX, double mouseY, MouseType pressedKey)
     {
-        foreach (Button button in buttons) {
-            if (button.MouseClicked(mouseX, mouseY, pressedKey))
+        foreach (IWidget widget in widgets) {
+            if (widget.MouseClicked(mouseX, mouseY, pressedKey))
             {
                 return true;
             }

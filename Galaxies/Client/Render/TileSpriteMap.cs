@@ -1,4 +1,5 @@
-﻿using Galaxies.Client.Resource;
+﻿using Galaxies.Client.Render.TileStateInfo;
+using Galaxies.Client.Resource;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
@@ -49,62 +50,13 @@ public class TileSpriteMap
         foreach (var s in tile.GetAllState())
         {
             var prop = JsonUtils.GetValue<JObject>(state, s.GetState());
-            JsonUtils.TryGetValue(prop, "animation", out bool animation);
-            JsonUtils.TryGetValue(prop, "smoothTile", out bool smoothTile);
-
-            if (animation)
-            {
-                var rect = JsonUtils.GetValue<int[]>(prop, "renderRect");
-                var rectList = new List<Rectangle>();
-                for (int y = rect[0] - 1; y <= rect[2] - 1; y++)
-                {
-                    for (int x = rect[1] - 1; x <= rect[3] - 1; x++)
-                    {
-                        rectList.Add(sourceRect[y, x]);
-                    }
-                }
-                var info = new AnimationStateInfo(rectList);
-                infos.Add(s, info);
-
-            }
-            else if (smoothTile)
-            {
-                JsonUtils.TryGetValue(prop, "random", out bool random, true);
-                var rectList = new List<Rectangle>();
-                var rect = JsonUtils.GetValue<int[]>(prop, "full");
-                rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
-
-                rect = JsonUtils.GetValue<int[]>(prop, "sideIII");
-                rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
-
-                rect = JsonUtils.GetValue<int[]>(prop, "sideII");
-                rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
-
-                rect = JsonUtils.GetValue<int[]>(prop, "sideI");
-                rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
-
-                rect = JsonUtils.GetValue<int[]>(prop, "corner");
-                rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
-
-                rect = JsonUtils.GetValue<int[]>(prop, "single");
-                rectList.Add(sourceRect[rect[0] - 1, rect[1] - 1]);
-
-                var info = new SmoothStateInfo(rectList, random);
-                infos.Add(s, info);
-            }
-            else//default state info
-            {
-                var rect = JsonUtils.GetValue<int[]>(prop, "renderRect");
-                var info = new StateInfo(sourceRect[rect[0] - 1, rect[1] - 1]);
-                infos.Add(s, info);
-            }
-            //var info = new StateInfo(animation, rectList);
-            //infos.Add(s, info);
+            JsonUtils.TryGetValue(prop, "processor", out string processorName, "default");
+            var processor = SpriteManager.ProcessorsMap[processorName].Invoke();
+            processor.Deserialize(prop, sourceRect);
+            infos.Add(s, processor);
 
         }
-        TileSpriteMap map = new(source, width, height, infos);
-
-        return map;
+        return new(source, width, height, infos);
     }
 
     public IStateInfo GetStateInfo(TileState state)

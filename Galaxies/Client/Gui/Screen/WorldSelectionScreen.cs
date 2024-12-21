@@ -19,7 +19,7 @@ public class WorldSelectionScreen : AbstractScreen
 
     protected override void OnInit()
     {
-        AddButton(new Widget.Button("1", Width / 2 - 100, Height / 4, 200, 20, () =>
+        AddWidget(new Widget.Button("1", Width / 2 - 100, Height / 4, 200, 20, () =>
         {
             galaxias.ScreenManager.FadeOut(1f, () =>
             {

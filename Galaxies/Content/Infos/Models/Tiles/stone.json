@@ -3,7 +3,7 @@
     "size": [ 2, 3, 1],
     "state": {
         "default": {
-            "smoothTile": true,
+            "processor": "smooth",
             "full": [ 1, 1 ],
             "sideIII": [ 1, 2 ],
             "sideII": [ 1, 3 ],

@@ -1,4 +1,5 @@
 ﻿using Galaxies.Core.World;
+using Galaxies.Core.World.Tiles.State;
 using SharpDX.Direct2D1;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ public class GrassPlantTile : Tile
     public GrassPlantTile(TileSettings settings) : base(settings)
     {
     }
-    public override bool CanStay(AbstractWorld world, TileLayer layer, int x, int y)
+    public override bool CanStay(TileState state, AbstractWorld world, TileLayer layer, int x, int y)
     {
         var downTile = world.GetTileState(TileLayer.Main, x, y - 1).GetTile();
         return downTile == AllTiles.GrassTile || downTile == AllTiles.Dirt;

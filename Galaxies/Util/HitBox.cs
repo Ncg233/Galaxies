@@ -74,4 +74,37 @@ public class HitBox
     {
         return direction == Direction.Left ? minX : maxX;
     }
+    public HitBox GetCurrent(bool isHorTurn)
+    {
+        if (isHorTurn)
+        {
+            return new HitBox(1 - maxX, minY, 1 - minX, maxY);
+        }
+        else return this;
+    }
+
+    public HitBox GetSlicedBox(int innerX, int innerY)
+    {
+        float newminX = 0;
+        float newminY = 0;
+        float newmaxX = 1;
+        float newmaxY = 1;
+        if(innerX < minX)
+        {
+            newminX = minX;
+        }
+        if (innerY < minY)
+        {
+            newminX = minY;
+        }
+        if (innerX + 1 > maxX)
+        {
+            newmaxX = maxX - innerX;
+        }
+        if(innerY + 1 > maxY)
+        {
+            newmaxY = maxY - innerY;
+        }
+        return new(newminX, newminY, newmaxX, newmaxY);
+    }
 }
