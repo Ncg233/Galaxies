@@ -174,7 +174,9 @@ public abstract class AbstractPlayerEntity : LivingEntity
     public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
     {
         private static Color ClothesColor = Color.Blue;
-        private static Color FaceColor = new Color(220, 179, 125);
+        private static Color FaceColor = new Color(245, 203, 148);
+        private static Color EyeColor = new Color(180, 41, 37);
+        private static Color HairColor = new Color(250, 209, 81);
         public override void LoadContent()
         {
 
@@ -192,13 +194,19 @@ public abstract class AbstractPlayerEntity : LivingEntity
                 width / 2f, height, colors,
                 source: GetSource(player),
                 effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
-
+            
             renderer.Draw("Textures/Entities/Player/player_body", x, y,
                 width / 2f, height, colors,
                 effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
             renderer.Draw("Textures/Entities/Player/player_head", x, y,
-                width / 2f, height, colors,
+                width / 2f, height, Utils.MultiplyNoA(colors, FaceColor),
+                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+            renderer.Draw("Textures/Entities/Player/player_eye", x, y,
+                width / 2f, height, Utils.MultiplyNoA(colors, EyeColor),
+                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+            renderer.Draw("Textures/Entities/Player/player_hair", x, y,
+                width / 2f, height, Utils.MultiplyNoA(colors, Color.Orange),
                 effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
             //HELD ITEM
             var item = player.GetItemOnHand();

@@ -1,9 +1,0 @@
-{
-    "texture": "Textures/Tiles/grass_tile",
-    "size": [2, 3, 1],
-    "state": {
-        "default": {
-            "renderRect": [ 1, 1 ]
-        }
-    }
-}

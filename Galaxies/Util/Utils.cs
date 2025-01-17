@@ -35,6 +35,10 @@ public class Utils
     {
         return new Color((int)(value.R * scale), (int)(value.G * scale), (int)(value.B * scale), value.A);
     }
+    public static Color MultiplyNoA(Color value, Color scale)
+    {
+        return new Color(value.R * scale.R / 255, value.G * scale.G / 255, value.B * scale.B / 255, value.A);
+    }
     public static Color Multiply(Color value, Color scale)
     {
         return new Color(value.R * scale.R / 255, value.G * scale.G / 255, value.B * scale.B / 255, value.A * value.B / 255);

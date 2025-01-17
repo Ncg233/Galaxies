@@ -53,7 +53,7 @@ public class GameRenderer
 
             renderer.End();
             //render hud
-            if (renderHud)
+            if (true)
             {
                 renderer.Begin(sortMode: SpriteSortMode.Immediate,
                 blendState:BlendState.AlphaBlend,

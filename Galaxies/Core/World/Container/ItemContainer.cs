@@ -1,4 +1,5 @@
 ﻿using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Items;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ public class ItemContainer : IEnumerable<Slot>
 {
     public readonly AbstractPlayerEntity Player;
     private readonly List<Slot> slots = [];
-    
+    internal ItemPile draggedPile = ItemPile.Empty;
+
     public ItemContainer(AbstractPlayerEntity player)
     {
         Player = player;

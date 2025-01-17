@@ -28,4 +28,8 @@ public class PlayerInventory : IInventory
     {
         return Hotbar.Length;
     }
+    public void Set(int slotId, ItemPile pile)
+    {
+        Hotbar[slotId] = pile;
+    }
 }

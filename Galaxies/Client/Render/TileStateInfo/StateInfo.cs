@@ -11,6 +11,7 @@ namespace Galaxies.Client.Render.TileStateInfo;
 public class StateInfo : IStateInfo
 {
     private Rectangle sourceRect;
+    private bool shouldRandomTurn;
     public StateInfo(Rectangle sourceRect)
     {
         this.sourceRect = sourceRect;
@@ -22,6 +23,7 @@ public class StateInfo : IStateInfo
     public TileRenderInfo DefaultInfo()
     {
         return new TileRenderInfo();
+        
     }
 
     public Rectangle GetRenderRect(byte id)
@@ -32,11 +34,18 @@ public class StateInfo : IStateInfo
     {
         var rect = JsonUtils.GetValue<int[]>(prop, "renderRect");
         sourceRect = sourceRects[rect[0] - 1, rect[1] - 1];
-
+        JsonUtils.TryGetValue(prop, "shouldRandomTurn", out shouldRandomTurn);
     }
 
     public TileRenderInfo UpdateAdjacencies(AbstractWorld world, TileLayer layer, int x, int y)
     {
-        return new TileRenderInfo();
+        if (shouldRandomTurn) {
+            return new TileRenderInfo().WithFacing(0, (x + y) % 2 == 0 ? Facing.None : Facing.Turned);
+        }
+        else
+        {
+            return new TileRenderInfo().WithFacing(0, world.GetTileState(layer, x, y).GetFacing());
+        }
+        
     }
 }

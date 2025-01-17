@@ -157,9 +157,7 @@ public class Main : Game
     }
     protected override void Draw(GameTime gameTime)
     {
-
         GameRenderer.Render((float)gameTime.ElapsedGameTime.TotalSeconds);
-
         base.Draw(gameTime);
     }
     public void QuitGame()

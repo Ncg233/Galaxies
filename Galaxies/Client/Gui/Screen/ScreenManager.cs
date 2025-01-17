@@ -53,6 +53,7 @@ public class ScreenManager
             pressed = true;
             mouseType = MouseType.Middle;
         }
+
         if (CurrentScreen != null && pressed && GetMouseState(ms) == ButtonState.Released && !isFading)
         {
             Main.GetScreenPos(out var mouseX, out var mouseY);

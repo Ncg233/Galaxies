@@ -1,4 +1,5 @@
-﻿using Galaxies.Client.Render;
+﻿using Galaxies.Client.Gui.Screen;
+using Galaxies.Client.Render;
 using Galaxies.Core.World.Inventory;
 using Galaxies.Core.World.Items;
 using SharpDX.Direct3D9;
@@ -24,6 +25,29 @@ public class Slot
     public ItemPile GetItem()
     {
         return inventory.GetItemPile(slotId);
+    }
+
+    public void SetItem(ItemPile pile)
+    {
+        inventory.Set(slotId, pile);
+    }
+
+    public void OnClicked(ItemContainer container, MouseType type)
+    {
+        ItemPile pile = GetItem();
+        if (container.draggedPile.IsEmpty())
+        {
+            if (!pile.IsEmpty())
+            {
+                container.draggedPile = pile;
+                SetItem(ItemPile.Empty);
+            }
+        }
+        else
+        {
+            SetItem(container.draggedPile);
+            container.draggedPile = ItemPile.Empty;
+        }
     }
 
     //client

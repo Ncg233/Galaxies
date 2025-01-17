@@ -22,34 +22,22 @@ public class TileRenderer
         int width = tileTexture.Width;
         int height = tileTexture.Height;
         
-        float renderX = 0, renderY = 0, originX = 0, originY = 0, renderWidth = 0, renderHeight = 0;
+        float renderX = 0, renderY = 0, originX = width / 2f, originY = height / 2f, renderWidth = width, renderHeight = height;
         if (state.GetTile().GetRenderType() == TileRenderType.Center)
         {
             renderX = (x + 0.5f) * GameConstants.TileSize;
             renderY = -(y + 0.5f) * GameConstants.TileSize;
-            originX = width / 2;
-            originY = height / 2;
-            renderWidth = width;
-            renderHeight = height;
         }
         else if(state.GetTile().GetRenderType() == TileRenderType.BottomCenter)
         {
             renderX = (x + 0.5f) * GameConstants.TileSize;
             renderY = -y * GameConstants.TileSize - height / 2;
-            originX = width / 2f;
-            originY = height / 2f;
-            renderWidth = width;
-            renderHeight = height;
         }
         else if (state.GetTile().GetRenderType() == TileRenderType.BottomCorner)
         {
             bool normal = state.GetFacing().Effect == SpriteEffects.None;
             renderX = normal ? (x * GameConstants.TileSize + width / 2f) : ((x + 1) * GameConstants.TileSize - width / 2f);
             renderY = -y * GameConstants.TileSize - height / 2;
-            originX = width / 2f;
-            originY = height / 2f;
-            renderWidth = width;
-            renderHeight = height;
         }
         DrawTileSpriteMap(renderer, tileTexture, state,layer, renderX, renderY, originX, originY, renderWidth, renderHeight,
                apperaance, colors);
@@ -62,7 +50,7 @@ public class TileRenderer
         int angle = appearance.RotationD;
         Texture2D tex = map.SourceTexture;
         var info = map.GetStateInfo(state);
-        Facing facing = state.GetFacing();
+        Facing facing = appearance.Facing;
         var rect = info.GetRenderRect(appearance.TextureId);
         if(state.GetRenderType() == TileRenderType.Center)
         {

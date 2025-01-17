@@ -18,6 +18,7 @@ public static class AllTiles
     public static readonly Tile Table = Register("table", new FurnitureTile(3, 2));
     public static readonly Tile Door = Register("door", new DoorTile());
     public static readonly Tile Wood = Register("wood", new Tile(new TileSettings()));
+    public static readonly Tile Chest = Register("chest", new ChestTile(new TileSettings()));
 
     public static void Init()
     {

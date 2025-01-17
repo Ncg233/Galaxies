@@ -1,6 +1,7 @@
 ﻿using Galaxies.Client.Gui.Screen;
 using Galaxies.Client.Render;
 using Galaxies.Core.World.Container;
+using Galaxies.Core.World.Items;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,18 @@ using System.Threading.Tasks;
 namespace Galaxies.Client.Gui.Widget;
 internal class SlotWidget : IWidget
 {
-    private readonly ItemContainer _container;
+    private readonly ItemContainer container;
     private readonly Slot slot;
-    private string textureName;
+    private readonly string textureName;
+    private readonly string highLightTexture;
     private int x;
     private int y;
 
-    public SlotWidget(ItemContainer container, string textureName, Slot slot, int x, int y)
+    public SlotWidget(ItemContainer container,Slot slot, int x, int y, string textureName, string highLightTexture)
     {
+        this.container = container;
         this.textureName = textureName;
+        this.highLightTexture = highLightTexture;
         this.x = x;
         this.y = y;
         this.slot = slot;
@@ -27,6 +31,11 @@ internal class SlotWidget : IWidget
 
     public bool MouseClicked(double mouseX, double mouseY, MouseType type)
     {
+        if(IsMouseOver(mouseX, mouseY))
+        {
+            slot.OnClicked(container, type);
+            return true;
+        }
         return false;
     }
 
@@ -34,14 +43,14 @@ internal class SlotWidget : IWidget
     {
         renderer.Draw(textureName, x, y, Color.White);
         ItemRenderer.RenderInGui(renderer, slot.GetItem(), x + 10, y + 10, Color.White);
-        if (IsMouseOver(slot, mouseX, mouseY))
+        if (IsMouseOver(mouseX, mouseY))
         {
-            renderer.Draw("Textures/Gui/slot_onHand", x, y, Color.White);
+            renderer.Draw(highLightTexture, x, y, Color.White);
         }
 
     }
 
-    private bool IsMouseOver(Slot slot, double mouseX, double mouseY)
+    private bool IsMouseOver(double mouseX, double mouseY)
     {
         return x <= mouseX && mouseX <= x + 18 && y <= mouseY && mouseY <= y + 18;
     }

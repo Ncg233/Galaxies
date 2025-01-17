@@ -11,7 +11,6 @@ public class InventoryScreen : AbstractScreen
 {
     private PlayerContainer playerContainer;
     private AbstractPlayerEntity playerEntity;
-    private ItemPile draggedPile = ItemPile.Empty;
     public InventoryScreen(AbstractPlayerEntity player)
     {
         playerEntity = player; 
@@ -23,7 +22,8 @@ public class InventoryScreen : AbstractScreen
     {
         base.Render(renderer, mouseX, mouseY);
 
-        if(draggedPile != null && !draggedPile.IsEmpty())
+        ItemPile draggedPile = playerContainer.draggedPile;
+        if (draggedPile != null && !draggedPile.IsEmpty())
         {
             ItemRenderer.RenderInGui(renderer, draggedPile, (float)mouseX, (float)mouseY, Color.White);
         }
@@ -35,20 +35,6 @@ public class InventoryScreen : AbstractScreen
         {
             return true;
         }
-        if (draggedPile.IsEmpty())
-        {
-            int x = Utils.Floor((mouseX - LeftPos) / 20);
-            int y = (int)(mouseY / 20);
-            if (x >= 0 && x < 9 && y >= 0 && y < 4)
-            {
-                int index = y * 9 + x;
-                draggedPile = playerContainer.GetSlot(index).GetItem();
-                return true;
-            }
-        }else
-        {
-
-        }
         
         return false;//todo
 
@@ -59,7 +45,7 @@ public class InventoryScreen : AbstractScreen
         LeftPos = (Width - xSize) / 2;
         foreach (var slot in playerContainer)
         {
-            AddWidget(new SlotWidget(playerContainer, "Textures/Gui/slot" ,slot, LeftPos + slot.X, slot.Y));
+            AddWidget(new SlotWidget(playerContainer ,slot, LeftPos + slot.X, slot.Y, "Textures/Gui/slot", "Textures/Gui/slot_onHand"));
             
         }
 

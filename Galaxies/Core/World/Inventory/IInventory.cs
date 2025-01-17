@@ -9,5 +9,6 @@ namespace Galaxies.Core.World.Inventory;
 public interface IInventory
 {
     public ItemPile GetItemPile(int index);
+    void Set(int slotId, ItemPile pile);
 }
 

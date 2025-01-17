@@ -1,9 +1,0 @@
-{
-    "texture": "Textures/Tiles/iron_ore",
-    "size": [1, 1],
-    "state": {
-        "default": {
-            "renderRect": [ 1, 1 ]
-        }
-    }
-}
