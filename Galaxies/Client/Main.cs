@@ -18,6 +18,7 @@ using Galaxies.Util;
 using Galaxies.Core.Audio;
 using Galaxies.Core.Networking.Server;
 using Galaxies.Core.Networking.Client;
+using Galaxies.Client.Gui.Screen.Menu;
 
 namespace Galaxies.Client;
 public class Main : Game
@@ -136,17 +137,26 @@ public class Main : Game
     }
     private void HandleKey()
     {
-
+        var screen = ScreenManager.CurrentScreen;
         if (KeyBind.InventoryKey.IsKeyPressed())
         {
-            inGameHud.ToggleInventory();
+            //inGameHud.ToggleInventory();
+            //invOpen = !invOpen;
+            if (screen == null)
+            {
+                SetCurrentScreen(new InventoryScreen(GetPlayer()));
+            }
+            else
+            {
+                SetCurrentScreen(null);
+            }
         }
         if (KeyBind.Esc.IsKeyPressed())
         {
-            var screen = ScreenManager.CurrentScreen;
+            
             if (screen == null)
             {
-                SetCurrentScreen(new MenuScreen());
+                SetCurrentScreen(new InGameMenuScreen());
             }
             else if (screen.CanCloseWithEsc)
             {

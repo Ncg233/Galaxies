@@ -1,5 +1,6 @@
 ﻿using Galaxies.Core.World.Entities;
 using Galaxies.Util;
+using SharpDX.Direct2D1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,11 @@ public class MultiState : TileState
         InnerX = innerX;
         InnerY = innerY;
     }
-    public override void OnUse(AbstractWorld world, int x, int y)
+    public override void OnUse(AbstractWorld world,AbstractPlayerEntity player, int x, int y)
     {
         if (world.GetTileState(TileLayer.Main, X, Y) == baseTileState)
         {
-            baseTileState.OnUse(world, X, Y);
+            baseTileState.OnUse(world, player, X, Y);
         }
     }
     public override void OnDestroyed(AbstractWorld world, int x, int y)

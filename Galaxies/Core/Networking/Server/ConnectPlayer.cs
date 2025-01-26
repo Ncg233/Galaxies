@@ -2,6 +2,8 @@
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Menu;
+using Galaxies.Core.World.Tiles.Entity;
 using LiteNetLib;
 using System;
 
@@ -15,6 +17,11 @@ public class ConnectPlayer : AbstractPlayerEntity
     {
         this.peer = peer;
         InteractionManager = new InteractionManagerConnection(world, this);
+    }
+
+    public override bool OpenInventoryMenu(IMenuProvider entity)
+    {
+        throw new NotImplementedException();
     }
 
     public override void SendToClient(S2CPacket packet)

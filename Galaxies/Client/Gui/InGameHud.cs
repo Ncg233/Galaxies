@@ -1,4 +1,5 @@
 using Galaxies.Client.Gui.Screen;
+using Galaxies.Client.Gui.Screen.Menu;
 using Galaxies.Client.Key;
 using Galaxies.Client.Render;
 using Galaxies.Core.World.Entities;
@@ -66,7 +67,7 @@ public class InGameHud
             for (int x = 0; x < 9; x++)
             {
                 renderer.Draw("Textures/Gui/slot", guiWidth / 2 - 90 + x * 20, 0, Color.White);
-                ItemRenderer.RenderInGui(renderer, inv.Hotbar[x], guiWidth / 2 - 90 + x * 20 + 10, 10, Color.White);
+                ItemRenderer.RenderInGui(renderer, inv.GetItemPile(x), guiWidth / 2 - 90 + x * 20 + 10, 10, Color.White);
 
             }
             renderer.Draw("Textures/Gui/slot_onHand", guiWidth / 2 - 90 + inv.onHand * 20, 0 * 20, Color.White);
@@ -80,13 +81,7 @@ public class InGameHud
     }
     public void ToggleInventory()
     {
-        invOpen = !invOpen;
-        if (invOpen) {
-            _client.SetCurrentScreen(new InventoryScreen(_client.GetPlayer()));
-        }else
-        {
-            _client.SetCurrentScreen(null);
-        }
+        
     }
     internal void RenderString(IntegrationRenderer renderer, string s, float x, float y, float scale = 1)
     {

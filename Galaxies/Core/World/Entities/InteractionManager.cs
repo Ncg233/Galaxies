@@ -50,7 +50,7 @@ public class InteractionManager
             if (buttonRealased)
             {
                 var tileState = world.GetTileState(TileLayer.Main, x, y);
-                tileState.OnUse(world, x, y);
+                tileState.OnUse(world,player, x, y);
             }
             //PlayerUseItem(world, x, y);
             buttonRealased = false;

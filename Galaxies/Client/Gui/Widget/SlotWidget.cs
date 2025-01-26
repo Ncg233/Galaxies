@@ -1,7 +1,7 @@
 ﻿using Galaxies.Client.Gui.Screen;
 using Galaxies.Client.Render;
-using Galaxies.Core.World.Container;
 using Galaxies.Core.World.Items;
+using Galaxies.Core.World.Menu;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,18 +12,18 @@ using System.Threading.Tasks;
 namespace Galaxies.Client.Gui.Widget;
 internal class SlotWidget : IWidget
 {
-    private readonly ItemContainer container;
+    private readonly InventoryMenu container;
     private readonly Slot slot;
     private readonly string textureName;
     private readonly string highLightTexture;
     private int x;
     private int y;
 
-    public SlotWidget(ItemContainer container,Slot slot, int x, int y, string textureName, string highLightTexture)
+    public SlotWidget(InventoryMenu container,Slot slot, int x, int y)
     {
         this.container = container;
-        this.textureName = textureName;
-        this.highLightTexture = highLightTexture;
+        textureName = slot.TextureName;
+        highLightTexture = slot.HighLightTexture;
         this.x = x;
         this.y = y;
         this.slot = slot;

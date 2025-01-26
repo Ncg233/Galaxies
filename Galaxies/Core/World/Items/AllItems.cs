@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.State;
+using Galaxies.Util;
 
 namespace Galaxies.Core.World.Items;
 public class AllItems
 {
+
     public static readonly Dictionary<string, Item> itemRegister = new Dictionary<string, Item>();
+    public static readonly IntIdentityDictionary<Item> ItemId = [];
     public readonly static Item Air = Register("air", new Item());
     public readonly static Item Dirt = FromTile("dirt", AllTiles.Dirt);
     public readonly static Item DirtWall = FromTile("dirt_wall", AllTiles.Dirt, TileLayer.Background);
@@ -15,9 +19,11 @@ public class AllItems
     public readonly static Item Door = FromTile("door", AllTiles.Door);
     public readonly static Item Wood = FromTile("wood", AllTiles.Wood);
     public readonly static Item WoodWall = FromTile("wood_wall", AllTiles.Wood, TileLayer.Background);
+    public readonly static Item Chest = FromTile("chest", AllTiles.Chest);
     private static Item Register(string name, Item item)
     {
         itemRegister.Add(name, item);
+        ItemId.Add(item);
         return item;
     }
     private static Item FromTile(string name, Tile tile, TileLayer layer)

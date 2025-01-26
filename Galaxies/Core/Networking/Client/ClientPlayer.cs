@@ -1,16 +1,18 @@
 ﻿using Galaxies.Client;
 using Galaxies.Core.Networking.Packet.C2S;
 using Galaxies.Core.Networking.Packet.S2C;
+using Galaxies.Core.Networking.Server;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Tiles.Entity;
 using System;
 
 namespace Galaxies.Core.Networking.Client;
-public class ClientPlayer : AbstractPlayerEntity
+public class ClientPlayer : PlayerEntity
 {
     public ClientPlayer(AbstractWorld world, Guid id) : base(world, id)
     {
-        InteractionManager = new InteractionManager(world, this);
+        //InteractionManager = new InteractionManager(world, this);
     }
     public override void Update(float dTime)
     {

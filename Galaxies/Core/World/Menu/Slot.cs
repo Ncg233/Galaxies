@@ -7,21 +7,34 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Galaxies.Core.World.Container;
+namespace Galaxies.Core.World.Menu;
 public class Slot
 {
     private readonly IInventory inventory;
     private readonly int slotId;
     public readonly int X;
     public readonly int Y;
-    public Slot(IInventory inventory, int slotId, int x, int y)
+    public readonly string TextureName;
+    public readonly string HighLightTexture;
+    public Slot(IInventory inventory, int slotId, int x, int y, string textureName = "Textures/Gui/slot", string highLightTexture = "Textures/Gui/slot_onHand")
     {
         this.inventory = inventory;
         this.slotId = slotId;
         X = x;
         Y = y;
+        TextureName = textureName;
+        HighLightTexture = highLightTexture;
     }
-    
+    public Slot(IInventoryProvider invProvider, int slotId, int x, int y, string textureName = "Textures/Gui/slot", string highLightTexture = "Textures/Gui/slot_onHand")
+    {
+        inventory = invProvider.GetInventory();
+        this.slotId = slotId;
+        X = x;
+        Y = y;
+        TextureName = textureName;
+        HighLightTexture = highLightTexture;
+    }
+
     public ItemPile GetItem()
     {
         return inventory.GetItemPile(slotId);
@@ -32,7 +45,7 @@ public class Slot
         inventory.Set(slotId, pile);
     }
 
-    public void OnClicked(ItemContainer container, MouseType type)
+    public void OnClicked(InventoryMenu container, MouseType type)
     {
         ItemPile pile = GetItem();
         if (container.draggedPile.IsEmpty())

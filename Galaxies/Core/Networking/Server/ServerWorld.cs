@@ -3,10 +3,13 @@ using Galaxies.Core.Data;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.Entity;
 using Galaxies.Util;
+using Galaxies.Utill;
 using LiteNetLib;
 using MonoGame.Framework.Utilities.Deflate;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -44,8 +47,23 @@ public class ServerWorld : AbstractWorld
         worldData.PutIntArray("tileData", tileData);
         worldData.PutByteArray("skyLight", skyLight);
         worldData.PutByteArray("tileLight", tileLight);
+
+        List<DataSet> tileEntityDatas = [];
+        foreach (TileEntity tile in tileEntityGrid.Values)
+        {
+            
+            DataSet tileSet = new();
+            tileSet.PutInt("x", tile.Pos.X);
+            tileSet.PutInt("y", tile.Pos.Y);
+            tileSet.PutInt("layer", (int)tile.Pos.Layer);
+            tile.Save(tileSet);
+            tileEntityDatas.Add(tileSet);
+        }
+        worldData.PutList("tileEntities", tileEntityDatas);
+
         DataUtils.WriteDataSet(worldData, worldDirectory + "world.dat");
 
+        
         foreach (var player in players)
         {
             var dataSet = new DataSet();
@@ -78,6 +96,16 @@ public class ServerWorld : AbstractWorld
                 var tileLight = worldData.GetData<byte[]>("tileLight");
                 ReadTileData(tileData, skyLight, tileLight);
 
+                List<DataSet> tileEntityDatas = worldData.GetData<List<DataSet>>("tileEntities");
+                tileEntityDatas.ForEach(data =>
+                {
+                    var x = data.GetData<int>("x");
+                    var y = data.GetData<int>("y");
+                    var layer = data.GetData<int>("layer");
+                    TilePos pos = new(x, y, (TileLayer)layer);
+                    var tileEntity = GetTileEntity(pos);
+                    tileEntity.Read(data);
+                });
                 isGenerated = false;
                 stopwatch.Stop();
                 Log.Info("Take " + stopwatch.ElapsedMilliseconds + "ms to load world");

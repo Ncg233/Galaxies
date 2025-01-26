@@ -1,4 +1,5 @@
-﻿using Galaxies.Core.World.Tiles.State;
+﻿using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using SharpDX.Direct3D11;
 using System;
@@ -22,7 +23,7 @@ public class DoorTile : FurnitureTile
         handler.AddProp("close");
         handler.AddProp("open");
     }
-    public override void OnUse(TileState tileState, AbstractWorld world, int x, int y)
+    public override void OnUse(TileState tileState, AbstractWorld world,AbstractPlayerEntity player, int x, int y)
     {
         if(tileState.GetState() == "close")
         {

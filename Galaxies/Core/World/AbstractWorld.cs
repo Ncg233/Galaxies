@@ -5,8 +5,10 @@ using Galaxies.Core.World.Entities;
 using Galaxies.Core.World.Gen;
 using Galaxies.Core.World.Particles;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.Entity;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
+using Galaxies.Utill;
 using LiteNetLib;
 using SharpDX;
 using SharpDX.X3DAudio;
@@ -22,8 +24,8 @@ public abstract class AbstractWorld
     public readonly List<AbstractPlayerEntity> players = [];
     private readonly LightManager lightManager;
     private readonly Dictionary<TileLayer, TileState[]> blockStateGrid = [];
+    protected readonly Dictionary<TilePos, TileEntity> tileEntityGrid = [];
     private readonly IWorldListener worldListener;
-    //private readonly Dictionary<LightType, byte[]> lightGrid = [];
     #region SERVER_ONLY
 
     protected HeightGen heightGen;
@@ -42,7 +44,7 @@ public abstract class AbstractWorld
     {
         IsClient = isClient;
         worldListener = listener;
-        seed = new Random().Next(-10000, 10000);
+        seed = Utils.Random.Next(-10000, 10000);
         rand = new Random(seed);
         lightManager = new LightManager(this, Width, Height);
         blockStateGrid.Add(TileLayer.Background, new TileState[Width * Height]);
@@ -119,6 +121,10 @@ public abstract class AbstractWorld
     public List<AbstractPlayerEntity> GetAllPlayers(){
         return players;
     }
+    public void AddTileEntity(TileEntity entity)
+    {
+        tileEntityGrid[entity.Pos] = entity;
+    }
     public int GetTileIndex(int x, int y)
     {
         while (x > Width - 1)
@@ -145,20 +151,29 @@ public abstract class AbstractWorld
         }
         return AllTiles.Air.GetDefaultState();
     }
-    public void SetTileState(TileLayer layer, int x, int y, TileState id)
+    public void SetTileState(TileLayer layer, int x, int y, TileState state)
     {
-        if (IsInWorld(y) && id != null)
+        if (IsInWorld(y) && state != null)
         {
             var grid = blockStateGrid.GetValueOrDefault(layer);
-            grid[GetTileIndex(x, y)] = id;
-            id.OnTilePlaced(this, null, x, y);
+            grid[GetTileIndex(x, y)] = state;
+            state.OnTilePlaced(this, null, x, y);
+            if (state.HasTileEntity() && !state.IsMulti())
+            {
+                var tileEntity = ((ITileEntityProvider)state.GetTile()).CreateTileEntity(this, state, new TilePos(x, y, layer));
+                if (tileEntity != null)
+                {
+                    AddTileEntity(tileEntity);
+                }
+            }
             if (!isGenerated)
             {
                 lightManager.CauseLightUpdate(x, y);
-                NotifyNeighbors(layer, x, y, id);
+                NotifyNeighbors(layer, x, y, state);
+                
                 if (!IsClient)
                 {
-                    NetPlayManager.SendToAllClients(new S2CTileChangePacket(x, y, id));
+                    NetPlayManager.SendToAllClients(new S2CTileChangePacket(x, y, state));
                 }
             }
 
@@ -306,5 +321,10 @@ public abstract class AbstractWorld
         }
         isGenerated = false;
         //isLoaded = true;
+    }
+
+    public TileEntity GetTileEntity(TilePos tilePos)
+    {
+        return tileEntityGrid[tilePos];
     }
 }

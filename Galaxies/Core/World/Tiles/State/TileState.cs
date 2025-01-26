@@ -70,9 +70,9 @@ public class TileState
         Tile.OnDestoryed(this, world, x, y);
     }
 
-    public virtual void OnUse(AbstractWorld world, int x, int y)
+    public virtual void OnUse(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
-        Tile.OnUse(this, world, x, y);
+        Tile.OnUse(this, world, player, x, y);
     }
 
     public virtual void OnTilePlaced(AbstractWorld world, AbstractPlayerEntity player, int x, int y)
@@ -106,6 +106,10 @@ public class TileState
     {
         Tile.RandomTick(this, abstractWorld, x, y, rand);
     }
-    
+
+    public bool HasTileEntity()
+    {
+        return Tile is ITileEntityProvider;
+    }
 }
 

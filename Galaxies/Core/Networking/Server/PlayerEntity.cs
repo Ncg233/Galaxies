@@ -3,6 +3,8 @@ using Galaxies.Client.Key;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Menu;
+using Galaxies.Core.World.Tiles.Entity;
 using Microsoft.Xna.Framework.Input;
 using System;
 namespace Galaxies.Core.Networking.Server;
@@ -46,5 +48,16 @@ public class PlayerEntity : AbstractPlayerEntity
     public override void SendToClient(S2CPacket packet)
     {
 
+    }
+
+    public override bool OpenInventoryMenu(IMenuProvider provider)
+    {
+        var menu = provider.CreateMenu(Inventory);
+
+        currentInvMenu = menu;
+
+        Main.GetInstance().SetCurrentScreen(currentInvMenu.CreateScreen());
+
+        return true;
     }
 }

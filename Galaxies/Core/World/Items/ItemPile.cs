@@ -1,3 +1,4 @@
+using Galaxies.Core.Data;
 using Galaxies.Core.World.Entities;
 using System;
 
@@ -42,5 +43,16 @@ public class ItemPile
     public bool IsDiggingTool()
     {
         return item.IsDiggingTool;
+    }
+
+    public void Save(DataSet set)
+    {
+        set.PutInt("count", count);
+        set.PutInt("item", AllItems.ItemId.Get(item));
+    }
+    public void Load(DataSet set)
+    {
+        count = set.GetData<int>("count");
+        item = AllItems.ItemId.Get(set.GetData<int>("item"));
     }
 }

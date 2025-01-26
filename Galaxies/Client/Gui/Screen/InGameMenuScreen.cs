@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Galaxies.Client.Gui.Screen;
-public class MenuScreen : AbstractScreen
+public class InGameMenuScreen : AbstractScreen
 {
     protected override void OnInit()
     {

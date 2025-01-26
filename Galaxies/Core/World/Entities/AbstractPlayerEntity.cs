@@ -1,10 +1,11 @@
 using Galaxies.Client.Render;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World;
-using Galaxies.Core.World.Container;
 using Galaxies.Core.World.Inventory;
 using Galaxies.Core.World.Items;
+using Galaxies.Core.World.Menu;
 using Galaxies.Core.World.Tiles;
+using Galaxies.Core.World.Tiles.Entity;
 using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
@@ -20,7 +21,8 @@ public abstract class AbstractPlayerEntity : LivingEntity
     private static readonly PlayerRenderer s_playerRender = new();
     public InteractionManager InteractionManager;
     public PlayerInventory Inventory { get; private set; } = new();
-    public PlayerContainer container;
+    public PlayerInventoryMenu container;
+    protected InventoryMenu currentInvMenu;
     public bool IsWalking { get; protected set; }
 
     public int HitX = 0;
@@ -38,7 +40,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
         speed = 10f;
         maxHealth = 100;
         health = 100;
-        container = new PlayerContainer(this);
+        container = new PlayerInventoryMenu(Inventory);
         
     }
     public override void Update(float dTime)
@@ -139,7 +141,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
     }
     public ItemPile GetItemOnHand()
     {
-        return Inventory.Hotbar[Inventory.onHand];
+        return Inventory.GetItemOnHand();
     }
     public PlayerInventory GetInventory()
     {
@@ -171,6 +173,9 @@ public abstract class AbstractPlayerEntity : LivingEntity
         }
 
     }
+
+    public abstract bool OpenInventoryMenu(IMenuProvider provider);
+
     public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
     {
         private static Color ClothesColor = Color.Blue;

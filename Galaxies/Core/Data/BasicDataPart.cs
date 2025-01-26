@@ -6,11 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Galaxies.Core.Data;
-public abstract class BasicDataPart<T>(T data) : IDataPart
+public abstract class BasicDataPart<T> : IDataPart
 {
-    protected T Data = data;
 
-    public T GetData()
+    protected T Data;
+    public BasicDataPart(T data)
+    {
+        Data = data;
+    }
+    public BasicDataPart()
+    {
+        Data = default;
+    }
+    public virtual T GetData()
     {
         return Data;
     }

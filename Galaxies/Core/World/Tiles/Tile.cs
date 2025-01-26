@@ -123,7 +123,7 @@ public class Tile
         var pile = GetDropItem();
         world.AddEntity(new ItemEntity(world, pile, x + Utils.Random.NextFloat(0, 0.5f), y + Utils.Random.NextFloat(0, 0.5f)));
     }
-    public virtual void OnUse(TileState tileState, AbstractWorld world, int x, int y)
+    public virtual void OnUse(TileState tileState, AbstractWorld world, AbstractPlayerEntity player, int x, int y)
     {
 
     }

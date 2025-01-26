@@ -25,13 +25,7 @@ public class DataUtils
         {
             BinaryWriter writer = new BinaryWriter(new GZipStream(new FileStream(writeFile, FileMode.OpenOrCreate, FileAccess.Write), CompressionMode.Compress));
             //write data set size
-            writer.Write(set.Datas.Count);
-            foreach (var valuePair in set.Datas)
-            {
-                writer.Write(valuePair.Value.GetId());
-                writer.Write(valuePair.Key);
-                valuePair.Value.Write(writer);
-            }
+            set.Write(writer);
             writer.Close();
         }
         catch (Exception e) { 
@@ -44,14 +38,7 @@ public class DataUtils
         try
         {
             BinaryReader reader = new BinaryReader(new GZipStream(new FileStream(readFile, FileMode.OpenOrCreate, FileAccess.Read), CompressionMode.Decompress));
-            int size = reader.ReadInt32();
-            for (int i = 0; i < size; i++) { 
-                byte partId = reader.ReadByte();
-                IDataPart part = GetDataPart(partId);
-                string key = reader.ReadString();
-                part.Read(reader);
-                set.Datas.Add(key, part);
-            }
+            set.Read(reader);
             reader.Close();
         }
         catch (Exception e)
@@ -59,14 +46,16 @@ public class DataUtils
             Log.Error("Can't write data set", e);
         }
     }
-    private static IDataPart GetDataPart(int partId)
+    public static IDataPart GetDataPart(int partId)
     {
         switch (partId) { 
-            case 0: return null;
+            case Byte: return new DataByte(0);
             case Int: return new DataInt(0);
             case Float: return new DataFloat(0);
             case ByteArray: return new DataByteArray(null);
             case IntArray: return new DataIntArray(null);
+            case DataSet: return new DataSet();
+            case List: return new DataList();
             default: return null;
         }
     }
