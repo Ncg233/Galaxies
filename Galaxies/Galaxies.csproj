@@ -26,6 +26,7 @@
   <ItemGroup>
     <None Remove="Content\Assets\Textures\Tiles\grass_tile.png" />
     <None Remove="content\infos\models\items\chest.json" />
+    <None Remove="Content\Infos\Models\Items\stone_pickaxe.json" />
     <None Remove="content\infos\models\tiles\chest.json" />
     <None Remove="Content\Infos\Models\Tiles\chest.png" />
     <None Remove="Content\Infos\Models\Tiles\grass_tile.png" />

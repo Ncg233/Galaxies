@@ -1,14 +1,14 @@
 using Galaxies.Core.World;
 
 namespace Galaxies.Core.World.Entities;
-public class LivingEntity : Entity
+public abstract class LivingEntity : Entity
 {
     public float health { get; protected set; }
     public float maxHealth { get; protected set; }
     protected bool isFalling;
     protected float fallDistance = 0;
     private bool lastOnGround = true;
-    public LivingEntity(EntityType type, AbstractWorld world) : base(type, world)
+    public LivingEntity(AbstractWorld world) : base(world)
     {
 
     }

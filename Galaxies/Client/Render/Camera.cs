@@ -24,25 +24,18 @@ public class Camera
     public float worldWidth, worldHeight;
     public void Update(AbstractPlayerEntity player, float dTime)
     {
-        if (false)
-        {
-            Utils.Lerp(ref _pos, new Vector3(-player.X * GameConstants.TileSize, (player.Y + 2) * GameConstants.TileSize, 0), dTime);
-
-        }
-        else
-        {
-            _pos.X = -player.X * GameConstants.TileSize; _pos.Y = (player.Y + 3) * GameConstants.TileSize;
-        }
+        _pos.X = -player.X * GameConstants.TileSize; 
+        _pos.Y = (player.Y + 3) * GameConstants.TileSize;
 
         if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
         {
-            _zoom += dTime;
+            _zoom += 0.03f;
         }     
         else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
         {
-            _zoom -= dTime;
+            _zoom -= 0.03f;
         }
-        _zoom = MathHelper.Clamp(_zoom, 2.6f, 4);
+        _zoom = MathHelper.Clamp(_zoom, 2f, 4);
         scale = _zoom * displayRadio;
 
         worldWidth = viewWidth / scale;

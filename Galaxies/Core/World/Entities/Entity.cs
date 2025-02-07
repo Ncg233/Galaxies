@@ -38,9 +38,8 @@ public abstract class Entity
     public bool collidedVert;
 
     public bool IsDead = false;
-    public Entity(EntityType entity, AbstractWorld world)
+    public Entity(AbstractWorld world)
     {
-        Type = entity;
         this.world = world;
         hitbox = HitBox.Empty();
         //renderer = new EntityRenderer();
@@ -170,30 +169,21 @@ public abstract class Entity
 
         
     }
-
     public virtual void OnCollideWithEntity(Entity otherEntity)
     {
         
     }
 
-    public virtual void Render(IntegrationRenderer renderer, Color color)
-    {
-
-    }
+    public abstract void Render(IntegrationRenderer renderer, Color color);
     public void SetPos(float x, float y)
     {
-        this.X = x;
-        this.Y = y;
+        X = x;
+        Y = y;
         float u = GetWidth() / 2;
         float h = GetHeight();
 
         hitbox.SetPos(x - u, y, x + u, y + h);
         //SetHitBox(MakeHitBox());
-    }
-
-    private void SetHitBox(HitBox hit)
-    {
-        hitbox = hit;
     }
 
     public virtual float GetWidth()//1 -> 8Pixel

@@ -10,7 +10,7 @@ public abstract class Particle : Entity
     protected float life;
     protected bool dead;
 
-    public Particle(AbstractWorld world, float x, float y, float motionX, float motionY, float maxLife) : base(null, world)
+    public Particle(AbstractWorld world, float x, float y, float motionX, float motionY, float maxLife) : base(world)
     {
         vx = motionX;
         vy = motionY;
@@ -35,5 +35,4 @@ public abstract class Particle : Entity
         vx *= onGround ? 0.8f : 0.98f;
         vy *= 0.99f;
     }
-    public abstract void Render(IntegrationRenderer renderer, Color color);
 }

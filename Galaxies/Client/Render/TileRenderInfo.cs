@@ -11,6 +11,7 @@ public class TileRenderInfo
 {
     public byte TextureId;
     public short RotationD;
+    private bool isFull = true;
     public Facing Facing = Facing.None;
     public SpriteEffects Effects;
     public TileRenderInfo WithRotation(byte textureId, short rotationD)
@@ -24,5 +25,14 @@ public class TileRenderInfo
         TextureId = textureId;
         Facing = facing;
         return this;
+    }
+    public TileRenderInfo SetNotFull()
+    {
+        isFull = false;
+        return this;
+    }
+    internal bool IsFull()
+    {
+        return isFull;
     }
 }

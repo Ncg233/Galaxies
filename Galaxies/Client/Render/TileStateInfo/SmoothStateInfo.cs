@@ -69,67 +69,67 @@ internal class SmoothStateInfo : IStateInfo
         // the three sides are same
         else if (isSameRight && isSameLeft && isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, None);
+            return renderInfo.WithRotation(SideIII, None).SetNotFull();
         }
         else if (!isSameRight && isSameLeft && isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, r_90d);
+            return renderInfo.WithRotation(SideIII, r_90d).SetNotFull();
         }
         else if (isSameRight && isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, r_180d);
+            return renderInfo.WithRotation(SideIII, r_180d).SetNotFull();
         }
         else if (isSameRight && !isSameLeft && isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideIII, r_270d);
+            return renderInfo.WithRotation(SideIII, r_270d).SetNotFull();
         }
         // the two sides are same （side）
         else if (!isSameRight && !isSameLeft && isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideII, None);
+            return renderInfo.WithRotation(SideII, None).SetNotFull();
         }
         else if (isSameRight && isSameLeft && !isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideII, r_270d);
+            return renderInfo.WithRotation(SideII, r_270d).SetNotFull();
         }
         //(corner)
         else if (isSameRight && !isSameLeft && isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(Corner, None);
+            return renderInfo.WithRotation(Corner, None).SetNotFull();
         }
         else if (!isSameRight && isSameLeft && isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(Corner, r_90d);
+            return renderInfo.WithRotation(Corner, r_90d).SetNotFull();
         }
         else if (!isSameRight && isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(Corner, r_180d);
+            return renderInfo.WithRotation(Corner, r_180d).SetNotFull();
         }
         else if (isSameRight && !isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(Corner, r_270d);
+            return renderInfo.WithRotation(Corner, r_270d).SetNotFull();
         }
         // the one side is same 
         else if (!isSameRight && !isSameLeft && isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideI, None);
+            return renderInfo.WithRotation(SideI, None).SetNotFull();
         }
         else if (!isSameRight && isSameLeft && !isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideI, r_90d);
+            return renderInfo.WithRotation(SideI, r_90d).SetNotFull();
         }
         else if (!isSameRight && !isSameLeft && !isSameDown && isSameUp)
         {
-            return renderInfo.WithRotation(SideI, r_180d);
+            return renderInfo.WithRotation(SideI, r_180d).SetNotFull();
         }
         else if (isSameRight && !isSameLeft && !isSameDown && !isSameUp)
         {
-            return renderInfo.WithRotation(SideI, r_270d);
+            return renderInfo.WithRotation(SideI, r_270d).SetNotFull();
         }
         // the single tile
         else
         {
-            return renderInfo.WithRotation(Single, shouldRandom ? (short)(Utils.Random.Next(0, 3) * 90) : (short)0);
+            return renderInfo.WithRotation(Single, shouldRandom ? (short)(Utils.Random.Next(0, 3) * 90) : (short)0).SetNotFull();
         }
     }
     private byte WithRotation(byte id, byte rotation)

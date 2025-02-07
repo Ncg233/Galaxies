@@ -2,6 +2,8 @@ using Galaxies.Client;
 using Galaxies.Core.Networking;
 using Galaxies.Core.Networking.Packet.S2C;
 using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Entities.Monsters;
+using Galaxies.Core.World.Entities.Spawn;
 using Galaxies.Core.World.Gen;
 using Galaxies.Core.World.Particles;
 using Galaxies.Core.World.Tiles;
@@ -29,7 +31,8 @@ public abstract class AbstractWorld
     #region SERVER_ONLY
 
     protected HeightGen heightGen;
-    protected readonly List<IWorldGenerator> generators;
+    public readonly List<IWorldGenerator> Generators;
+    public readonly List<ISpawnBehaviour<Entity>> SpawnBehaviours;
 
     #endregion
     private int tutolTime = 1440;
@@ -52,14 +55,15 @@ public abstract class AbstractWorld
         if (!isClient)
         {
             heightGen = new HeightGen(seed, rand);
-            generators = [new TileGen(seed, rand), new TreeGen(seed, rand)];
+            Generators = [new TileGen(seed, rand), new TreeGen(seed, rand)];
+            SpawnBehaviours = [SlimeEntity.SpawnBehaviour];
         }
 
     }
     public void Generate()
     {
         isGenerated = true;
-        foreach (var generator in generators)
+        foreach (var generator in Generators)
         {
             generator.Generate(this);
         }
@@ -70,7 +74,7 @@ public abstract class AbstractWorld
     public void Update(float dTime)
     {
         currnetTime = (currnetTime + dTime) % 1440;
-        currnetTime = 720;
+        //currnetTime = 720;
         sunRotation = (float)(currnetTime / tutolTime * 2 * Math.PI - Math.PI / 2);
         skyLight = (float)(Math.Sin(sunRotation) + 1) / 2;
 
@@ -94,6 +98,7 @@ public abstract class AbstractWorld
         if(entity is AbstractPlayerEntity player)
         	players.Add(player);
         entities.Add(entity);
+        //Log.Info("entity added" + entity);
     }
     public List<Entity> GetAllEntities()
     {
@@ -156,8 +161,12 @@ public abstract class AbstractWorld
         if (IsInWorld(y) && state != null)
         {
             var grid = blockStateGrid.GetValueOrDefault(layer);
+            var oldState = grid[GetTileIndex(x, y)];
             grid[GetTileIndex(x, y)] = state;
-            state.OnTilePlaced(this, null, x, y);
+            if (oldState != null && oldState.HasTileEntity())
+            {
+                RemoveTileEntity(new TilePos(x, y, layer));
+            }
             if (state.HasTileEntity() && !state.IsMulti())
             {
                 var tileEntity = ((ITileEntityProvider)state.GetTile()).CreateTileEntity(this, state, new TilePos(x, y, layer));
@@ -166,6 +175,7 @@ public abstract class AbstractWorld
                     AddTileEntity(tileEntity);
                 }
             }
+            state.OnTilePlaced(this, null, x, y);
             if (!isGenerated)
             {
                 lightManager.CauseLightUpdate(x, y);
@@ -325,6 +335,10 @@ public abstract class AbstractWorld
 
     public TileEntity GetTileEntity(TilePos tilePos)
     {
-        return tileEntityGrid[tilePos];
+        return tileEntityGrid.GetValueOrDefault(tilePos);
+    }
+    public void RemoveTileEntity(TilePos tilePos)
+    {
+        tileEntityGrid.Remove(tilePos);
     }
 }

@@ -70,7 +70,7 @@ public class WorldRenderer : IWorldListener
                 for (int y = minY; y < maxY; y++)
                 {
                     var tileState = _world.GetTileState(layer, x, y);
-                    if (tileState.ShouldRender())
+                    if (tileState.ShouldRender() && ShouldRender(layer, x, y))
                     { 
                         var appearance = GetRenderApperance(layer, x, y, tileState);
                         TileRenderer.Render(renderer, tileState, layer, x, y, appearance, GetColors(x, y));
@@ -94,16 +94,31 @@ public class WorldRenderer : IWorldListener
             e.Render(renderer, LightColor[_world.GetCombinedLightSmooth((int)e.X, (int)e.Y)]);
 
         });
-        //var player = Main.GetInstance().GetPlayer();
-        //if(player != null && player.GetItemOnHand().GetItem() is TileItem tileItem)
-        //{
-        //    Main.GetMosueTilePos(out int x, out int y);
-        //    var state = tileItem.GetTile().GetPlaceState(_world, player, x, y);
-        //    TileRenderer.Render(renderer, state, tileItem.GetLayer(), x, y, SpriteManager.GetStateInfo(state).DefaultInfo(),
-        //        Utils.Multiply(LightColor[_world.GetCombinedLightSmooth(x, y)], Color.White) * 0.75f);
-        //}
         
     }
+
+    private bool ShouldRender(TileLayer layer, int x, int y)
+    {
+        if(layer == TileLayer.Main)
+        {
+            return true; 
+        }else if(layer == TileLayer.Background)
+        {
+            
+            var state = _world.GetTileState(TileLayer.Main, x, y);
+            
+            if(state.IsFullTile() && state.ShouldRender())
+            {
+                var appearance = GetRenderApperance(TileLayer.Main, x, y, state);
+                return !appearance.IsFull();
+            }
+            return true;
+
+        }
+        return false;
+        
+    }
+
     public void OnNotifyNeighbor(TileLayer layer, int x, int y, TileState state, TileState changeTile)
     {
         if (state.ShouldRender())

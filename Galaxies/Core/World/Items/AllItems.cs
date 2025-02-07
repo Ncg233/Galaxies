@@ -12,7 +12,7 @@ public class AllItems
     public readonly static Item Air = Register("air", new Item());
     public readonly static Item Dirt = FromTile("dirt", AllTiles.Dirt);
     public readonly static Item DirtWall = FromTile("dirt_wall", AllTiles.Dirt, TileLayer.Background);
-    public readonly static Item GoldIngot = Register("gold_ingot", new Item(new Item.Properties().SetDiggingTool()));
+    public readonly static Item GoldIngot = Register("gold_ingot", new Item());
     public readonly static Item Torch = FromTile("torch", AllTiles.Torch);
     public readonly static Item ChairTile = FromTile("chair_tile", AllTiles.ChairTile);
     public readonly static Item Table = FromTile("table", AllTiles.Table);
@@ -20,6 +20,7 @@ public class AllItems
     public readonly static Item Wood = FromTile("wood", AllTiles.Wood);
     public readonly static Item WoodWall = FromTile("wood_wall", AllTiles.Wood, TileLayer.Background);
     public readonly static Item Chest = FromTile("chest", AllTiles.Chest);
+    public readonly static Item StonePickaxe = Register("stone_pickaxe", new Item(new Item.Properties().SetDiggingTool()));
     private static Item Register(string name, Item item)
     {
         itemRegister.Add(name, item);

@@ -43,7 +43,7 @@ public class DataUtils
         }
         catch (Exception e)
         {
-            Log.Error("Can't write data set", e);
+            Log.Error("Can't read data set", e);
         }
     }
     public static IDataPart GetDataPart(int partId)

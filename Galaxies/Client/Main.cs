@@ -19,12 +19,13 @@ using Galaxies.Core.Audio;
 using Galaxies.Core.Networking.Server;
 using Galaxies.Core.Networking.Client;
 using Galaxies.Client.Gui.Screen.Menu;
+using Galaxies.Core.World.Entities.Monsters;
 
 namespace Galaxies.Client;
 public class Main : Game
 {
     private static readonly Guid DefaultId = Guid.Empty;
-    public static readonly string Version = "0.3.0";
+    public static readonly string Version = "0.3.3";
     public static float DeltaTime;
     private static Main instance;
     //private GalaxiasServer server;
@@ -186,11 +187,11 @@ public class Main : Game
             player = null;
         }
         SetCurrentScreen(new MainMenuScreen());
+        Thread.CurrentThread.Name = "Client";
     }
     public void SetCurrentScreen(AbstractScreen newScreen)
     {
         ScreenManager.SetCurrentScreen(newScreen, camera.guiWidth, camera.guiHeight);
-
     }
     //this method is used for server start
     internal void StartWorld(DirectoryInfo info)
@@ -200,7 +201,8 @@ public class Main : Game
         world.AddEntity(player);
         WorldRenderer.SetRenderWorld(world);
         SetCurrentScreen(null);
-        AllSounds.Forest.PlayMusic(0.5f);
+        AllSounds.Night.PlayMusic(0.5f);
+        Thread.CurrentThread.Name = "Client/Server";
     }
     //this method is used for client join
     internal void JoinWorld(ClientWorld world)
@@ -274,6 +276,12 @@ public class Main : Game
         Vector2 p = camera.ScreenToWorldSpace(Mouse.GetState().Position);
         x = Utils.Floor(p.X / 8);
         y = Utils.Floor(-p.Y / 8);
+    }
+    public static void GetMosueWorldPos(out float x, out float y)
+    {
+        Vector2 p = camera.ScreenToWorldSpace(Mouse.GetState().Position);
+        x = p.X / 8;
+        y = -p.Y / 8;
     }
     public static void GetScreenPos(out double x, out double y)
     {

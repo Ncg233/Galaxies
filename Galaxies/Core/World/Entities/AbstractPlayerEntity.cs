@@ -10,8 +10,10 @@ using Galaxies.Core.World.Tiles.State;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct2D1;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 
 namespace Galaxies.Core.World.Entities;
 // server: PlayerEntity ConnectPlayer
@@ -23,17 +25,18 @@ public abstract class AbstractPlayerEntity : LivingEntity
     public PlayerInventory Inventory { get; private set; } = new();
     public PlayerInventoryMenu container;
     protected InventoryMenu currentInvMenu;
-    public bool IsWalking { get; protected set; }
-
+    public PlayerState State = PlayerState.Idle;
     public int HitX = 0;
     public int HitY = 0;
     protected float homeX = 0;
     protected float homeY = 80;
+    protected int currentAngle = 0;
+    protected int armAngle = 0;
     private float invincibleTicks = 3;
     protected bool isJumping;
     public int jumpTicks;
     public int jumpTimeout;
-    public AbstractPlayerEntity(AbstractWorld world, Guid id) : base(AllEntityTypes.PlayerEntity, world)
+    public AbstractPlayerEntity(AbstractWorld world, Guid id) : base(world)
     {
         SetPos(0, 140);
         Id = id;
@@ -91,11 +94,53 @@ public abstract class AbstractPlayerEntity : LivingEntity
         }
         if (Math.Abs(vx) > 0.001f)
         {
-            IsWalking = true;
+            State = PlayerState.Walking;
         }
-        else IsWalking = false;
+        else State = PlayerState.Idle;
+        UpdateArmAngle();
         InteractionManager?.Update(dTime);
+        if (!world.IsClient)
+        {
+            HandleEntitySpawn();
+        }
     }
+    public void SetCurrentAngle(int angle)
+    {    
+        currentAngle = angle;
+    }
+    public void UpdateArmAngle()
+    {
+        if (State == PlayerState.Idle)
+        {
+            if (direction == Direction.Left)
+            {
+                if (currentAngle > 180) direction = Direction.Right;
+            }
+            else
+            {
+                if (currentAngle < 180) direction = Direction.Left;
+            }
+            armAngle = Utils.RoundLerp(armAngle, currentAngle, 360, 0.2f);
+        }else if(State == PlayerState.Walking) {
+            armAngle = (int)MathHelper.ToDegrees((float)Math.Sin(existedTime * 10) / 2);  
+        }
+        
+    }
+    private void HandleEntitySpawn()
+    {
+        foreach (var behaviour in world.SpawnBehaviours)
+        {
+            if ((int)(world.currnetTime * 60) % (int)(behaviour.GetSpawnFrequency(world) * 60) == 0)
+            {
+                if(world.GetAllEntities().Count <= 15)
+                {
+                    var entity = behaviour.CreateEntity(world, Utils.Random.Next(0, world.Width), 140);
+                    world.AddEntity(entity);
+                }
+            }
+        }
+    }
+
     public override void Render(IntegrationRenderer renderer, Color color)
     {
         s_playerRender.Render(renderer, this, 1, color);
@@ -110,7 +155,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
     }
     protected float GetJumpHeight()
     {
-        return 6 / 8f;
+        return 5 / 8f;
     }
     public void Jump(float value)
     {
@@ -122,7 +167,7 @@ public abstract class AbstractPlayerEntity : LivingEntity
     }
     public override void Die()
     {
-
+        SetPos(0, 140);
     }
     public override void Hurt(float amout)
     {
@@ -178,57 +223,59 @@ public abstract class AbstractPlayerEntity : LivingEntity
 
     public class PlayerRenderer : EntityRenderer<AbstractPlayerEntity>
     {
-        private static Color ClothesColor = Color.Blue;
+        private static Color ClothesColor = new Color(116, 46, 60);
         private static Color FaceColor = new Color(245, 203, 148);
         private static Color EyeColor = new Color(180, 41, 37);
         private static Color HairColor = new Color(250, 209, 81);
-        public override void LoadContent()
+        private float i;
+        public override void Render(IntegrationRenderer renderer, AbstractPlayerEntity player, float scale, Color colors)
         {
-
-        }
-
-        public override void Render(IntegrationRenderer renderer, AbstractPlayerEntity player, int scale, Color colors)
-        {
+            i += 0.05f;
             var x = player.GetRenderX();
             var y = player.GetRenderY();
             var width = 16;
             var height = 32;
             bool isTurn = player.direction == Direction.Left;
+            SpriteEffects effects = isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             //BODY
             renderer.Draw("Textures/Entities/Player/player_leg", x, y,
-                width / 2f, height, colors,
-                source: GetSource(player),
-                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+                width / 2f, height, colors, 0,
+                source: GetSource(player), effects);
             
             renderer.Draw("Textures/Entities/Player/player_body", x, y,
-                width / 2f, height, colors,
-                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+                width / 2f, height, Utils.MultiplyNoA(colors, ClothesColor),0,  null, effects);
 
             renderer.Draw("Textures/Entities/Player/player_head", x, y,
-                width / 2f, height, Utils.MultiplyNoA(colors, FaceColor),
-                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+                width / 2f, height, Utils.MultiplyNoA(colors, FaceColor),0,   null, effects);
             renderer.Draw("Textures/Entities/Player/player_eye", x, y,
-                width / 2f, height, Utils.MultiplyNoA(colors, EyeColor),
-                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+                width / 2f, height, Utils.MultiplyNoA(colors, EyeColor),0,  null, effects);
             renderer.Draw("Textures/Entities/Player/player_hair", x, y,
-                width / 2f, height, Utils.MultiplyNoA(colors, Color.Orange),
-                effects: isTurn ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+                width / 2f, height, Utils.MultiplyNoA(colors, Color.Orange),0,  null, effects);
+
+            
             //HELD ITEM
             var item = player.GetItemOnHand();
+            var radians = MathHelper.ToRadians(player.armAngle) - Math.PI / 2;
             if (isTurn)
             {
-                ItemRenderer.RenderInWorld(renderer, item, x - 0.75f, y - 4, colors);
+                renderer.Draw("Textures/Entities/Player/player_hand", x + 2, y - height + 14,
+                width-6, 14, colors,player.armAngle,
+                source: null, effects);
+                ItemRenderer.RenderInWorld(renderer, item, x - (float)(9 * Math.Cos(radians)) + 1, y - 14 - (float)(9 * Math.Sin(radians)), 0.8f, colors, effects);
             }
             else
             {
-                ItemRenderer.RenderInWorld(renderer, item, x, y - 4, colors);
+                renderer.Draw("Textures/Entities/Player/player_hand", x - 2, y - height + 14,
+                6, 14, colors, player.armAngle,
+                source: null, effects);
+                ItemRenderer.RenderInWorld(renderer, item, x - (float)(9 * Math.Cos(radians)), y - 14 -(float)(9 * Math.Sin(radians)), 0.8f, colors, effects);
 
             }
         }
 
         private Rectangle? GetSource(AbstractPlayerEntity player)
         {
-            if (player.IsWalking)
+            if (player.State == PlayerState.Walking)
             {
                 int count = 5;
                 long runningTime = DateTime.UtcNow.Ticks / 1000 % (count * 1200);
@@ -251,4 +298,5 @@ public abstract class AbstractPlayerEntity : LivingEntity
 
         }
     }
+
 }

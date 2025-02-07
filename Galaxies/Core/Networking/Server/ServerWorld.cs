@@ -2,6 +2,7 @@
 using Galaxies.Core.Data;
 using Galaxies.Core.World;
 using Galaxies.Core.World.Entities;
+using Galaxies.Core.World.Entities.Monsters;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Core.World.Tiles.Entity;
 using Galaxies.Util;

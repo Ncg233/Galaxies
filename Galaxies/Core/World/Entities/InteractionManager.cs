@@ -4,10 +4,12 @@ using Galaxies.Client.Render;
 using Galaxies.Core.Networking;
 using Galaxies.Core.Networking.Packet.C2S;
 using Galaxies.Core.World;
+using Galaxies.Core.World.Entities.Monsters;
 using Galaxies.Core.World.Tiles;
 using Galaxies.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Galaxies.Core.World.Entities;
 public class InteractionManager
@@ -72,12 +74,12 @@ public class InteractionManager
         {
             player.Move(Direction.Up, dTime);
         }
-    }
-    public void GetMosuePos(Camera camera, out int x, out int y)
-    {
-        Vector2 p = camera.ScreenToWorldSpace(Mouse.GetState().Position);
-        x = Utils.Floor(p.X / 8);
-        y = Utils.Floor(-p.Y / 8);
+
+        float px = player.X;
+        float py = player.Y + 2;
+        Main.GetMosueWorldPos(out float mx, out float my);
+        int angle = (int)(MathHelper.ToDegrees((float)Math.Atan2(mx - px,my - py)) + 180);
+        player.SetCurrentAngle(angle);
     }
     public void SyncHeldItem()
     {

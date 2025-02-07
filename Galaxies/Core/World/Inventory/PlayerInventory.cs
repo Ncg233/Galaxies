@@ -9,7 +9,7 @@ public class PlayerInventory : SimpleInventory
     public PlayerInventory() : base(36)
     {
         Set(0, new ItemPile(AllItems.Dirt, 99));
-        Set(1, new ItemPile(AllItems.GoldIngot, 99));
+        Set(1, new ItemPile(AllItems.StonePickaxe, 1));
         Set(2, new ItemPile(AllItems.Torch, 99));
         Set(3, new ItemPile(AllItems.ChairTile, 99));
         Set(4, new ItemPile(AllItems.Table, 99));

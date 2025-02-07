@@ -15,7 +15,7 @@ public class ItemRenderer
     public static void LoadContent()
     {
     }
-    public static void RenderInWorld(IntegrationRenderer renderer, ItemPile itemPile, float worldX, float worldY, Color color)
+    public static void RenderInWorld(IntegrationRenderer renderer, ItemPile itemPile, float worldX, float worldY,float scale,Color color, SpriteEffects effects = SpriteEffects.None)
     {
         if (itemPile != null && !itemPile.IsEmpty())
         {
@@ -25,7 +25,7 @@ public class ItemRenderer
 
             float width = map.RenderWidth;
             float height = map.Renderheight;
-            renderer.Draw(tex, worldX, worldY - height, Utils.MultiplyNoA(color, map.ColorMod), width / tex.Width, height / tex.Height);
+            renderer.Draw(tex, worldX - width / 2f, worldY - height, Utils.MultiplyNoA(color, map.ColorMod), width / tex.Width * scale, height / tex.Height * scale, null, effects);
         }
     }
 

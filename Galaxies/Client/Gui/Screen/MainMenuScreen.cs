@@ -31,6 +31,7 @@ public class MainMenuScreen : AbstractScreen
     public override void Render(IntegrationRenderer renderer, double mouseX, double mouseY)
     {
         renderer.Draw("Textures/Misc/a", new Rectangle(0, 0, Width, Height), Color.White);
+        renderer.DrawString("V" + Main.Version, 0, 0, 1);
         base.Render(renderer, mouseX, mouseY);
     }
     protected override void OnInit()
